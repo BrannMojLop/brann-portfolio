@@ -23,14 +23,14 @@ export default function SpanishOpenGraphImage() {
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "74%" }}>
           <div style={{ fontSize: 22, letterSpacing: "0.3em", textTransform: "uppercase", color: "#5eead4" }}>
-            Portafolio de Ingeniería
+            Portafolio de Ingenieria
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
             <div style={{ fontSize: 74, fontWeight: 700, lineHeight: 1 }}>
               Brandon Mojica Lopez
             </div>
             <div style={{ fontSize: 34, lineHeight: 1.3, color: "#cbd5e1" }}>
-              Arquitectura de sistemas, plataformas ERP y backend con Python FastAPI para operación real.
+              Arquitectura de sistemas, plataformas ERP y backend con Python FastAPI para operacion real.
             </div>
           </div>
           <div style={{ display: "flex", gap: "16px", fontSize: 24, color: "#94a3b8" }}>

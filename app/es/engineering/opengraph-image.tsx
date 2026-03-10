@@ -23,14 +23,14 @@ export default function SpanishEngineeringOpenGraphImage() {
         }}
       >
         <div style={{ fontSize: 22, letterSpacing: "0.28em", textTransform: "uppercase", color: "#7dd3fc" }}>
-          Notas de Ingeniería
+          Notas de Ingenieria
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "78%" }}>
           <div style={{ fontSize: 68, fontWeight: 700, lineHeight: 1 }}>
             Decisiones de arquitectura construidas en plataformas ERP y financieras.
           </div>
           <div style={{ fontSize: 30, lineHeight: 1.35, color: "#cbd5e1" }}>
-            Patrones backend, límites de dominio, capas de servicio con FastAPI y confiabilidad operativa en producción.
+            Patrones backend, limites de dominio, capas de servicio con FastAPI y confiabilidad operativa en produccion.
           </div>
         </div>
         <div style={{ display: "flex", gap: "18px", fontSize: 24, color: "#94a3b8" }}>
