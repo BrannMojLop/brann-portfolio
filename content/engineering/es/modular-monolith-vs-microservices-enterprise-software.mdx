@@ -1,0 +1,88 @@
+---
+title: "Monolito modular vs. microservicios para software empresarial"
+summary: "Cómo decidir entre monolito modular y microservicios al construir ERP y sistemas financieros que comparten verdad operativa."
+date: "2026-03-09"
+theme: "architecture"
+articleType: "Análisis de Tradeoff"
+readingTime: "10 min de lectura"
+tags:
+  - Monolito Modular
+  - Microservicios
+  - Software Empresarial
+  - Decisiones de Arquitectura
+---
+
+La discusión entre monolito modular y microservicios suele presentarse como una meta de madurez. Para software empresarial esa lectura es demasiado simple. La decisión correcta depende menos de modas arquitectónicas y más de qué tan estables son los límites de dominio, qué tan costosa sería la coordinación distribuida y cuánta complejidad operativa puede sostener realmente el equipo.
+
+Los ERP y los sistemas financieros son un buen ejemplo porque combinan varios dominios con una verdad operativa compartida. Finanzas, inventario, ventas y conciliación pueden ser distintos, pero no son independientes de forma trivial. Sus flujos suelen depender de cambios de estado coordinados y de una auditabilidad confiable.
+
+## Por qué muchos equipos se mueven demasiado pronto
+
+Los microservicios son atractivos porque prometen independencia, propiedad más clara y escalabilidad. Esos beneficios son reales cuando los límites ya maduraron. El problema es que muchas plataformas extraen servicios antes de haber demostrado dónde están realmente las fronteras.
+
+Eso produce un patrón familiar:
+
+- servicios distribuidos que aún necesitan conocimiento interno unos de otros;
+- transacciones entre servicios más frágiles;
+- costos de observabilidad creciendo más rápido que la calidad de entrega;
+- tiempo dedicado a administrar la arquitectura en vez de clarificar el dominio.
+
+Para plataformas empresariales que aún están descubriendo flujos clave, eso suele ser demasiada complejidad demasiado pronto.
+
+## Por qué el monolito modular suele ser el mejor default
+
+Un monolito modular puede ser una arquitectura disciplinada, no solo un paso temporal. Funciona bien cuando:
+
+- la plataforma comparte una base principal de verdad operativa;
+- los flujos de negocio cruzan varios dominios con frecuencia;
+- el equipo necesita fuerte consistencia transaccional;
+- la simplicidad de despliegue sigue siendo valiosa.
+
+La condición clave es que la modularidad sea real. Un monolito sin límites no es mejor que microservicios mal cortados. Pero un monolito modular con propiedad explícita por dominio, capas de servicio y contratos internos claros puede soportar mucho crecimiento antes de requerir extracción.
+
+## Qué te están comprando realmente los microservicios
+
+Los microservicios se vuelven más atractivos cuando la plataforma ya tiene:
+
+- dominios con independencia probada;
+- equipos que pueden poseer servicios de punta a punta;
+- requerimientos distintos de escalado o despliegue;
+- madurez operativa en trazas, alertas y manejo de fallas.
+
+En ese punto, un límite de servicio puede reducir riesgo en lugar de aumentarlo.
+
+## Los criterios que más importan
+
+Tres preguntas son más útiles que cualquier checklist genérico:
+
+1. ¿Puede este dominio evolucionar sin reinterpretar reglas internas de otro dominio?
+2. ¿El equipo puede operar fallas distribuidas con confianza?
+3. ¿Extraer este servicio reduce acoplamiento, o solo lo mueve a la red?
+
+Si la respuesta a la tercera es "mueve el mismo acoplamiento a APIs y colas", el servicio probablemente todavía no está listo para existir de forma independiente.
+
+## El software empresarial tiene una restricción especial: verdad compartida
+
+Los ERP y las plataformas financieras suelen requerir corrección coordinada. Separar demasiado pronto puede hacer que la arquitectura se vea más limpia en papel mientras vuelve más difíciles los flujos reales:
+
+- las aprobaciones cruzan varios conceptos;
+- el cierre financiero depende de estados consistentes entre dominios;
+- la conciliación puede requerir datos coherentes entre servicios;
+- soporte necesita una explicación unificada de lo sucedido.
+
+Esas restricciones vuelven cara la distribución prematura.
+
+## Una postura pragmática
+
+La mejor pregunta no es "¿cuándo nos volvemos microservicios?" sino "¿qué límites son lo suficientemente fuertes como para que distribuir reduzca riesgo?"
+
+Para muchas plataformas empresariales internas, la respuesta es:
+
+- comenzar como monolito modular;
+- forzar propiedad de dominio desde el inicio;
+- medir dónde el dolor de coordinación es real;
+- extraer solo cuando el límite esté probado técnica y operativamente.
+
+Ese camino mantiene la arquitectura alineada con la realidad del negocio y no con estética de roadmap.
+
+Para aterrizar mejor esta decisión, conviene leerlo junto con [arquitectura de plataformas ERP](/es/engineering/erp-platform-architecture) y [diseño de límites de dominio](/es/engineering/erp-modularity).

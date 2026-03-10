@@ -1,0 +1,94 @@
+---
+title: "Patrones de capa de servicio en FastAPI para backends empresariales"
+summary: "Patrones que mantienen mantenibles las aplicaciones FastAPI cuando las APIs empiezan a representar aprobaciones, conciliaciones y flujos de negocio en lugar de CRUD simple."
+date: "2026-03-09"
+theme: "backend-engineering"
+articleType: "Guía de Implementación"
+readingTime: "10 min de lectura"
+tags:
+  - FastAPI
+  - Capa de Servicio
+  - Backend Empresarial
+  - Arquitectura API
+---
+
+FastAPI es suficientemente productivo como para que muchos equipos construyan un backend grande con rapidez. Esa velocidad es útil, pero también esconde un riesgo arquitectónico: los handlers de rutas pueden convertirse por accidente en la capa de aplicación.
+
+Eso suele pasar por etapas. Primero los routers validan entrada y llaman a la base de datos. Luego se agregan algunas reglas. Más adelante aparecen un job, una restricción de permisos o un efecto auditable. Después de varias iteraciones, el handler de ruta termina coordinando todo el caso de uso aunque nadie lo haya diseñado así.
+
+Los backends empresariales necesitan una estructura más fuerte porque la superficie de la API no es estable si el comportamiento de negocio detrás tampoco lo es.
+
+## Patrón 1: routers delgados de forma intencional
+
+Los routers deberían encargarse principalmente de HTTP:
+
+- recibir entrada;
+- validar forma de la solicitud;
+- mapear resultados de dominio a respuestas HTTP.
+
+No deberían ser el hogar permanente de la política del negocio. Cuando un handler decide validez de estado, escribe varios repositorios y emite efectos operativos, el backend se vuelve más difícil de entender.
+
+Routers delgados no son una preferencia estética. Son una forma de preservar un lugar donde el caso de uso pueda entenderse separado del transporte.
+
+## Patrón 2: modelar servicios alrededor de casos de uso
+
+Una función de servicio útil representa una intención concreta:
+
+- crear un cargo;
+- aprobar un movimiento;
+- conciliar una cuenta;
+- cerrar un periodo.
+
+Ese servicio debe poseer las precondiciones, la transición de estado y las consecuencias de la acción. Si el caso de uso cruza varios repositorios, justamente por eso pertenece a un servicio.
+
+Este patrón también mejora el lenguaje. Es más claro leer `cerrar_periodo_contable` que `actualizar_estado_periodo`.
+
+## Patrón 3: aislar repositorios de reglas de flujo
+
+Los repositorios son útiles porque le dan a la capa de servicio una forma consistente de consultar y persistir datos. Su responsabilidad debería quedarse cerca del acceso a datos. Cuando empiezan a codificar semántica de flujo, el límite entre persistencia y política se vuelve borroso otra vez.
+
+La capa de servicio debería decidir *por qué* algo es válido. El repositorio debería ayudar a persistir *qué* cambió.
+
+## Patrón 4: devolver resultados de proceso y no solo modelos
+
+Las APIs empresariales son más fáciles de consumir cuando la respuesta refleja la acción de negocio que realmente ocurrió. A veces devolver el registro actualizado basta. Muchas veces no.
+
+Una respuesta orientada a proceso puede necesitar comunicar:
+
+- el nuevo estado operativo;
+- un mensaje o razón de soporte;
+- si se disparó algún paso adicional;
+- advertencias relevantes para usuario o proceso posterior.
+
+Esa forma de responder mantiene a los consumidores alineados con el flujo, en lugar de obligarlos a inferir significado desde campos aislados.
+
+## Patrón 5: centralizar efectos laterales con el caso de uso
+
+Notificaciones de soporte, auditorías, actualizaciones de libro mayor, creación de tareas o jobs posteriores deberían coordinarse desde el mismo límite donde se aprobó la transacción. Repartir estos efectos entre hooks y utilidades ad hoc vuelve el sistema más difícil de depurar.
+
+Esto no significa que toda la lógica viva en una sola función. Significa que debe existir un punto evidente de orquestación para el flujo.
+
+## Patrón 6: probar casos de uso como contratos
+
+Una prueba backend valiosa demuestra un contrato de negocio:
+
+- la transacción funciona cuando se cumplen precondiciones;
+- se bloquean transiciones inválidas;
+- los efectos necesarios ocurren exactamente una vez;
+- los reintentos no generan inconsistencia.
+
+Este tipo de pruebas es más natural cuando los servicios son explícitos. Es más difícil cuando el flujo está repartido entre routers, modelos y utilidades.
+
+## Patrón 7: documentar fallas en la estructura del código
+
+Las plataformas empresariales viven llenas de casos como "qué pasa si esto ya está cerrado", "qué pasa si el pago ya existe" o "qué pasa si la cuenta está en el estado incorrecto". Eso es normal. Los modos de falla forman parte del diseño.
+
+Una buena estructura de servicio hace visibles e intencionales esas ramas. Una estructura débil las esconde hasta que soporte las descubre en producción.
+
+## Por qué esto importa más en FastAPI de lo que parece
+
+La ergonomía de FastAPI facilita mezclar responsabilidades porque el framework no impone una sola arquitectura. Esa flexibilidad es excelente, pero implica que la mantenibilidad depende más de la disciplina del equipo.
+
+Si el backend soporta ERP o finanzas, la capa de servicio no debería ser una limpieza tardía. Debería formar parte del diseño inicial en cuanto los flujos de negocio se vuelven relevantes.
+
+Para una visión más amplia, este artículo combina bien con [diseño de APIs orientadas a transacciones](/es/engineering/backend-service-boundaries) y con la decisión entre [monolito modular y microservicios](/es/engineering/modular-monolith-vs-microservices-enterprise-software).

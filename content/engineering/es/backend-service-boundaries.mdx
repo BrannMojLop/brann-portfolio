@@ -1,0 +1,106 @@
+---
+title: "Diseñar servicios en FastAPI alrededor de transacciones de negocio y no de CRUD"
+summary: "Por qué una capa de servicio orientada a transacciones produce APIs más estables para ERP y plataformas internas que endpoints que solo reflejan tablas y serializers."
+date: "2026-03-09"
+theme: "backend-engineering"
+articleType: "Patrón Backend"
+readingTime: "9 min de lectura"
+tags:
+  - FastAPI
+  - Capa de Servicio
+  - APIs
+  - Arquitectura Backend
+---
+
+Muchas APIs internas se ven limpias el primer día porque mapean muy bien a tablas. Crear un registro. Actualizar un registro. Eliminar un registro. Devolver el modelo. Se siente ordenado, testeable y rápido de construir.
+
+Esa estructura deja de ser útil cuando el endpoint ya no representa una sola escritura. En sistemas empresariales, una llamada API suele significar "aprobar un movimiento", "registrar un pago", "cerrar un periodo" o "generar un estado de cuenta". Esas son transacciones de negocio, no acciones CRUD.
+
+Aquí es donde un backend en FastAPI madura hacia una capa de aplicación o empieza a dispersar reglas entre routers, modelos, jobs y excepciones específicas de UI.
+
+## Por qué las APIs CRUD se rompen en sistemas de negocio
+
+Los endpoints CRUD asumen que la fila de base de datos es la unidad principal de intención. En ERP y sistemas financieros eso rara vez es cierto. La unidad real es el resultado de negocio:
+
+- un pago solo es válido si el estado de cuenta y las reglas lo permiten;
+- un periodo solo puede cerrarse bajo condiciones financieras definidas;
+- un movimiento de stock afecta más de una tabla y muchas veces más de un dominio;
+- una acción orientada al cliente puede activar requisitos de auditoría internos.
+
+Cuando la API se diseña como acceso directo a tablas, aparecen tres problemas:
+
+1. La validación se distribuye entre capas porque ningún caso de uso posee la regla completa.
+2. Las respuestas se moldean por persistencia y no por significado de proceso.
+3. Las transiciones de estado se vuelven implícitas, lo que complica soporte y depuración.
+
+La primera versión aún funciona. Las siguientes se vuelven frágiles.
+
+## La capa de servicio debe modelar acciones de negocio
+
+La capa de servicio funciona mejor cuando modela una transacción completa. Eso implica que cada servicio debe:
+
+- validar precondiciones del dominio;
+- ejecutar la transición de estado pretendida;
+- registrar los efectos colaterales que importan operativamente;
+- devolver una respuesta alineada al proceso de negocio.
+
+En FastAPI esto suele significar que los routers quedan delgados. Parsean entrada, llaman a un servicio y transforman el resultado en respuesta HTTP. La capa de servicio se vuelve el lugar donde la política del sistema es visible.
+
+Eso es distinto a empujar reglas a modelos ORM o a handlers de rutas. Los modelos sirven para persistencia e invariantes locales. Los handlers sirven para HTTP. Las transacciones de negocio merecen una capa dedicada porque suelen cruzar múltiples repositorios, validaciones y eventos auditables.
+
+## Una forma práctica de estructurarlo
+
+Un patrón sano es:
+
+- el router recibe la solicitud;
+- el esquema valida estructura;
+- el servicio coordina el caso de uso;
+- los repositorios persisten o consultan datos;
+- las respuestas orientadas al dominio comunican resultado y contexto.
+
+Esta estructura es útil porque se parece más a cómo soporte y operación entienden el sistema. Si un pago falla, la pregunta no es "¿qué update se rompió?" sino "¿qué regla bloqueó el pago y en qué estado estaba la cuenta?"
+
+Los servicios facilitan exponer y probar esa respuesta.
+
+## Las transiciones de estado deben ser explícitas
+
+Uno de los mayores riesgos backend en software empresarial es fingir que las transiciones son simples updates. No lo son. Pasar de pendiente a aprobado, o de abierto a cerrado, tiene significado operativo.
+
+Eso implica que una buena capa de servicio debe hacer explícito:
+
+- qué estados actuales son válidos;
+- qué estados de destino están permitidos;
+- qué efectos deben ocurrir cuando la transición funciona;
+- qué registros o auditorías deben escribirse.
+
+Cuando esto es explícito, la API gana estabilidad. Los detalles internos pueden evolucionar, pero la transacción sigue siendo coherente. Sin esa capa, las transiciones terminan en queries ad hoc, condiciones de frontend o utilidades difíciles de rastrear.
+
+## El tradeoff: más estructura, menos complejidad accidental
+
+Una capa de servicio agrega forma. A algunos equipos eso les parece ceremonia. En una app trivial quizá sea una crítica válida. En un ERP, una plataforma crediticia o un backend operativo, omitirla suele ser una falsa economía.
+
+El tradeoff es simple:
+
+- más diseño deliberado al inicio;
+- mucha menos ambigüedad cuando la plataforma crece.
+
+Esto importa cuando el backend soporta jobs, reintentos, tooling administrativo, soporte operativo y consumidores externos. En ese punto necesitas un lugar donde el caso de uso se explique en código.
+
+## Qué cambia en el diseño de APIs
+
+Cuando el backend modela transacciones y no tablas, la superficie API cambia:
+
+- los endpoints se nombran por acciones y flujos;
+- la validación se vuelve contextual, no solo estructural;
+- las respuestas reflejan resultado de negocio y siguiente estado;
+- la compatibilidad se vuelve más sostenible porque los consumidores dependen de un contrato de intención.
+
+Ese último punto suele pasarse por alto. Una API orientada a tablas queda acoplada al modelo de persistencia. Una API orientada a casos de uso puede seguir sirviendo la misma intención aun cuando la implementación interna cambie.
+
+## Impacto en producción
+
+En sistemas reales, el valor está en la claridad operativa. Los incidentes de soporte se diagnostican mejor. Las auditorías se alinean con más facilidad. Las pruebas de regresión pueden concentrarse en flujos críticos en lugar de updates dispersos.
+
+Por eso el beneficio no es estético. Es la diferencia entre un backend que sobrevive al crecimiento y uno que se convierte en una colección de excepciones.
+
+Si trabajas en un stack similar, este patrón se vuelve más fuerte cuando se combina con [límites de dominio en un ERP](/es/engineering/erp-modularity) y con una decisión explícita sobre [monolito modular vs. microservicios](/es/engineering/modular-monolith-vs-microservices-enterprise-software).

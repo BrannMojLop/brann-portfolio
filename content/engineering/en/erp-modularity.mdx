@@ -1,0 +1,93 @@
+---
+title: "Defining ERP domain boundaries before modules start to scale"
+summary: "How Businext ERP keeps finance, inventory, HR, and sales evolvable by treating domain boundaries as an architecture problem instead of a folder structure problem."
+date: "2026-03-09"
+theme: "architecture"
+articleType: "Architecture Note"
+readingTime: "8 min read"
+tags:
+  - ERP
+  - Domain Boundaries
+  - Businext
+  - Modular Architecture
+---
+
+An ERP becomes expensive long before it becomes technically impossible to change. The real warning sign is not line count. It is the moment when every business module starts to depend on private rules that belong to another area.
+
+That was the risk inside Businext ERP. Finance needed inventory state to validate movements. Sales needed customer account context. HR needed access rules that affected the rest of the platform. All of that is normal in a real enterprise system. The problem begins when those dependencies are solved through direct table access, hidden joins, and one-off shortcuts that feel efficient in the moment.
+
+In practice, a platform like this does not fail because one module is badly written. It fails because the business model is not explicit. Once that happens, every change in finance can quietly break sales, every inventory update can affect accounting close, and every urgent delivery leaves the codebase less understandable than before.
+
+## The scaling problem is organizational as much as technical
+
+When ERP modules grow, they attract responsibility. The finance module does not only own balances and ledgers. It starts to influence approvals, payment expectations, reconciliations, and reporting semantics. Inventory does not only track stock. It defines movement rules, operational timing, and exceptions that matter to accounting. Sales is not just opportunities and orders. It shapes fulfillment commitments, pricing assumptions, and customer lifecycle data.
+
+If those concerns are not modeled as separate domains, developers compensate with convenience:
+
+- import data directly from another module because a service call feels slower;
+- replicate business rules in multiple screens or endpoints because the core rule is hard to reach;
+- add conditional logic everywhere instead of deciding which module truly owns the concept.
+
+The result is a system that still works, but can no longer evolve safely.
+
+## The architecture decision in Businext
+
+The decision was to define clear domain boundaries and force integration through explicit contracts. Each area could expose capabilities, but it could not expose its internal logic as a shared dependency for the rest of the ERP.
+
+That sounds simple. In practice, it changes several engineering decisions:
+
+- service interfaces matter more than table visibility;
+- ownership of business language matters more than naming convenience;
+- integrations are designed intentionally instead of appearing accidentally through SQL joins.
+
+For example, finance owns accounting periods, reconciliation semantics, and ledger integrity. Sales can request a financial status, but it should not decide what a valid accounting state means. Inventory can emit movement outcomes, but it should not embed accounting logic just because a transaction has downstream impact.
+
+This distinction is why domain boundaries are architecture and not only code organization. A clean folder structure without ownership rules still produces cross-platform regressions.
+
+## Why direct table access is usually the beginning of the problem
+
+In many internal systems, direct reads across modules feel harmless. A developer only needs one extra field, so they join another table. Then a second developer copies that query into another flow. Later, support asks for a new exception, so the logic is adjusted in one screen but not in the API that should mirror it.
+
+What looked like efficiency becomes distributed policy.
+
+That is dangerous in ERP software because the system is full of rules that are not obvious from the schema:
+
+- which period can still be edited;
+- when a stock movement is only provisional;
+- when a sales action should become a financial commitment;
+- how permissions interact with operational and administrative context.
+
+Those are domain rules, not persistence details. Once they leak into random queries, the platform loses a reliable center of truth.
+
+## A practical boundary model
+
+The most useful model was to ask four questions for every major concept:
+
+1. Which business area owns the rule?
+2. Which other areas need to consume the outcome?
+3. What is the contract between them?
+4. What failure mode appears if the consumer bypasses that contract?
+
+This method keeps decisions concrete. If finance owns period close, then another module should consume a finance decision, not reinterpret finance state independently. If inventory owns movement validity, then another service can react to approved movements, but should not derive movement rules from internal tables.
+
+That also makes testing more defensible. Instead of testing dozens of endpoints that each implement a little piece of the rule, the team can test ownership points where the business policy truly lives.
+
+## The tradeoff: more explicit coordination
+
+Clear boundaries do not make a platform magically smaller. They often make dependencies more visible. Some flows need service orchestration, contract negotiation, and better naming. Teams sometimes resist this because direct access looks faster.
+
+The tradeoff is worth it in enterprise systems because hidden coupling is a debt multiplier. A small amount of explicit coordination now avoids a large amount of regression analysis later.
+
+This is especially true when:
+
+- the ERP is still growing in modules;
+- multiple people touch the same platform over time;
+- accounting and operational workflows must stay consistent.
+
+## Operational effect
+
+The strongest benefit was not aesthetic code quality. It was decision safety. Finance changes became easier to isolate. Inventory behavior stayed coherent. New features had to declare their dependencies instead of quietly inventing them.
+
+That is what keeps an ERP maintainable. Not the absence of complexity, but the presence of explicit ownership.
+
+If you are designing or refactoring a similar platform, a useful next step is to pair this boundary work with [FastAPI service design around business transactions](/engineering/backend-service-boundaries) and with a broader view on [ERP platform architecture](/engineering/erp-platform-architecture).

@@ -1,0 +1,89 @@
+---
+title: "Jobs de conciliación como control sistémico en plataformas financieras"
+summary: "Por qué la conciliación debe diseñarse como un mecanismo de control continuo y no como una tarea secundaria de soporte en sistemas de crédito y pagos."
+date: "2026-03-09"
+theme: "financial-systems"
+articleType: "Patrón de Control"
+readingTime: "8 min de lectura"
+tags:
+  - Conciliación
+  - Sistemas Financieros
+  - Jobs de Control
+  - Plataforma de Crédito
+---
+
+La conciliación suele describirse como una tarea de back office. En términos de arquitectura, esa definición se queda corta. En una plataforma financiera, la conciliación es uno de los controles que te dicen si el sistema sigue siendo internamente coherente.
+
+Esto importa porque muchas fallas no son dramáticas. No necesariamente tumban la aplicación. Aparecen como diferencias sutiles entre saldos esperados, eventos registrados, estados de cuenta o estatus operativos. Si esas diferencias no se exponen de forma sistemática, la plataforma puede seguir corriendo mientras la confianza se deteriora por debajo.
+
+## Por qué la corrección del happy path no basta
+
+Incluso cuando la ruta principal de escritura está bien diseñada, los sistemas financieros siguen enfrentando:
+
+- reintentos y peticiones duplicadas;
+- jobs asíncronos;
+- intervenciones manuales de soporte;
+- correcciones tardías de datos;
+- comportamiento legado que aún afecta el estado actual.
+
+Estas condiciones hacen riesgoso asumir que "si la API respondió bien, la plataforma está consistente". La conciliación existe para poner esa suposición a prueba continuamente.
+
+## Qué deberían verificar los jobs de conciliación
+
+Los chequeos exactos dependen del producto, pero los jobs útiles suelen validar relaciones como:
+
+- saldo esperado contra eventos financieros registrados;
+- periodos vencidos contra salida de estados de cuenta;
+- registros de pago contra estado de cuenta o cuenta;
+- cargos generados contra expectativas contractuales;
+- registros internos contra información visible para el cliente.
+
+El objetivo no es solo encontrar diferencias. Es clasificarlas con suficiente rapidez para que el equipo actúe antes de que afecten al cliente o al cierre contable.
+
+## La conciliación es arquitectura, no solo reporteo
+
+El error común es tratar la conciliación como un reporte generado después del hecho. Un diseño más fuerte la trata como un ciclo de control integrado en la plataforma:
+
+- la plataforma registra eventos financieros;
+- los jobs de control evalúan coherencia;
+- las diferencias se exponen con contexto accionable;
+- soporte o ingeniería pueden rastrear la discrepancia hasta el flujo responsable.
+
+Ese ciclo cambia la forma de pensar sobre confiabilidad. Reconoce que las operaciones financieras complejas necesitan verificación más allá del happy path.
+
+## Consideraciones de diseño
+
+Los jobs de conciliación útiles comparten algunas propiedades:
+
+- son suficientemente deterministas para que el equipo confíe en ellos;
+- codifican expectativas del dominio de manera explícita;
+- producen resultados que soporte puede interpretar;
+- son seguros de reejecutar.
+
+Ese último punto importa mucho. Un job de control debe ayudar a diagnosticar la verdad, no mutar el sistema de manera impredecible. En la mayoría de los casos, detección y corrección deberían permanecer separadas.
+
+## Beneficio operativo
+
+El beneficio más fuerte es la detección temprana. En lugar de enterarse de una diferencia por una queja de cliente o por el cierre, la plataforma puede exponerla como excepción operativa mientras el contexto todavía es recuperable.
+
+Eso reduce tiempo de investigación manual y mejora confianza en:
+
+- saldos;
+- estados de cuenta;
+- procesamiento de pagos;
+- estados del ciclo de vida de la cuenta.
+
+## Relación con el resto de la arquitectura
+
+La conciliación es más efectiva cuando la plataforma ya tiene:
+
+- rutas de escritura centralizadas en la capa de servicio;
+- transiciones de estado confiables;
+- manejo idempotente para reintentos;
+- eventos financieros trazables.
+
+Sin esas bases, la conciliación seguirá detectando problemas, pero será mucho más difícil explicarlos y corregirlos.
+
+Por eso conviene tratar la conciliación como parte de la arquitectura de plataforma y no solo como tooling de soporte.
+
+Para temas relacionados, revisa [controles de consistencia para flujos financieros](/es/engineering/fastapi-financial-apis) y [patrones de capa de servicio en FastAPI](/es/engineering/fastapi-service-layer-patterns).

@@ -1,0 +1,89 @@
+---
+title: "Reconciliation jobs as systemic control in financial platforms"
+summary: "Why reconciliation should be designed as an ongoing control mechanism instead of a secondary support task in credit and payment systems."
+date: "2026-03-09"
+theme: "financial-systems"
+articleType: "Control Pattern"
+readingTime: "8 min read"
+tags:
+  - Reconciliation
+  - Financial Systems
+  - Control Jobs
+  - Credit Platform
+---
+
+Reconciliation is often described as a back-office task. In system design terms, that framing is too weak. In a financial platform, reconciliation is one of the controls that tells you whether the platform is still internally coherent.
+
+This matters because many failures are not dramatic. They do not necessarily crash the application. They appear as subtle mismatches between expected balances, posted events, statements, or operational status. If those mismatches are not surfaced systematically, the platform can keep running while trust erodes underneath it.
+
+## Why application correctness is not enough
+
+Even when the primary write path is designed carefully, financial systems still face:
+
+- retries and duplicate requests;
+- asynchronous jobs;
+- manual support interventions;
+- late data corrections;
+- legacy behavior that still affects current state.
+
+Those conditions make it risky to assume that "if the API responded successfully, the platform is consistent." Reconciliation exists to test that assumption continuously.
+
+## What reconciliation jobs should verify
+
+The exact checks depend on the product, but useful reconciliation jobs usually verify relationships such as:
+
+- expected balance versus registered financial events;
+- due periods versus statement output;
+- payment records versus account state;
+- generated charges versus contractual expectations;
+- internal records versus externally visible customer information.
+
+The goal is not only to find differences. It is to classify them quickly enough that teams can respond before they affect customers or accounting close.
+
+## Reconciliation is architecture, not reporting
+
+The mistake is to treat reconciliation as a report generated after the fact. A stronger design treats it as a control loop built into the platform:
+
+- the platform records financial events;
+- control jobs evaluate coherence;
+- mismatches are surfaced with enough context to be actionable;
+- support or engineering can trace the discrepancy back to the responsible workflow.
+
+That loop changes how a team thinks about system reliability. It acknowledges that complex financial operations need verification beyond the happy path.
+
+## Design considerations
+
+Useful reconciliation jobs share a few properties:
+
+- they are deterministic enough to be trusted;
+- they encode domain expectations explicitly;
+- they produce results that support teams can interpret;
+- they are safe to rerun.
+
+That last point matters. A control job should help diagnose truth, not mutate the system unpredictably. In most cases, detection and correction should stay clearly separated.
+
+## Operational benefit
+
+The strongest benefit of reconciliation is early detection. Instead of learning about a mismatch from a customer complaint or a closing issue, the platform can expose it as an operational exception while the context is still recoverable.
+
+That reduces manual investigation time and improves confidence in:
+
+- balances;
+- statements;
+- payment processing;
+- account lifecycle state.
+
+## Relationship to the rest of the architecture
+
+Reconciliation is most effective when the platform already has:
+
+- explicit service-layer write paths;
+- reliable state transition rules;
+- idempotent handling for retries;
+- traceable financial events.
+
+Without those foundations, reconciliation will still detect problems, but it will be harder to explain and fix them.
+
+That is why reconciliation should be considered part of platform architecture, not just support tooling.
+
+For related topics, see [consistency controls for credit workflows](/engineering/fastapi-financial-apis) and [service-layer patterns in FastAPI](/engineering/fastapi-service-layer-patterns).

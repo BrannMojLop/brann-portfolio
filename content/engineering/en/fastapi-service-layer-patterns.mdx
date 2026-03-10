@@ -1,0 +1,94 @@
+---
+title: "FastAPI service layer patterns for enterprise backends"
+summary: "Patterns that keep FastAPI applications maintainable when APIs start representing approvals, reconciliations, and business workflows instead of simple CRUD."
+date: "2026-03-09"
+theme: "backend-engineering"
+articleType: "Implementation Guide"
+readingTime: "10 min read"
+tags:
+  - FastAPI
+  - Service Layer
+  - Enterprise Backend
+  - API Architecture
+---
+
+FastAPI is productive enough that many teams can create a large backend quickly. That speed is useful, but it also hides an architectural risk: route handlers can become the application layer by accident.
+
+That usually happens in stages. First, routers validate input and call the database. Then a few business checks are added. Later, a background task, permission rule, or audit side effect appears. After enough iterations, the route handler is coordinating the whole use case, even though no one intended to design it that way.
+
+Enterprise backends need a stronger structure because the API surface is not stable unless the business behavior behind it is stable.
+
+## Pattern 1: make routers thin on purpose
+
+Routers should mainly do HTTP work:
+
+- receive input;
+- validate request shape;
+- map domain outcomes to HTTP responses.
+
+They should not be the long-term home of business policy. Once route handlers decide state validity, write multiple repositories, and emit operational side effects, the backend becomes difficult to reason about.
+
+Thin routers are not about style. They are about preserving a place where the use case can be understood independently from transport details.
+
+## Pattern 2: model services around use cases
+
+A useful service function represents one business intention:
+
+- create a charge;
+- approve a movement;
+- reconcile an account;
+- close a period.
+
+That service should own the preconditions, state transition, and consequences of the action. If the use case spans multiple repositories, that is exactly why it belongs in a service.
+
+This pattern also improves naming. It is easier to understand `close_accounting_period` than `update_period_status`.
+
+## Pattern 3: isolate repositories from workflow rules
+
+Repositories are useful because they give the service layer a consistent way to retrieve and persist data. Their responsibility should stay close to data access. Once they start encoding workflow semantics heavily, the boundary between persistence and application policy becomes blurry again.
+
+The service layer should decide *why* something is valid. The repository should help persist *what* changed.
+
+## Pattern 4: return process outcomes, not only models
+
+Enterprise APIs are easier to consume when the response reflects the business action that occurred. Sometimes returning the updated record is enough. Often it is not.
+
+A process-oriented response may need to communicate:
+
+- the new operational state;
+- a supporting message or reason;
+- whether additional steps were triggered;
+- any warnings that matter to the user or downstream process.
+
+That response shape keeps consumers aligned with the workflow rather than forcing them to infer meaning from raw fields.
+
+## Pattern 5: centralize side effects with the use case
+
+Support notifications, audit events, ledger updates, task creation, or follow-up jobs should be coordinated from the same use case boundary that approved the transaction. Splitting these side effects across multiple ad hoc hooks makes the system harder to debug.
+
+This does not mean all logic belongs in one function. It means there should be one obvious orchestration point for the workflow.
+
+## Pattern 6: test use cases as contracts
+
+A high-value backend test usually proves a business contract:
+
+- the transaction succeeds when preconditions are met;
+- invalid state transitions are blocked;
+- required side effects occur exactly once;
+- retries do not create inconsistent results.
+
+That kind of test is easier when services are explicit. It is harder when the workflow is distributed between routers, models, and helper utilities.
+
+## Pattern 7: document failure modes in code structure
+
+Enterprise platforms spend a lot of time dealing with "what if this is already closed," "what if the payment exists," or "what if the account is in the wrong state." That is normal. Failure modes are part of the system's design.
+
+Good service structure makes those branches visible and intentional. Weak structure hides them until support discovers them in production.
+
+## Why this matters more in FastAPI than it first appears
+
+FastAPI's ergonomics make it easy to blur concerns because the framework does not strongly force one architecture. That flexibility is excellent, but it means maintainability depends more on team discipline.
+
+If the backend powers ERP or financial operations, the service layer should not be a later cleanup task. It should be part of the initial design once workflows begin to matter.
+
+For a broader architecture context, this article pairs well with [transaction-oriented API design](/engineering/backend-service-boundaries) and with the question of [modular monolith vs. microservices](/engineering/modular-monolith-vs-microservices-enterprise-software).

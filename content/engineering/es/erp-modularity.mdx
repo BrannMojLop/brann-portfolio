@@ -1,0 +1,93 @@
+---
+title: "Definir límites de dominio en un ERP antes de que los módulos escalen"
+summary: "Cómo Businext ERP mantiene evolutivos finanzas, inventario, RH y ventas al tratar los límites de dominio como un problema de arquitectura y no solo de carpetas."
+date: "2026-03-09"
+theme: "architecture"
+articleType: "Nota de Arquitectura"
+readingTime: "8 min de lectura"
+tags:
+  - ERP
+  - Límites de Dominio
+  - Businext
+  - Arquitectura Modular
+---
+
+Un ERP se vuelve costoso mucho antes de que se vuelva imposible de cambiar. La señal real no es el número de líneas. Es el momento en que cada módulo empieza a depender de reglas privadas que pertenecen a otra área del negocio.
+
+Ese era el riesgo dentro de Businext ERP. Finanzas necesitaba contexto de inventario para validar movimientos. Ventas necesitaba estado de cuenta del cliente. Recursos humanos necesitaba reglas de acceso que afectaban al resto de la plataforma. Todo eso es normal en un sistema empresarial real. El problema comienza cuando esas dependencias se resuelven con acceso directo a tablas, joins ocultos y atajos que parecen eficientes en el momento.
+
+En la práctica, una plataforma de este tipo no falla porque un módulo esté mal escrito. Falla porque el modelo de negocio no está explícito. Cuando eso ocurre, cada cambio en finanzas puede romper ventas silenciosamente, cada ajuste de inventario puede afectar el cierre contable y cada entrega urgente deja la base de código menos comprensible que antes.
+
+## El problema de escala también es organizacional
+
+Cuando los módulos de un ERP crecen, también crece su responsabilidad. Finanzas no solo posee saldos y pólizas. Empieza a influir en aprobaciones, expectativas de pago, conciliaciones y semántica de reportes. Inventario no solo rastrea stock. Define reglas de movimiento, tiempos operativos y excepciones que importan a contabilidad. Ventas no es solo oportunidades y pedidos. Moldea compromisos de cumplimiento, supuestos de precio y datos del ciclo de vida del cliente.
+
+Si esas preocupaciones no se modelan como dominios separados, el equipo compensa con conveniencia:
+
+- importa datos directos desde otro módulo porque una llamada de servicio parece más lenta;
+- replica reglas de negocio en varias pantallas o endpoints porque la regla central es difícil de reutilizar;
+- agrega condicionales por todos lados en lugar de decidir qué módulo realmente posee el concepto.
+
+El resultado es un sistema que sigue funcionando, pero deja de evolucionar con seguridad.
+
+## La decisión de arquitectura en Businext
+
+La decisión fue definir límites de dominio claros y forzar la integración mediante contratos explícitos. Cada área podía exponer capacidades, pero no podía exponer su lógica interna como dependencia compartida para el resto del ERP.
+
+Eso suena simple. En la práctica cambia varias decisiones de ingeniería:
+
+- las interfaces de servicio importan más que la visibilidad de tablas;
+- la propiedad del lenguaje de negocio importa más que la comodidad al nombrar;
+- las integraciones se diseñan de forma intencional en lugar de aparecer por joins accidentales.
+
+Por ejemplo, finanzas posee periodos contables, semántica de conciliación e integridad de libro mayor. Ventas puede consultar un estatus financiero, pero no debería decidir qué significa un estado contable válido. Inventario puede emitir el resultado de un movimiento, pero no debería incrustar lógica contable solo porque una transacción tenga impacto posterior.
+
+Esta distinción explica por qué los límites de dominio son arquitectura y no solo organización de carpetas. Una estructura limpia sin reglas de propiedad sigue produciendo regresiones cruzadas.
+
+## Por qué el acceso directo a tablas suele iniciar el problema
+
+En muchos sistemas internos, leer tablas de otro módulo parece inofensivo. Un desarrollador solo necesita un campo extra y hace un join. Luego otro copia esa consulta. Después soporte pide una excepción y la lógica se ajusta en una pantalla, pero no en la API que debería reflejarla.
+
+Lo que parecía eficiencia se convierte en política distribuida.
+
+Eso es peligroso en software ERP porque el sistema está lleno de reglas que no son obvias desde el esquema:
+
+- qué periodo aún se puede editar;
+- cuándo un movimiento de stock sigue siendo provisional;
+- cuándo una acción comercial debe volverse compromiso financiero;
+- cómo interactúan permisos con contexto operativo y administrativo.
+
+Esas son reglas de dominio, no detalles de persistencia. Cuando se filtran en consultas aleatorias, la plataforma pierde un centro de verdad confiable.
+
+## Un modelo práctico de límites
+
+El modelo más útil fue hacer cuatro preguntas para cada concepto relevante:
+
+1. ¿Qué área de negocio posee la regla?
+2. ¿Qué otras áreas consumen el resultado?
+3. ¿Cuál es el contrato entre ellas?
+4. ¿Qué falla aparece si el consumidor se salta ese contrato?
+
+Este método mantiene las decisiones concretas. Si finanzas posee el cierre de periodo, otro módulo debe consumir una decisión de finanzas, no reinterpretar el estado por su cuenta. Si inventario posee la validez de un movimiento, otro servicio puede reaccionar a movimientos aprobados, pero no deducir reglas desde tablas internas.
+
+Eso también vuelve más defendibles las pruebas. En lugar de probar decenas de endpoints que implementan fragmentos de una regla, el equipo puede probar puntos de propiedad donde la política de negocio realmente vive.
+
+## El tradeoff: más coordinación explícita
+
+Límites claros no vuelven una plataforma mágicamente pequeña. Muchas veces hacen las dependencias más visibles. Algunos flujos requieren orquestación de servicios, negociación de contratos y mejor lenguaje. A veces esto genera resistencia porque el acceso directo parece más rápido.
+
+El tradeoff vale la pena en sistemas empresariales porque el acoplamiento oculto multiplica deuda. Un poco de coordinación explícita ahora evita una gran cantidad de análisis de regresiones después.
+
+Esto es especialmente cierto cuando:
+
+- el ERP todavía sigue creciendo en módulos;
+- varias personas tocan la misma plataforma con el tiempo;
+- contabilidad y operación deben mantenerse consistentes.
+
+## Efecto operativo
+
+El beneficio más fuerte no fue estético. Fue seguridad para decidir. Los cambios en finanzas se volvieron más aislables. El comportamiento de inventario se mantuvo coherente. Las nuevas funcionalidades tuvieron que declarar sus dependencias en lugar de inventarlas silenciosamente.
+
+Eso es lo que mantiene mantenible a un ERP. No la ausencia de complejidad, sino la presencia de propiedad explícita.
+
+Si estás diseñando o refactorizando una plataforma similar, un siguiente paso útil es combinar este trabajo con [servicios FastAPI orientados a transacciones de negocio](/es/engineering/backend-service-boundaries) y con una visión más amplia sobre [arquitectura de plataformas ERP](/es/engineering/erp-platform-architecture).
