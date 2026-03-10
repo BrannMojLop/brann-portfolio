@@ -21,20 +21,22 @@ export function SiteHeader() {
 
   return (
     <header className="site-chrome sticky top-0 z-30 border-b border-border/70 bg-background/82 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-6">
+      <div className="mx-auto flex min-h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-3 sm:px-6">
         <Link
           href={localizePath(locale, "/")}
-          className="site-wordmark flex items-center gap-3 text-sm font-semibold tracking-[0.08em] text-foreground/92 transition-colors duration-300"
+          className="site-wordmark flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold tracking-[0.05em] text-foreground/92 transition-colors duration-300 sm:flex-none sm:gap-3 sm:tracking-[0.08em]"
         >
           <Image
             src="/brand-mark.svg"
             alt="Brandon Mojica logo"
             width={28}
             height={28}
-            className="h-7 w-7 rounded-md"
+            className="h-6 w-6 rounded-md sm:h-7 sm:w-7"
             priority
           />
-          <span>Brandon Mojica</span>
+          <span className="truncate">
+            Brandon <span className="max-[380px]:hidden">Mojica</span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -49,7 +51,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <LanguageSwitcher />
           <ThemeSwitcher />
         </div>
