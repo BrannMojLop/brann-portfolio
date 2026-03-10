@@ -257,6 +257,212 @@ html.light .shell-grid {
   animation: revealUp 600ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
 }
 
+.systems-page {
+  isolation: isolate;
+}
+
+.systems-ambient {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.systems-grid {
+  position: absolute;
+  inset: 0 4% auto;
+  height: min(100%, 20rem);
+  background-image:
+    linear-gradient(to right, transparent 0, var(--hero-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, transparent 0, var(--hero-grid) 1px, transparent 1px);
+  background-size: 68px 68px;
+  opacity: 0.14;
+  mask-image: radial-gradient(circle at 28% 14%, black, transparent 75%);
+}
+
+.systems-intro {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.systems-intro-line {
+  display: block;
+  width: min(12rem, 28vw);
+  height: 1px;
+  background: linear-gradient(90deg, var(--hero-line), transparent);
+  opacity: 0.7;
+  animation: eyebrowSweep 900ms ease-out 220ms both;
+}
+
+.systems-orbit {
+  position: absolute;
+  display: block;
+  border-radius: 9999px;
+  filter: blur(2px);
+}
+
+.systems-orbit-a {
+  top: 7rem;
+  right: -5rem;
+  width: 22rem;
+  height: 22rem;
+  border: 1px solid rgba(94, 234, 212, 0.06);
+  box-shadow: inset 0 0 40px rgba(94, 234, 212, 0.02);
+  animation: traceDrift 20s ease-in-out infinite;
+}
+
+.systems-orbit-b {
+  top: 10rem;
+  left: -4rem;
+  width: 12rem;
+  height: 12rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--hero-glow) 84%, transparent), transparent 68%);
+  opacity: 0.4;
+  animation: signalPulse 12s ease-in-out infinite;
+}
+
+.system-panel {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 22%),
+    linear-gradient(125deg, rgba(94, 234, 212, 0.04), transparent 42%),
+    linear-gradient(90deg, rgba(8, 17, 31, 0.22), transparent 24%, rgba(8, 17, 31, 0.18) 78%, rgba(94, 234, 212, 0.03) 100%),
+    color-mix(in srgb, var(--card) 94%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 18px 48px rgba(8, 17, 31, 0.16),
+    0 0 0 1px rgba(125, 211, 252, 0.04);
+  animation: panelReveal 820ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.system-panel:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--border) 58%, var(--primary));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 56px rgba(8, 17, 31, 0.18),
+    0 0 0 1px rgba(125, 211, 252, 0.06);
+}
+
+.system-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(94, 234, 212, 0.045), transparent);
+  transform: translateX(-115%);
+  animation: signalTraverse 16s linear infinite;
+  opacity: 0.8;
+}
+
+.system-panel-rail {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--hero-line), transparent);
+  opacity: 0.75;
+}
+
+.system-panel-header {
+  position: relative;
+}
+
+.system-panel-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 36%;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--hero-line), transparent);
+  opacity: 0.45;
+}
+
+.system-module,
+.system-stack,
+.system-list-block {
+  position: relative;
+  background: rgba(8, 17, 31, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.system-module:hover,
+.system-stack:hover,
+.system-list-block:hover {
+  border-color: color-mix(in srgb, var(--border) 62%, var(--primary));
+  background: rgba(8, 17, 31, 0.19);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.system-module-accent {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 26%),
+    linear-gradient(135deg, rgba(94, 234, 212, 0.07), transparent 70%),
+    rgba(8, 17, 31, 0.16);
+}
+
+.system-stack {
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(94, 234, 212, 0.03), transparent 32%, rgba(56, 189, 248, 0.04) 100%),
+    rgba(8, 17, 31, 0.16);
+}
+
+.system-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--hero-line), transparent);
+  opacity: 0.75;
+}
+
+.system-list-block h4 {
+  letter-spacing: -0.02em;
+}
+
+.system-list-block ul li {
+  text-wrap: pretty;
+}
+
+.system-results {
+  background:
+    linear-gradient(135deg, rgba(94, 234, 212, 0.03), transparent 38%),
+    rgba(8, 17, 31, 0.16);
+}
+
+.system-cta {
+  position: relative;
+}
+
+.system-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.3rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0.45);
+  transform-origin: left;
+  opacity: 0.55;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.system-cta:hover::after {
+  transform: scaleX(1);
+  opacity: 0.9;
+}
+
 .hero-title {
   text-shadow: 0 10px 38px rgba(8, 17, 31, 0.18);
 }
@@ -532,6 +738,10 @@ html.light .mobile-nav-link {
   .hero-copy > *,
   .hero-panel,
   .data-float,
+  .systems-intro-line,
+  .systems-orbit,
+  .system-panel,
+  .system-panel::after,
   .hero-eyebrow::after,
   .hero-signal-card::after,
   .hero-signal-ping {
@@ -543,7 +753,11 @@ html.light .mobile-nav-link {
   .theme-toggle,
   .site-wordmark,
   .hero-chip::before,
-  .hero-signal-card {
+  .hero-signal-card,
+  .system-module,
+  .system-stack,
+  .system-list-block,
+  .system-cta::after {
     transition: none;
   }
 }
@@ -576,5 +790,35 @@ html.light .mobile-nav-link {
 
   .hero-panel {
     margin-top: 0.75rem;
+  }
+
+  .systems-intro {
+    margin-bottom: 1.1rem;
+  }
+
+  .systems-grid {
+    inset-inline: -8%;
+    background-size: 52px 52px;
+    opacity: 0.12;
+  }
+
+  .systems-orbit-a {
+    top: 8rem;
+    right: -10rem;
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .systems-orbit-b {
+    top: 13rem;
+    left: -6rem;
+  }
+
+  .system-panel {
+    border-radius: 1.45rem;
+  }
+
+  .system-panel-header::after {
+    right: 18%;
   }
 }
