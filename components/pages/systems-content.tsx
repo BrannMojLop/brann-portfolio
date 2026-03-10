@@ -113,7 +113,7 @@ export function SystemsContent() {
                   </ul>
                 </div>
 
-                <div className="pt-1">
+                <div className="hidden pt-1">
                   <Link
                     href={localizePath(locale, "/contact")}
                     className="system-cta inline-flex items-center text-sm font-medium text-primary transition-colors hover:text-primary/80"
