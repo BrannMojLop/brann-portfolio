@@ -19,8 +19,9 @@ export function SiteShell({
         <ThemeScript />
         <ThemeProvider>
           <LanguageProvider initialLocale={locale}>
-            <div className="relative min-h-screen overflow-x-hidden">
-              <div className="theme-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,_rgba(94,234,212,0.12),_transparent_40%),radial-gradient(circle_at_90%_10%,_rgba(56,189,248,0.16),_transparent_35%)]" />
+            <div className="relative min-h-screen">
+              <div className="theme-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,_rgba(94,234,212,0.12),_transparent_40%),radial-gradient(circle_at_90%_10%,_rgba(56,189,248,0.16),_transparent_35%),linear-gradient(180deg,_rgba(4,12,24,0.84)_0%,_transparent_34%)]" />
+              <div className="shell-grid pointer-events-none absolute inset-x-0 top-0 -z-10 h-[36rem]" />
               <SiteHeader />
               <main>{children}</main>
               <SiteFooter />

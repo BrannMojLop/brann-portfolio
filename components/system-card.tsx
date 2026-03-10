@@ -13,11 +13,11 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
   const content = system.content[locale];
 
   return (
-    <Card className="h-full border-border/70 bg-card/80">
+    <Card className="flex h-full flex-col border-border/70 bg-card/80">
       <CardHeader>
         <CardTitle>{content.name}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="flex flex-1 flex-col space-y-4">
         <CardDescription className="text-sm leading-6 text-muted-foreground">{content.tagline}</CardDescription>
         <p className="text-sm leading-6 text-muted-foreground">{content.solution}</p>
 
@@ -43,7 +43,7 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
         )}
       </CardContent>
       {!showDetails && (
-        <CardFooter>
+        <CardFooter className="mt-auto">
           <Link
             href={localizePath(locale, "/systems")}
             className="text-sm font-medium text-primary transition-colors hover:text-primary/80"

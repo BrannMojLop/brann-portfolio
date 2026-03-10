@@ -23,11 +23,18 @@ export function HomeContent() {
 
   return (
     <>
-      <Section className="pb-10 pt-14 md:pt-18 lg:pt-24">
-        <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
+      <Section className="hero-stage pb-10 pt-12 md:pt-16 lg:pt-20">
+        <div aria-hidden className="hero-ambient">
+          <div className="hero-grid" />
+          <span className="hero-orbit hero-orbit-a" />
+          <span className="hero-orbit hero-orbit-b" />
+          <span className="hero-scanline" />
+        </div>
+
+        <div className="hero-shell grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
           <div className="space-y-10 lg:space-y-12">
             <div className="hero-copy space-y-9">
-              <div className="flex items-center gap-3.5">
+              <div className="hero-eyebrow flex items-center gap-3.5">
                 <span className="h-px w-12 bg-primary/35" />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/80 md:text-[11px]">
                   {t.home.eyebrow}
@@ -35,11 +42,11 @@ export function HomeContent() {
               </div>
 
               <div className="space-y-7">
-                <h1 className="max-w-4xl text-[3.05rem] font-semibold leading-[0.9] tracking-[-0.065em] text-balance md:max-w-5xl md:text-[4.6rem] lg:max-w-[14ch] lg:text-[5.15rem]">
+                <h1 className="hero-title max-w-4xl text-[3.05rem] font-semibold leading-[0.9] tracking-[-0.065em] text-balance md:max-w-5xl md:text-[4.6rem] lg:max-w-[14ch] lg:text-[5.15rem]">
                   {t.home.title}
                 </h1>
 
-                <div className="max-w-[43rem] space-y-6">
+                <div className="hero-intro max-w-[43rem] space-y-6">
                   <p className="max-w-[40rem] text-[1.08rem] leading-8 text-foreground/90 md:text-[1.24rem] md:leading-9">
                     {leadIntro}
                   </p>
@@ -54,7 +61,7 @@ export function HomeContent() {
               </div>
             </div>
 
-            <div className="space-y-4.5">
+            <div className="hero-stack space-y-4.5">
               <div className="space-y-3.5">
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/52 md:text-[11px]">
                   {t.home.stackLabel}
@@ -64,7 +71,7 @@ export function HomeContent() {
                     <Badge
                       key={item}
                       variant="secondary"
-                      className="rounded-md border border-primary/10 bg-card/95 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)] md:text-[11px]"
+                      className="hero-chip rounded-md border border-primary/10 bg-card/95 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)] md:text-[11px]"
                     >
                       {item}
                     </Badge>
@@ -73,22 +80,24 @@ export function HomeContent() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-1">
+            <div className="hero-actions flex flex-wrap gap-3 pt-1">
               <Link href={localizePath(locale, "/systems")}>
-                <Button size="lg" className="group">
+                <Button size="lg" className="group hero-cta-primary">
                   {t.home.exploreSystems}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </Link>
               <Link href={localizePath(locale, "/engineering")}>
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="group hero-cta-secondary">
                   {t.home.readNotes}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </Link>
             </div>
           </div>
 
           <aside className="hero-panel rounded-2xl border border-border/70 bg-card/95 p-5 shadow-sm lg:p-6">
+            <div aria-hidden className="hero-panel-rail" />
             <div className="mb-6 flex items-start justify-between gap-4 border-b border-border/70 pb-4">
               <div className="space-y-2">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
@@ -110,8 +119,9 @@ export function HomeContent() {
                 return (
                   <article
                     key={signal.title}
-                    className="data-float rounded-xl border border-border/65 bg-background/75 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                    className="data-float hero-signal-card rounded-xl border border-border/65 bg-background/75 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
                   >
+                    <span aria-hidden className="hero-signal-ping" />
                     <div className="flex items-center gap-2.5">
                       <Icon className="mt-0.5 size-4 shrink-0 text-primary" />
                       <p className="font-mono text-[10px] uppercase tracking-[0.17em] text-foreground/58 md:text-[11px]">

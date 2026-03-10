@@ -43,8 +43,8 @@ export const messages = {
       ],
       stackLabel: "TECHNICAL FOCUS",
       profileBadge: "ENGINEERING PROFILE",
-      exploreSystems: "Explore Systems",
-      readNotes: "Read Engineering Notes",
+      exploreSystems: "Explore Production Systems",
+      readNotes: "Explore Engineering",
       signalBoard: "Core Engineering Areas",
       matrixTitle: "Types of systems I work on",
       matrixNote:
@@ -319,8 +319,8 @@ export const messages = {
       ],
       stackLabel: "ENFOQUE TÉCNICO",
       profileBadge: "PERFIL DE INGENIERÍA",
-      exploreSystems: "Explorar Sistemas",
-      readNotes: "Leer Notas de Ingeniería",
+      exploreSystems: "Explorar Sistemas en Producción",
+      readNotes: "Explorar Ingeniería",
       signalBoard: "Áreas clave de ingeniería",
       matrixTitle: "Tipos de sistemas en los que trabajo",
       matrixNote:

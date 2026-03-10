@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { Circle, Disc3 } from "lucide-react";
 
 import { useLanguage } from "@/components/language-provider";
@@ -10,10 +11,14 @@ export function ThemeSwitcher() {
   const { t } = useLanguage();
   const { theme, setTheme } = useTheme();
   const isLight = theme === "light";
+  const trackStyle = {
+    "--thumb-size": "1.95rem",
+    "--thumb-travel": "calc(100% - var(--thumb-size) - 0.5rem)",
+  } as CSSProperties;
 
   return (
-    <div className="control-shell flex items-center gap-1 rounded-full border border-border/70 bg-card/80 p-1 shadow-[0_1px_0_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-sm sm:gap-2 sm:p-1.5">
-      <span className="control-icon flex size-8 items-center justify-center rounded-full border border-primary/18 bg-primary/10 text-primary">
+    <div className="control-shell flex w-full items-center gap-2 rounded-full border border-border/70 bg-card/72 p-1 shadow-[0_1px_0_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-sm sm:w-auto sm:gap-2 sm:p-1.5">
+      <span className="control-icon flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/18 bg-primary/8 text-primary sm:size-8">
         <span className="sr-only">{t.common.theme}</span>
         <Disc3 className="size-3.5" />
       </span>
@@ -21,28 +26,30 @@ export function ThemeSwitcher() {
         type="button"
         onClick={() => setTheme(isLight ? "dark" : "light")}
         className={cn(
-          "theme-toggle relative inline-flex h-8 w-10 items-center rounded-full border border-border/60 bg-background/70 p-1 transition-colors duration-300 sm:h-9 sm:w-[4.25rem]",
+          "theme-toggle relative inline-flex h-11 flex-1 items-center overflow-hidden rounded-full border border-border/60 bg-background/78 px-1 py-1 transition-[border-color,background-color] duration-300 sm:h-10 sm:w-[6rem] sm:flex-none",
           isLight ? "text-slate-700" : "text-slate-200",
         )}
         aria-label={isLight ? t.common.switchToDark : t.common.switchToLight}
         aria-pressed={isLight}
+        style={trackStyle}
       >
         <span className="sr-only">{t.common.theme}</span>
-        <span className="hidden w-full items-center justify-between px-1 sm:flex">
-          <Circle className={cn("size-3.5 transition-all duration-300", isLight ? "text-foreground" : "text-muted-foreground/70")} />
-          <Disc3 className="size-3.5" />
-        </span>
-        <span className="flex w-full items-center justify-center sm:hidden">
+        <span
+          className={cn(
+            "pointer-events-none absolute inset-y-1 left-1 right-1 flex items-center transition-all duration-300",
+            isLight ? "justify-end" : "justify-start",
+          )}
+        >
           {isLight ? (
-            <Circle className="size-3.5 text-muted-foreground/70" />
+            <Disc3 className="size-3.5 text-primary/45 sm:size-3.5" />
           ) : (
-            <Disc3 className="size-3.5 text-primary" />
+            <Circle className="size-3.5 text-muted-foreground/55 sm:size-3.5" />
           )}
         </span>
         <span
           className={cn(
-            "absolute top-1 flex size-6 items-center justify-center rounded-full border border-border/60 bg-card text-foreground shadow-[0_6px_14px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-300 ease-out sm:size-7",
-            isLight ? "left-1" : "left-[1.55rem] sm:left-[2.1rem]",
+            "pointer-events-none absolute inset-y-1 left-1 flex w-[var(--thumb-size)] items-center justify-center rounded-full border border-border/60 bg-card text-foreground shadow-[0_6px_14px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.08)] transition-transform duration-300 ease-out",
+            isLight ? "translate-x-0" : "translate-x-[var(--thumb-travel)]",
           )}
         >
           {isLight ? <Circle className="size-3.5" /> : <Disc3 className="size-3.5 text-primary" />}
