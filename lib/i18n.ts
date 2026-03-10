@@ -93,9 +93,10 @@ export const messages = {
       ],
     },
     systems: {
-      title: "Systems designed for real operations",
+      title: "ERP and financial systems built for real-world operations",
       description:
-        "Enterprise and financial platforms built from real business needs, with architecture decisions focused on maintainability, traceability, operational reliability, and explicit domain boundaries.",
+        "Enterprise platforms developed from real business needs, with backend architecture focused on domain modeling, APIs, and reliable operational workflows.",
+      businessContextLabel: "Business context",
       solutionLabel: "What it solves",
       stackLabel: "Core technologies",
       architectureLabel: "Architectural approach",
@@ -369,9 +370,10 @@ export const messages = {
       ],
     },
     systems: {
-      title: "Sistemas diseñados para operación real",
+      title: "Sistemas ERP y financieros construidos para operación real",
       description:
-        "Plataformas empresariales y financieras construidas desde necesidades reales de negocio, con decisiones de arquitectura enfocadas en mantenibilidad, trazabilidad, confiabilidad operativa y límites de dominio explícitos.",
+        "Plataformas empresariales desarrolladas desde necesidades reales de negocio, con arquitectura backend orientada a dominio, APIs y flujos operativos confiables.",
+      businessContextLabel: "Contexto de negocio",
       solutionLabel: "Qué resuelve",
       stackLabel: "Tecnologías principales",
       architectureLabel: "Enfoque arquitectónico",
