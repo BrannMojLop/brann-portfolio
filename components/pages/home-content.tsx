@@ -16,7 +16,10 @@ const icons = [Network, ServerCog, Landmark, Database] as const;
 export function HomeContent() {
   const { locale, t } = useLanguage();
   const [leadIntro, ...supportingIntro] = t.home.intro;
-  const stack = ["Python", "FastAPI", "React", "AWS", "Microservices", "ERP"];
+  const stack =
+    locale === "en"
+      ? ["Python", "FastAPI", "React", "AWS", "Domain Architecture", "ERP Platforms"]
+      : ["Python", "FastAPI", "React", "AWS", "Arquitectura de Dominio", "Plataformas ERP"];
 
   return (
     <>
@@ -95,8 +98,8 @@ export function HomeContent() {
                   {t.home.matrixNote}
                 </p>
               </div>
-              <span className="rounded-full border border-primary/15 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-primary">
-                {t.common.liveProfile}
+              <span className="whitespace-nowrap rounded-full border border-primary/15 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-primary">
+                {t.home.profileBadge}
               </span>
             </div>
 
@@ -151,23 +154,30 @@ export function HomeContent() {
         <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
           <article className="rounded-2xl border border-border/70 bg-card/85 p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
-              {locale === "en" ? "Search positioning focus" : "Enfoque de posicionamiento"}
+              {locale === "en" ? "PORTFOLIO CONTEXT" : "ENFOQUE DEL PORTAFOLIO"}
             </p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight">
               {locale === "en"
-                ? "Software Engineer portfolio focused on ERP systems, backend architecture, FastAPI services, and systems design."
-                : "Portafolio de ingeniería enfocado en sistemas ERP, arquitectura backend, servicios con FastAPI y diseño de sistemas."}
+                ? "Engineering portfolio focused on real-world enterprise systems."
+                : "Portafolio de ingeniería centrado en sistemas empresariales reales."}
             </h2>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
-              {locale === "en"
-                ? "The strongest topics in this portfolio are ERP Systems Engineer work, Python FastAPI Backend Engineer experience, and systems architecture decisions validated in production environments."
-                : "Los temas más fuertes de este portafolio son el trabajo como especialista en ERP, experiencia como ingeniero backend con Python y FastAPI, y decisiones de arquitectura de sistemas validadas en producción."}
-            </p>
+            <div className="mt-4 max-w-3xl space-y-4 text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
+              <p>
+                {locale === "en"
+                  ? "This site documents platforms built for real-world operations, including an enterprise ERP and financial systems running in production."
+                  : "Este sitio documenta plataformas construidas para operación real, incluyendo un ERP empresarial y sistemas financieros utilizados en producción."}
+              </p>
+              <p>
+                {locale === "en"
+                  ? "The goal is to show how architectural decisions, domain modeling, and backend design support business workflows and long-term platform evolution."
+                  : "El objetivo es mostrar cómo decisiones de arquitectura, modelado de dominio y diseño backend sostienen flujos de negocio y evolución de plataforma a largo plazo."}
+              </p>
+            </div>
           </article>
 
           <aside className="rounded-2xl border border-border/70 bg-card/85 p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/58 md:text-[11px]">
-              {locale === "en" ? "Continue through the portfolio" : "Continúa por el portafolio"}
+              {locale === "en" ? "CONTINUE THROUGH THE PORTFOLIO" : "CONTINÚA POR EL PORTAFOLIO"}
             </p>
             <div className="mt-4 space-y-3">
               <Link
@@ -175,15 +185,15 @@ export function HomeContent() {
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "Review Businext ERP and TR0V1 as architecture case studies."
-                  : "Revisar Businext ERP y TR0V1 como casos de arquitectura."}
+                  ? "Explore Businext ERP and TR0V1 as real architecture case studies."
+                  : "Explorar Businext ERP y TR0V1 como casos reales de arquitectura."}
               </Link>
               <Link
                 href={localizePath(locale, "/about")}
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "See professional background, current role, and technology focus."
+                  ? "Review professional background, current role, and technical focus."
                   : "Ver trayectoria profesional, rol actual y enfoque tecnológico."}
               </Link>
               <Link
@@ -191,8 +201,8 @@ export function HomeContent() {
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "Read engineering writing about ERP modules, service layers, and financial consistency."
-                  : "Leer escritura técnica sobre módulos ERP, capas de servicio y consistencia financiera."}
+                  ? "Read engineering notes about ERP architecture, service layers, and financial consistency."
+                  : "Leer notas técnicas sobre arquitectura ERP, capas de servicio y consistencia financiera."}
               </Link>
             </div>
           </aside>

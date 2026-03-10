@@ -35,58 +35,60 @@ export const messages = {
       architectureNotes: "View system architecture",
     },
     home: {
-      eyebrow: "SYSTEMS ARCHITECTURE PORTFOLIO",
-      title: "Software Engineer portfolio for ERP systems, FastAPI backends, and enterprise architecture.",
+      eyebrow: "SYSTEMS ENGINEERING PORTFOLIO",
+      title: "Enterprise platforms and backend systems built for real-world operations.",
       intro: [
-        "Software Engineer, ERP Systems Engineer, and Python FastAPI Backend Engineer focused on building enterprise platforms, backend APIs, and financial systems for real operations.",
-        "This portfolio documents production software, including Businext ERP and the TR0V1 credit platform, with emphasis on domain boundaries, service layers, auditability, and maintainable architecture.",
-        "The goal is to show how architecture decisions support business workflows, operational reliability, and long-term platform evolution.",
+        "Backend engineer specialized in ERP platforms, APIs, and financial systems using Python and FastAPI.",
+        "This portfolio documents production software — including Businext ERP and the TR0V1 credit platform — with a focus on domain architecture, service layers, and operational reliability.",
       ],
-      stackLabel: "Core stack",
+      stackLabel: "TECHNICAL FOCUS",
+      profileBadge: "ENGINEERING PROFILE",
       exploreSystems: "Explore Systems",
       readNotes: "Read Engineering Notes",
-      signalBoard: "Architecture Signal Board",
-      matrixTitle: "Engineering Focus Areas",
+      signalBoard: "Core Engineering Areas",
+      matrixTitle: "Types of systems I work on",
       matrixNote:
-        "Core areas of engineering work across enterprise platforms, service architecture, and financial workflows.",
-      majorSystemsTitle: "Major Systems",
+        "Platforms and systems where I apply backend architecture, domain modeling, and engineering decisions for real-world operations.",
+      majorSystemsTitle: "Platforms in Production",
       majorSystemsDesc:
-        "Businext ERP and the TR0V1 credit platform, including business context, architecture decisions, technical constraints, and operational outcomes.",
+        "Businext ERP and the TR0V1 credit platform as enterprise systems built for real-world operations, including architectural decisions, technical constraints, and operational outcomes.",
       architectureSignals: [
         {
-          title: "Business Domains",
+          title: "BUSINESS DOMAINS",
           value: "Finance | HR | Sales | Inventory",
-          note: "Process modeling and real operational rules",
+          note: "Business process modeling and real operational rules.",
         },
         {
-          title: "Backend Architecture",
+          title: "BACKEND ARCHITECTURE",
           value: "FastAPI + Service Layer",
-          note: "API-first design and modular services",
+          note: "Backend architecture focused on APIs, explicit business logic, and modular services.",
         },
         {
-          title: "Financial Systems",
-          value: "Credit, Payments, Interest, Reconciliation",
-          note: "Workflows with operational traceability",
+          title: "FINANCIAL SYSTEMS",
+          value: "Credit, payments, interest, and reconciliation",
+          note: "Financial workflows with operational traceability and transactional consistency.",
         },
         {
-          title: "Platform Scale",
-          value: "Businext ERP with 200k+ LOC",
-          note: "Enterprise system in continuous evolution",
+          title: "PLATFORM SCALE",
+          value: "Businext ERP with 125K+ LOC",
+          note: "Enterprise platform in production with continuous evolution.",
         },
       ],
       focusTracks: [
         {
-          name: "ERP Workflows",
-          description: "Design of operational processes for finance, sales and inventory systems.",
-        },
-        {
-          name: "Backend APIs",
-          description: "Architecture of service layers and transaction-oriented APIs for enterprise platforms.",
-        },
-        {
-          name: "Financial Systems",
+          name: "ERP PLATFORMS",
           description:
-            "Design of credit, payment, interest and reconciliation systems with strong operational consistency.",
+            "Enterprise systems that integrate finance, sales, inventory, human resources, and operational workflows into a single platform.",
+        },
+        {
+          name: "API ARCHITECTURE",
+          description:
+            "Backend APIs and service layers designed to support business rules, transaction workflows, and maintainable platform evolution.",
+        },
+        {
+          name: "FINANCIAL PLATFORMS",
+          description:
+            "Systems for credit, payments, interest, reconciliation, and account statements where operational consistency is part of the architecture.",
         },
       ],
     },
@@ -95,7 +97,7 @@ export const messages = {
       description:
         "Enterprise and financial platforms built from real business needs, with architecture decisions focused on maintainability, traceability, operational reliability, and explicit domain boundaries.",
       solutionLabel: "What it solves",
-      stackLabel: "Primary stack",
+      stackLabel: "Core technologies",
       architectureLabel: "Architectural approach",
       impactLabel: "Impact",
     },
@@ -309,58 +311,60 @@ export const messages = {
       architectureNotes: "Ver arquitectura del sistema",
     },
     home: {
-      eyebrow: "PORTAFOLIO DE ARQUITECTURA DE SISTEMAS",
-      title: "Portafolio de ingeniería para sistemas ERP, FastAPI backend y arquitectura empresarial.",
+      eyebrow: "PORTAFOLIO DE INGENIERÍA DE SISTEMAS",
+      title: "Plataformas empresariales y sistemas backend construidos para operación real.",
       intro: [
-        "Ingeniero de software, especialista en sistemas ERP e ingeniero backend con Python FastAPI enfocado en construir plataformas empresariales, APIs y sistemas financieros para operación real.",
-        "Este portafolio documenta software en producción, incluyendo Businext ERP y la plataforma de crédito TR0V1, con énfasis en límites de dominio, capas de servicio, auditabilidad y arquitectura mantenible.",
-        "El objetivo es mostrar cómo las decisiones de arquitectura sostienen flujos de negocio, confiabilidad operativa y evolución de plataforma a largo plazo.",
+        "Ingeniero backend especializado en ERP, APIs y sistemas financieros con Python y FastAPI.",
+        "Este portafolio documenta software en producción — incluyendo Businext ERP y la plataforma de crédito TR0V1 — con énfasis en arquitectura de dominio, capas de servicio y confiabilidad operativa.",
       ],
-      stackLabel: "Stack principal",
+      stackLabel: "ENFOQUE TÉCNICO",
+      profileBadge: "PERFIL DE INGENIERÍA",
       exploreSystems: "Explorar Sistemas",
       readNotes: "Leer Notas de Ingeniería",
-      signalBoard: "Panel de Señales de Arquitectura",
-      matrixTitle: "Áreas de Enfoque de Ingeniería",
+      signalBoard: "Áreas clave de ingeniería",
+      matrixTitle: "Tipos de sistemas en los que trabajo",
       matrixNote:
-        "Áreas centrales de trabajo técnico en plataformas empresariales, arquitectura de servicios y flujos financieros.",
-      majorSystemsTitle: "Sistemas Principales",
+        "Plataformas y sistemas donde aplico arquitectura backend, modelado de dominio y diseño orientado a operación real.",
+      majorSystemsTitle: "Plataformas en producción",
       majorSystemsDesc:
-        "Businext ERP y la plataforma de crédito TR0V1, con contexto de negocio, decisiones de arquitectura, restricciones técnicas y resultados operativos.",
+        "Businext ERP y la plataforma de crédito TR0V1 como sistemas empresariales desarrollados para operación real, con decisiones de arquitectura, restricciones técnicas y resultados operativos.",
       architectureSignals: [
         {
-          title: "Dominios de negocio",
+          title: "DOMINIOS DE NEGOCIO",
           value: "Finanzas | RH | Ventas | Inventario",
-          note: "Modelado de procesos y reglas operativas reales",
+          note: "Modelado de procesos de negocio y reglas operativas reales.",
         },
         {
-          title: "Arquitectura backend",
+          title: "ARQUITECTURA BACKEND",
           value: "FastAPI + Capa de Servicios",
-          note: "Arquitectura orientada a APIs y servicios modulares",
+          note: "Arquitectura backend orientada a APIs, lógica de negocio explícita y servicios modulares.",
         },
         {
-          title: "Sistemas financieros",
+          title: "SISTEMAS FINANCIEROS",
           value: "Crédito, pagos, interés y conciliación",
-          note: "Flujos con trazabilidad operativa",
+          note: "Flujos financieros con trazabilidad operativa y consistencia transaccional.",
         },
         {
-          title: "Escala de plataforma",
-          value: "Businext ERP con +200k LOC",
-          note: "Sistema empresarial en evolución continua",
+          title: "ESCALA DE PLATAFORMA",
+          value: "Businext ERP con +125K LOC",
+          note: "Plataforma empresarial en producción con evolución continua.",
         },
       ],
       focusTracks: [
         {
-          name: "Flujos ERP",
-          description: "Diseño de procesos operativos para sistemas de finanzas, ventas e inventario.",
-        },
-        {
-          name: "APIs Backend",
-          description: "Arquitectura de capas de servicio y APIs orientadas a transacciones para plataformas empresariales.",
-        },
-        {
-          name: "Sistemas Financieros",
+          name: "PLATAFORMAS ERP",
           description:
-            "Diseño de sistemas de crédito, pagos, interés y conciliación con alta consistencia operativa.",
+            "Sistemas empresariales que integran finanzas, ventas, inventario, recursos humanos y procesos operativos dentro de una misma plataforma.",
+        },
+        {
+          name: "ARQUITECTURA DE APIS",
+          description:
+            "APIs backend y capas de servicio diseñadas para soportar reglas de negocio, transacciones y evolución mantenible de plataforma.",
+        },
+        {
+          name: "PLATAFORMAS FINANCIERAS",
+          description:
+            "Sistemas para crédito, pagos, interés, conciliación y estados de cuenta donde la consistencia operativa es parte de la arquitectura.",
         },
       ],
     },
@@ -369,7 +373,7 @@ export const messages = {
       description:
         "Plataformas empresariales y financieras construidas desde necesidades reales de negocio, con decisiones de arquitectura enfocadas en mantenibilidad, trazabilidad, confiabilidad operativa y límites de dominio explícitos.",
       solutionLabel: "Qué resuelve",
-      stackLabel: "Stack principal",
+      stackLabel: "Tecnologías principales",
       architectureLabel: "Enfoque arquitectónico",
       impactLabel: "Impacto",
     },

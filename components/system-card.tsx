@@ -16,17 +16,22 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
     <Card className="h-full border-border/70 bg-card/80">
       <CardHeader>
         <CardTitle>{content.name}</CardTitle>
-        <CardDescription>{content.tagline}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <CardDescription className="text-sm leading-6 text-muted-foreground">{content.tagline}</CardDescription>
         <p className="text-sm leading-6 text-muted-foreground">{content.solution}</p>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="space-y-2">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/75">
+            {t.systems.stackLabel}
+          </p>
+          <div className="flex flex-wrap gap-2">
           {system.technologies.map((tech) => (
             <Badge key={tech} variant="outline">
               {tech}
             </Badge>
           ))}
+          </div>
         </div>
 
         {showDetails && (
@@ -43,7 +48,7 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
             href={localizePath(locale, "/systems")}
             className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
           >
-            {t.common.architectureNotes}
+            {content.ctaLabel}
           </Link>
         </CardFooter>
       )}

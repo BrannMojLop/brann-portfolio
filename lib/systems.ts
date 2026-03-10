@@ -26,11 +26,12 @@ export const systems: SystemEntry[] = [
     content: {
       en: {
         name: "Businext ERP",
-        tagline: "Enterprise ERP developed from scratch to centralize critical business operations.",
+        tagline:
+          "Enterprise ERP platform developed from scratch to support finance, sales, inventory, and human resources operations within a unified system.",
         businessContext:
           "Businext was created inside a live industrial business to replace fragmented spreadsheets, disconnected admin tools, and manual coordination between finance, inventory, sales, and HR. The platform had to support daily operations without forcing teams to adapt to generic ERP assumptions that did not match the company workflow.",
         solution:
-          "Businext centralizes finance, human resources, purchasing, sales, and inventory in a single platform designed for day-to-day business operations. It was built from scratch to replace fragmented processes with a consistent, maintainable technology base prepared for long-term functional evolution and operational traceability.",
+          "The platform was designed to replace fragmented processes with a maintainable backend architecture, domain-oriented design, and long-term operational traceability.",
         stack: "Python · FastAPI · React · PostgreSQL · REST APIs · AWS · Linux · Nginx",
         architectureApproach: [
           "Domain boundaries defined for finance, inventory, HR, sales, and accounting.",
@@ -53,15 +54,16 @@ export const systems: SystemEntry[] = [
           "Made finance, sales, inventory, and HR changes easier to reason about through explicit service boundaries.",
           "Created a maintainable internal ERP foundation that can absorb new modules without reworking the whole platform.",
         ],
-        ctaLabel: "Explore Businext architecture",
+        ctaLabel: "Explore system architecture",
       },
       es: {
         name: "Businext ERP",
-        tagline: "ERP empresarial construido desde cero para operación transversal del negocio.",
+        tagline:
+          "ERP empresarial desarrollado desde cero para soportar operaciones de finanzas, ventas, inventario y recursos humanos dentro de una plataforma unificada.",
         businessContext:
           "Businext nació dentro de una operación industrial real para reemplazar hojas de cálculo, herramientas administrativas desconectadas y coordinación manual entre finanzas, inventario, ventas y recursos humanos. La plataforma debía soportar la operación diaria sin forzar al negocio a adaptarse a supuestos genéricos de un ERP tradicional.",
         solution:
-          "Businext centraliza finanzas, recursos humanos, compras, ventas e inventario en una sola plataforma diseñada para la operación diaria del negocio. Fue desarrollado desde cero para reemplazar procesos fragmentados con una base tecnológica consistente, mantenible y preparada para evolución funcional y trazabilidad operativa de largo plazo.",
+          "La plataforma fue diseñada para reemplazar procesos fragmentados mediante una arquitectura backend mantenible, orientada a dominio y preparada para evolución funcional y trazabilidad operativa a largo plazo.",
         stack: "Python · FastAPI · React · PostgreSQL · REST APIs · AWS · Linux · Nginx",
         architectureApproach: [
           "Límites de dominio definidos para finanzas, inventario, RH, ventas y contabilidad.",
@@ -84,7 +86,7 @@ export const systems: SystemEntry[] = [
           "Hizo más entendibles los cambios en finanzas, ventas, inventario y RH mediante límites claros de servicio.",
           "Creó una base ERP mantenible capaz de absorber nuevos módulos sin rehacer toda la plataforma.",
         ],
-        ctaLabel: "Explorar arquitectura de Businext",
+        ctaLabel: "Explorar arquitectura del sistema",
       },
     },
   },
@@ -94,11 +96,12 @@ export const systems: SystemEntry[] = [
     content: {
       en: {
         name: "TR0V1 Credit Platform",
-        tagline: "Financial system designed to manage credit, payments, interest, and account statements.",
+        tagline:
+          "Financial system designed to manage credit, payments, interest, and account statements with auditable operational rules.",
         businessContext:
           "TR0V1 was designed for a real credit operation where balances, due dates, payments, interest, and customer visibility had to remain consistent over time. The core challenge was not only exposing data, but protecting the integrity of financial state transitions across administrative and customer-facing flows.",
         solution:
-          "TR0V1 manages the full credit lifecycle including balances, payments, contracts, interest, and account statements. The platform was designed as a backend-first system to support both internal administrative operations and financial information visibility for customers with auditable rules.",
+          "The platform models the full credit lifecycle — contracts, balances, payments, and reconciliation — using a backend architecture focused on financial consistency and operational traceability.",
         stack: "Python · FastAPI · SQLAlchemy · React · REST APIs · Financial Services",
         architectureApproach: [
           "Backend-first architecture centered on business rules and state transitions.",
@@ -121,15 +124,16 @@ export const systems: SystemEntry[] = [
           "Improved operational control by surfacing reconciliation mismatches before they escalated.",
           "Provided a backend platform that supports internal staff and customer visibility without splitting the source of truth.",
         ],
-        ctaLabel: "Explore TR0V1 architecture",
+        ctaLabel: "Explore system architecture",
       },
       es: {
         name: "TR0V1 Credit Platform",
-        tagline: "Sistema financiero diseñado para gestionar crédito, pagos, intereses y estados de cuenta.",
+        tagline:
+          "Sistema financiero diseñado para gestionar crédito, pagos, intereses y estados de cuenta con reglas operativas auditables.",
         businessContext:
           "TR0V1 fue diseñada para una operación crediticia real donde saldos, vencimientos, pagos, intereses y visibilidad para clientes debían mantenerse consistentes con el tiempo. El reto central no era solo exponer datos, sino proteger la integridad de las transiciones financieras en flujos administrativos y orientados al cliente.",
         solution:
-          "TR0V1 gestiona el ciclo completo de crédito incluyendo saldos, pagos, contratos, intereses y estados de cuenta. La plataforma fue diseñada con una arquitectura centrada en backend para soportar tanto la operación administrativa interna como la visibilidad de información financiera para clientes con reglas auditables.",
+          "La plataforma modela el ciclo completo de crédito — contratos, saldos, pagos y conciliaciones — mediante una arquitectura backend orientada a consistencia financiera y trazabilidad operativa.",
         stack: "Python · FastAPI · SQLAlchemy · React · APIs REST · Servicios financieros",
         architectureApproach: [
           "Arquitectura centrada en backend para reglas de negocio y transiciones de estado.",
@@ -152,7 +156,7 @@ export const systems: SystemEntry[] = [
           "Mejoró el control operativo al detectar diferencias de conciliación antes de que escalaran.",
           "Entregó una plataforma backend que soporta operación interna y visibilidad al cliente sin dividir la fuente de verdad.",
         ],
-        ctaLabel: "Explorar arquitectura de TR0V1",
+        ctaLabel: "Explorar arquitectura del sistema",
       },
     },
   },
