@@ -35,7 +35,7 @@ export const siteConfig = {
     company: "Elements Of Steel",
   },
   links: {
-    github: "https://github.com/brandonmojicalopez",
+    github: "https://github.com/BrannMojLop",
     linkedin: "https://www.linkedin.com/in/brandon-mojica-dev/",
     email: "mailto:brandonmojica95@gmail.com",
   },
