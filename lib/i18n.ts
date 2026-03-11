@@ -103,11 +103,11 @@ export const messages = {
       impactLabel: "Impact",
     },
     engineering: {
-      title: "Engineering",
+      title: "Engineering Notes",
       description:
-        "Engineering notes and architecture decisions drawn from building real enterprise systems.",
+        "Architecture decisions and lessons learned while building real enterprise systems in production.",
       intro:
-        "This section documents ideas, patterns, and technical decisions that emerged while designing ERP platforms, financial systems, and backend architectures in production.",
+        "This section documents ideas, patterns and technical decisions that emerged while designing ERP platforms, financial systems and backend architectures running in production environments.",
       metadata: {
         publishedOn: "Published",
         readingTime: "Reading time",
@@ -381,11 +381,11 @@ export const messages = {
       impactLabel: "Impacto",
     },
     engineering: {
-      title: "Ingeniería",
+      title: "Notas de ingeniería",
       description:
-        "Notas de ingeniería y decisiones de arquitectura tomadas al construir sistemas empresariales reales.",
+        "Decisiones de arquitectura y aprendizajes surgidos al construir sistemas empresariales en producción.",
       intro:
-        "Esta sección documenta ideas, patrones y decisiones técnicas surgidas al diseñar plataformas ERP, sistemas financieros y arquitecturas backend en entornos de producción.",
+        "Esta sección documenta ideas, patrones y decisiones técnicas surgidas al diseñar plataformas ERP, sistemas financieros y arquitecturas backend utilizadas en entornos reales de operación.",
       metadata: {
         publishedOn: "Publicado",
         readingTime: "Tiempo de lectura",

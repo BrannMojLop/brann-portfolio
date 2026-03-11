@@ -12,86 +12,120 @@ tags:
   - Sistemas Financieros
 ---
 
-En software financiero, el mayor riesgo técnico rara vez es la latencia. Es la inconsistencia. Una plataforma puede responder rápido y aun así estar equivocada sobre saldos, vencimientos, estados de cuenta o historial de pagos.
+### Por qué los controles de consistencia aparecen en sistemas financieros
 
-Por eso el diseño backend para finanzas necesita controles más fuertes que una aplicación CRUD típica. En una plataforma de crédito como TR0V1, cada operación afecta más que un registro. Un pago puede cambiar saldo pendiente, estado de periodo, visibilidad en estado de cuenta, estado de la cuenta y expectativas de conciliación posteriores.
+En plataformas financieras, los errores raramente aparecen como fallas técnicas evidentes. Con más frecuencia se manifiestan como **inconsistencias operativas**.
 
-Si esos efectos no se coordinan, la plataforma empieza a acumular errores silenciosos. Tal vez no rompan la interfaz de inmediato, pero emergen después como confusión para clientes, trabajo manual de soporte y fricción contable.
+En TR0V1, algunos de los problemas reales que obligaron a introducir controles fueron:
 
-## La regla central: cada acción financiera cambia la verdad del sistema
+- pagos duplicados
+- cargos duplicados
+- cálculo incorrecto de intereses
+- cortes generados con fechas inconsistentes
+- errores al diferir deudas a parcialidades
+- reglas financieras aplicadas de forma incorrecta en eventos operativos
 
-Un cargo, pago, actualización de intereses o conciliación no es solo una mutación de campos. Cambia la historia financiera que la plataforma está contando. Cuando se formula así, los controles de consistencia dejan de parecer opcionales.
+Un ejemplo típico fue el cálculo de intereses. No todos los cargos deben generar interés, y en particular **no se debe cobrar interés sobre interés**. Cuando esa regla no está explícita en el sistema, los cálculos pueden derivar silenciosamente.
 
-Tres controles importan más:
+Otro caso ocurre al diferir deudas a parcialidades. El cálculo de intereses depende del contexto del crédito, del periodo activo y de la forma en que se generó el corte financiero.
 
-- transiciones de estado explícitas;
-- escrituras idempotentes;
-- conciliación como control continuo, no como limpieza posterior.
+En este tipo de plataformas, la dificultad no está en guardar datos. Está en preservar la **consistencia del flujo financiero**.
 
-## 1. Transiciones de estado explícitas
+---
 
-Las entidades financieras no deberían moverse libremente entre estados. Un periodo, cuenta o pago necesita un modelo de transición permitido que sea visible en código y se haga cumplir desde la capa de servicio.
+### Problemas comunes en flujos financieros
 
-Eso implica definir:
+Los sistemas de crédito y pagos suelen presentar ciertos riesgos estructurales:
 
-- qué estados actuales son legales;
-- qué siguientes estados son posibles;
-- qué validaciones bloquean o permiten el cambio;
-- qué se debe registrar cuando la transición ocurre.
+- operaciones repetidas por reintentos
+- procesos batch que ejecutan lógica sobre datos parcialmente actualizados
+- cálculos dependientes del estado del crédito
+- inconsistencias entre fechas de corte y fechas de pago
 
-Sin este modelo, el tooling de soporte y el manejo de excepciones suelen saltarse el flujo previsto. El resultado es una plataforma donde los valores de estado existen, pero su significado es inconsistente.
+Si estas condiciones no se controlan explícitamente, el sistema puede seguir operando mientras acumula inconsistencias difíciles de detectar.
 
-## 2. Escrituras idempotentes en flujos sensibles al dinero
+---
 
-Los reintentos son normales. Hay fallas de red, jobs reejecutados, clics dobles y repeticiones desde integraciones. Si la plataforma trata cada reintento como un evento financiero nuevo, los cargos o pagos duplicados terminan siendo inevitables.
+### Control 1: prevenir duplicados desde la base de datos
 
-La idempotencia importa porque la duplicación financiera no es un bug cosmético. Cambia saldos y afecta confianza.
+El primer nivel de defensa contra inconsistencias es evitar que ciertas operaciones puedan registrarse más de una vez.
 
-Un diseño útil consiste en identificar las operaciones por intención de negocio y no solo por el momento de la petición. Si la plataforma recibe la misma operación otra vez, debería reconocer el resultado existente o rechazar el duplicado con seguridad.
+En TR0V1 esto se maneja principalmente mediante:
 
-Este control es especialmente importante para:
+- **unique constraints** en combinaciones críticas
+- validaciones previas al aplicar operaciones
+- verificación de estado antes de ejecutar una acción financiera
 
-- registro de pagos;
-- generación programada de cargos;
-- jobs de interés;
-- correcciones disparadas por soporte.
+Este enfoque evita que el backend registre cargos o pagos duplicados incluso cuando existen reintentos o ejecuciones simultáneas.
 
-## 3. La conciliación debe ser sistémica, no opcional
+---
 
-La conciliación suele tratarse como una etapa final de reporte. En realidad es un mecanismo de salud del sistema. Compara el estado financiero esperado con lo que la plataforma realmente almacenó y expuso.
+### Control 2: validación del estado antes de ejecutar operaciones
 
-Esto es útil porque no toda inconsistencia proviene de un crash visible. Algunas nacen de bordes de sincronización, reintentos, updates parciales o excepciones heredadas. Los jobs de conciliación hacen visibles esas diferencias antes de que se conviertan en un problema de negocio mayor.
+Muchas operaciones financieras solo son válidas bajo ciertas condiciones.
 
-Una plataforma financiera sólida usa conciliación para responder preguntas como:
+Por ejemplo:
 
-- ¿los saldos coinciden con la suma de eventos financieros esperados?;
-- ¿los estados de cuenta reflejan la misma verdad que los registros internos?;
-- ¿un proceso programado generó los artefactos correctos?;
-- ¿hay cuentas en estados imposibles o ambiguos?
+- un pago solo debe aplicarse si el estado de la cuenta lo permite
+- un cargo no debe repetirse si ya fue generado para el periodo
+- una deuda diferida debe calcular intereses bajo reglas distintas
 
-## Por qué la capa de servicio importa aquí
+En TR0V1 estas validaciones se realizan antes de ejecutar cualquier transición de estado.
 
-Los controles de consistencia solo funcionan si las rutas de escritura están centralizadas. Si los pagos se registran en un endpoint, las correcciones en una utilidad y los intereses en un script distinto con otras reglas, los controles se degradan rápido.
+Además, varias acciones requieren **confirmaciones explícitas del usuario** o **aprobaciones con niveles de permisos**, lo que añade una capa adicional de control operativo.
 
-Por eso los sistemas financieros se benefician del mismo principio descrito en [servicios FastAPI orientados a transacciones](/es/engineering/backend-service-boundaries): las acciones de negocio necesitan una capa de aplicación estable. Ahí es donde la plataforma puede hacer cumplir transiciones, preservar idempotencia y emitir efectos auditables.
+---
 
-## El tradeoff: más disciplina al inicio
+### Control 3: cálculo de intereses controlado por eventos y jobs
 
-Los controles de consistencia agregan trabajo. El equipo debe definir transiciones, semántica de reintento y reglas de conciliación con claridad. Es tentador posponer esa disciplina hasta que el producto crezca.
+El cálculo de intereses es uno de los puntos más sensibles en una plataforma crediticia.
 
-Ese retraso sale caro en finanzas. Una vez que eventos duplicados y estados ambiguos alcanzan a clientes o al cierre contable, el costo de limpiar es mucho mayor que el costo de implementar bien desde el principio.
+En TR0V1 se combina:
 
-El tradeoff real no es "simple contra complejo". Es "atajos baratos hoy contra comportamiento confiable mañana".
+- cálculo en eventos operativos
+- cálculo periódico mediante **jobs**
+- cortes financieros por periodo
 
-## Resultado operativo
+Este enfoque permite mantener el cálculo consistente incluso cuando el sistema recibe múltiples operaciones sobre el mismo crédito.
 
-La recompensa es confiabilidad:
+---
 
-- menos eventos financieros duplicados;
-- explicaciones más claras para soporte y auditoría;
-- mayor confianza en saldos y estados de cuenta;
-- mejor visibilidad de diferencias antes de que escalen.
+### Control 4: conciliación posterior
 
-Esa es la diferencia entre una plataforma que registra transacciones y una plataforma en la que se puede confiar para operar finanzas.
+Aun con controles preventivos, los sistemas financieros necesitan mecanismos de verificación posteriores.
 
-Como lectura complementaria, este tema conecta directamente con [conciliación como control sistémico](/es/engineering/financial-systems-reconciliation-jobs) y con [diseño de límites ERP](/es/engineering/erp-modularity), porque la consistencia financiera suele depender de ambos.
+En TR0V1 existe un proceso de **conciliación** que revisa flujos clave como:
+
+- pagos vs cargos
+- movimientos registrados vs estado financiero esperado
+
+Este proceso permite detectar inconsistencias que no se capturan inmediatamente en el flujo principal.
+
+---
+
+### Qué ocurre cuando se detecta una inconsistencia
+
+Cuando el sistema detecta una inconsistencia durante conciliación:
+
+- se genera una alerta
+- el caso queda marcado para revisión
+- la corrección requiere confirmación manual
+
+Esto es importante porque una corrección automática podría afectar el estado financiero del cliente.
+
+Por esta razón, el sistema **detecta inconsistencias automáticamente**, pero la corrección queda sujeta a revisión operativa.
+
+---
+
+### La consistencia como propiedad del sistema
+
+En plataformas financieras, la consistencia no es solo un detalle técnico. Es una propiedad fundamental del sistema.
+
+Los controles combinan:
+
+- restricciones en base de datos
+- validaciones de estado
+- confirmaciones operativas
+- conciliación posterior
+
+Este conjunto de mecanismos permite que el sistema evolucione sin comprometer la integridad de los flujos financieros.

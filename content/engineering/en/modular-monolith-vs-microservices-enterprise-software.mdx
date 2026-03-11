@@ -1,88 +1,147 @@
 ---
-title: "Modular monolith vs. microservices for enterprise software"
-summary: "How to decide between a modular monolith and microservices when building ERP and financial systems that share operational truth."
+title: "Why Businext uses a modular monolith"
+summary: "A practical analysis of why a modular monolith was the right choice for Businext ERP: lower operational complexity, simpler deployments, direct integration between domains, and faster evolution for a small engineering team."
 date: "2026-03-09"
 theme: "architecture"
 articleType: "Tradeoff Analysis"
 readingTime: "10 min read"
 tags:
   - Modular Monolith
-  - Microservices
+  - Backend Architecture
   - Enterprise Software
   - Architecture Decisions
 ---
 
-The modular monolith versus microservices question is often framed as a maturity milestone. That framing is too simplistic for enterprise software. The right choice depends less on architectural fashion and more on how stable your domain boundaries are, how expensive cross-service coordination would be, and how much operational complexity the team can actually support.
+### The real discussion is not monolith vs microservices
 
-ERP and financial platforms are a good example because they combine multiple domains with shared operational truth. Finance, inventory, sales, and reconciliation may be distinct, but they are not independent in the casual sense. Their workflows often depend on coordinated state changes and reliable auditability.
+In enterprise architecture, the debate between monoliths and microservices is often framed as a maturity path.
 
-## Why teams move too early
+Start with a monolith. Then evolve to microservices.
 
-Microservices are attractive because they promise independence, clearer ownership, and scalability. Those benefits are real when the service boundaries are mature. The problem is that many platforms try to extract services before they have proved where the boundaries really are.
+In practice this narrative is overly simplistic.
 
-That creates a familiar pattern:
+The correct decision depends on:
 
-- distributed services still need each other's internal knowledge;
-- cross-service transactions become fragile;
-- observability cost rises faster than delivery quality;
-- teams spend time managing the architecture instead of clarifying the domain.
+- how stable domain boundaries are
+- how expensive distributed coordination would be
+- how much operational complexity the team can support
 
-For enterprise platforms still discovering core workflows, that is often too much complexity too early.
+ERP platforms amplify these questions because many domains share a **single operational truth**.
 
-## Why the modular monolith is often the stronger default
+### The nature of ERP systems
 
-A modular monolith can be a disciplined architecture, not a temporary compromise. It works well when:
+ERP platforms combine several business domains:
 
-- the platform shares a primary operational database or truth source;
-- business workflows cross multiple domains frequently;
-- the team needs strong transactional consistency;
-- deployment simplicity is still valuable.
+finance  
+inventory  
+sales  
+reconciliation  
+reporting  
+administrative operations
 
-The key condition is real modularity. A monolith without boundaries is not better than badly cut microservices. But a modular monolith with explicit domain ownership, service layers, and clear internal contracts can support significant growth before extraction is necessary.
+These domains are distinct but rarely independent.
 
-## What microservices are actually buying you
+A sales operation may affect inventory.  
+Inventory movements may affect accounting.  
+Financial reconciliation may depend on events produced by other modules.
 
-Microservices become more compelling when a platform has:
+Many flows therefore require **coordinated state transitions and reliable auditability**.
 
-- domains with proven independence;
-- teams that can own services end to end;
-- different scaling or deployment requirements;
-- operational maturity in tracing, alerting, and failure handling.
+### Why teams often move too early
 
-At that point, a service boundary can reduce risk rather than increase it.
+Microservices promise real benefits:
 
-## The decision criteria that matter most
+- independent deployments
+- clearer ownership
+- isolated scaling
+- domain decoupling
 
-Three questions are more useful than generic checklists:
+However, when services are extracted before domain boundaries mature, systems often develop new problems:
 
-1. Can this domain evolve without reinterpreting another domain's internal rules?
-2. Can the team operate distributed failures confidently?
-3. Does extraction reduce coupling, or just move it onto the network?
+- services requiring internal knowledge of each other
+- fragile distributed transactions
+- increasing observability costs
+- time spent operating infrastructure instead of improving the domain
 
-If the answer to the third question is "it moves the same coupling onto APIs and queues," the service probably is not ready to exist independently.
+For growing enterprise platforms, this can mean **too much complexity too early**.
 
-## Enterprise software has a special constraint: shared truth
+### The modular monolith approach
 
-ERP and financial systems frequently need coordinated correctness. Splitting too aggressively can make the architecture appear cleaner while making real workflows harder:
+Businext was designed as a **modular monolith**.
 
-- approvals span multiple concepts;
-- financial close depends on reliable cross-domain status;
-- reconciliation may need consistent data across services;
-- support teams need a coherent explanation of what happened.
+All domains live inside the same backend but maintain explicit boundaries.
 
-Those constraints make premature distribution expensive.
+Each business area runs as a module:
 
-## A pragmatic view
+CRM  
+HRM  
+SRM  
+PMS  
+EMS  
+RMS  
+IMS  
+SMS  
+AMS  
+EIS
 
-The better question is not "when do we become microservices?" It is "which boundaries are strong enough that distribution will reduce risk?"
+Each module is implemented as a FastAPI application mounted inside the same backend.
 
-For many internal enterprise platforms, the answer is:
+This architecture provides:
 
-- start as a modular monolith;
-- force domain ownership early;
-- measure where coordination pain is real;
-- extract only when the boundary is proven technically and operationally.
+- direct integration between domains
+- simpler transactional consistency
+- single deployment boundary
+- lower operational complexity
 
-That path keeps architecture aligned with business reality instead of roadmap aesthetics.
+These properties are especially valuable for small teams.
 
-To ground this decision further, it helps to read it alongside [ERP platform architecture](/engineering/erp-platform-architecture) and [domain boundary design](/engineering/erp-modularity).
+### The problem this approach avoids
+
+A modular monolith avoids a common issue in prematurely distributed systems: moving coupling from code to the network.
+
+When domains still require coordinated decisions, separating services often replaces internal dependencies with:
+
+- API calls
+- message queues
+- distributed transactions
+- eventual consistency
+
+This increases operational complexity without necessarily improving domain clarity.
+
+### When microservices become useful
+
+Microservices become more valuable once several conditions exist:
+
+- domains with proven independence
+- teams capable of owning services end-to-end
+- different scaling requirements
+- operational maturity in monitoring and failure handling
+
+At that point service boundaries can reduce risk rather than increase it.
+
+### Three useful questions
+
+Before extracting a service, three questions are often more useful than generic checklists:
+
+1. Can this domain evolve without reinterpreting another domain’s rules?
+2. Can the team confidently operate distributed failures?
+3. Does extraction reduce coupling or simply move it to APIs?
+
+If the coupling remains the same, the service likely isn’t ready to exist independently.
+
+### A pragmatic approach
+
+Instead of asking *“when should we adopt microservices?”*, a better question is:
+
+**Which domain boundaries are strong enough that distribution will actually reduce risk?**
+
+For many internal enterprise platforms the most practical path is:
+
+- start as a modular monolith
+- enforce domain ownership from the beginning
+- observe where coordination pain appears
+- extract services only when boundaries are proven
+
+This keeps architecture aligned with business reality rather than architectural trends.
+
+**Businext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**

@@ -1,6 +1,6 @@
 ---
 title: "Designing FastAPI services around business transactions instead of CRUD"
-summary: "Why a transaction-oriented service layer creates more stable APIs for ERP and internal platforms than endpoints that only mirror tables and serializers."
+summary: "Why enterprise APIs should model business actions — payments, approvals, reconciliations, or movements — instead of directly exposing CRUD operations over tables."
 date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Backend Pattern"
@@ -12,95 +12,132 @@ tags:
   - Backend Architecture
 ---
 
-Many internal APIs look clean on day one because they map neatly to tables. Create a record. Update a record. Delete a record. Return the model. It feels structured, testable, and fast to ship.
+### When CRUD APIs stop working
 
-That structure stops being useful when the endpoint no longer represents a single write. In enterprise systems, an API call often means "approve a movement," "register a payment," "close a period," or "generate a statement." Those are business transactions, not CRUD actions.
+Many internal APIs feel clean on day one because they map perfectly to database tables.
 
-This is where a FastAPI backend either matures into an application layer or starts scattering rules across routers, models, background jobs, and UI-specific exceptions.
+Create a record.  
+Update a record.  
+Delete a record.  
+Return the model.
 
-## Why CRUD-first APIs break down in business systems
+This works well when the backend simply manages data.
 
-CRUD endpoints assume the database row is the main unit of intent. In ERP and financial systems, that is rarely true. The real unit of intent is the business outcome:
+The problem appears when an API call represents a **business action** rather than a simple write.
 
-- a payment becomes valid only if account state and rules allow it;
-- a period can be closed only under defined financial conditions;
-- a stock movement affects more than one table and often more than one domain;
-- a customer-facing action may trigger internal audit requirements.
+In enterprise systems an endpoint often means:
 
-When the API is designed as direct table access, three problems appear:
+approve a movement  
+register a payment  
+close a financial period  
+generate an account statement  
+apply a reconciliation
 
-1. Validation spreads across layers because no single use case owns the full rule.
-2. Responses become shaped by persistence details instead of process meaning.
-3. State transitions become implicit, which makes support and debugging slower.
+These actions represent **business transactions**, not CRUD operations.
 
-The first version still works. The later versions become fragile.
+When the API remains table-oriented, business rules start spreading across routers, models, jobs and UI logic.
 
-## The service layer should model business actions
+### The issue with table-oriented APIs
 
-The service layer works best when it models a complete transaction. That means each service call should:
+CRUD endpoints assume the database row is the primary unit of intention.
 
-- validate the relevant domain preconditions;
-- execute the intended state transition;
-- record the side effects that matter operationally;
-- return a response aligned to the business process.
+In ERP and financial systems the real unit is the **business outcome**.
 
-In FastAPI, this usually means routers become thin coordination points. They parse input, call a service, and transform the result into an HTTP response. The service layer becomes the place where the system's policy is visible.
+For example:
 
-That is different from pushing rules into ORM models or into route handlers. Models are good at persistence and local invariants. Route handlers are good at HTTP concerns. Business transactions deserve a dedicated layer because they often cut across multiple repositories, validations, and audit events.
+A payment is only valid if the account state allows it.  
+A financial period can only close under specific rules.  
+An inventory movement can affect multiple domains.  
+A commercial action may trigger internal audit requirements.
 
-## A practical shape for a transaction-oriented backend
+When APIs expose tables directly several problems appear.
 
-A healthy pattern is:
+Validation spreads across layers.  
+Responses reflect persistence instead of process meaning.  
+State transitions become implicit and harder to debug.
 
-- router receives the request;
-- request schema validates structure;
-- service coordinates the business use case;
-- repositories persist or retrieve data;
-- domain-oriented responses communicate outcome and context.
+### Modeling transactions in the service layer
 
-This structure is useful because it mirrors how support and operations think about the system. If a payment failed, the question is not "which table update broke?" It is "which business rule blocked the payment and what state was the account in?"
+A service layer works best when it models a **complete business transaction**.
 
-Services make that answer easier to expose and test.
+A service should:
 
-## State transitions should be first-class
+validate domain preconditions  
+execute the intended state transition  
+register operational side effects  
+return a response aligned with the business process
 
-One of the biggest backend risks in enterprise software is pretending state transitions are just updates. They are not. A transition from pending to approved, or from open to closed, carries operational meaning.
+In FastAPI applications routers usually remain thin.
 
-That means a good service layer should make transitions explicit:
+Routers handle HTTP concerns.  
+Services coordinate the business use case.
 
-- which current states are valid;
-- which target states are allowed;
-- which side effects must happen when the transition succeeds;
-- which records or audit entries need to be written.
+This keeps the policy of the system visible and centralized.
 
-Once this is explicit, the API gains stability. Internals can evolve, but the business transaction remains coherent. Without that layer, state transitions start to appear in ad hoc queries, frontend conditions, or utility functions that are hard to track.
+### A practical FastAPI structure
 
-## The tradeoff: more ceremony, less accidental complexity
+A common structure in enterprise backends:
 
-A service layer adds structure. Some developers read that as unnecessary ceremony. For a trivial app, that criticism may be fair. For an ERP, credit platform, or operations backend, it is usually a false economy to skip it.
+Router → receives HTTP request  
+Schema → validates input structure  
+Service → coordinates the use case  
+Repository / ORM → persistence
 
-The tradeoff is straightforward:
+This mirrors how operations and support understand the system.
 
-- more deliberate service design up front;
-- much less ambiguity when the platform grows.
+When a payment fails the real question is:
 
-This matters once a backend supports jobs, retries, support operations, administrative tooling, and external consumers. At that point, you need one place where a use case is explained in code.
+“What rule blocked the payment and what was the account state?”
 
-## What changes in API design
+Service-oriented design makes that answer visible in code.
 
-When the backend models transactions instead of tables, the API surface changes:
+### State transitions must be explicit
 
-- endpoints become named after actions and workflows;
-- validation becomes contextual, not only structural;
-- responses reflect business outcome and next state;
-- backward compatibility becomes easier because consumers rely on a stable use case contract.
+One of the biggest risks in enterprise backends is pretending state transitions are simple updates.
 
-That last point is often overlooked. A table-shaped API is tightly coupled to the persistence model. A use-case-shaped API can keep serving the same intent even while the implementation changes internally.
+Transitions such as:
 
-## Production impact
+pending → approved  
+open → closed  
+provisional → confirmed
 
-In real systems, the value is operational clarity. Support issues become easier to diagnose. Audit trails become easier to align. Regression testing can focus on high-value workflows instead of scattered field updates.
+carry operational meaning.
 
-That is why the benefit is not aesthetic. It is the difference between a backend that survives growth and a backend that becomes a collection of exceptions.
+A good service layer makes explicit:
 
-If you are working on a similar stack, this pattern is strongest when combined with [clear ERP domain boundaries](/engineering/erp-modularity) and a decision on [modular monolith vs. microservices for enterprise software](/engineering/modular-monolith-vs-microservices-enterprise-software).
+valid current states  
+allowed destination states  
+side effects of the transition  
+audit records produced
+
+### The tradeoff
+
+A service layer introduces more structure.
+
+For simple apps that may feel unnecessary. For enterprise systems it prevents complexity from spreading silently.
+
+The tradeoff is:
+
+more deliberate design early  
+far less accidental complexity later
+
+### How API design changes
+
+When APIs model business actions instead of tables:
+
+endpoints are named after operations  
+validation becomes contextual  
+responses reflect business outcomes  
+clients depend on intent rather than persistence
+
+This makes APIs more resilient to internal refactoring.
+
+### Production impact
+
+In real systems the main benefit is operational clarity.
+
+Incidents are easier to diagnose.  
+Audits align with business decisions.  
+Tests focus on business flows instead of scattered updates.
+
+The result is not just cleaner code — it is a backend that can evolve safely under real operational pressure.

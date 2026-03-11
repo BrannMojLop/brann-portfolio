@@ -1,6 +1,6 @@
 ---
-title: "ERP platform architecture for real business operations"
-summary: "A practical view of ERP architecture when finance, inventory, sales, and HR need one platform without collapsing into a giant shared dependency graph."
+title: "ERP platform architecture for real-world operations"
+summary: "A practical view of ERP architecture based on Businext: a modular monolith built with FastAPI where each business area runs as an independent mounted module within the same backend platform."
 date: "2026-03-09"
 theme: "architecture"
 articleType: "Architecture Guide"
@@ -9,104 +9,126 @@ tags:
   - ERP Architecture
   - Enterprise Software
   - Businext
-  - Systems Design
+  - Backend Systems
 ---
 
-ERP architecture is often discussed as if the main problem were choosing a framework. In practice, the harder question is how to support multiple business domains inside one platform without letting every module absorb knowledge it should not own.
+### The real problem of ERP architecture
 
-Real business operations create pressure in every direction. Finance wants reliable close and traceability. Inventory wants strict movement rules. Sales wants speed and visibility. HR wants permission context and operational structure. Reporting wants coherent data across all of them. An ERP must support all of that while remaining maintainable under growth.
+ERP architecture discussions often start with technologies. Frameworks, databases or deployment models.
 
-That is why ERP architecture is primarily about boundaries, contracts, and operational truth.
+In practice the real problem is how to allow multiple business domains to coexist in the same platform without letting modules absorb rules they do not own.
 
-## Start from the business operating model
+In real enterprise systems each domain pushes architecture in different directions.
 
-Before choosing services, modules, or deployment structure, the platform has to answer a business question: what are the recurring workflows that keep the company functioning?
+Finance needs traceability and reliable closing.  
+Inventory needs strict movement rules.  
+Sales needs speed and customer visibility.  
+Human resources needs permission and organizational context.
 
-In many ERP contexts, the platform is responsible for:
+ERP architecture must support all of them while remaining understandable as the system grows.
 
-- recording financial operations correctly;
-- coordinating sales and fulfillment steps;
-- tracking inventory movement with auditability;
-- supporting administrative and HR flows;
-- exposing cross-domain reporting without rewriting domain rules everywhere.
+That is why ERP architecture is mainly about **boundaries, contracts and domain ownership**.
 
-If the architecture starts from tables instead of workflows, it usually ends up with a backend that is easy to scaffold and hard to evolve.
+### Starting from the operational model
 
-## A useful ERP decomposition
+Before choosing services or infrastructure, the platform must answer a more fundamental question:
 
-The most useful decomposition is usually by domain responsibility, not by screen or database area. For example:
+**Which operational flows keep the business running?**
 
-- finance owns accounting periods, ledgers, reconciliation, and financial controls;
-- inventory owns stock movement rules and operational stock truth;
-- sales owns order lifecycle and commercial workflow;
-- HR owns people context, permissions, and organizational data.
+Typical ERP flows include:
 
-This decomposition matters because enterprise software changes under operational pressure. If boundaries are weak, urgent business changes spread logic across the platform. If boundaries are clear, change can stay closer to the responsible domain.
+- recording financial operations correctly  
+- coordinating sales and operational fulfillment  
+- tracking inventory movements with auditability  
+- supporting administrative and HR workflows  
+- exposing consistent reporting across domains
 
-## Platform architecture should optimize for evolution
+When architecture starts from tables instead of operational flows, the backend often becomes easy to scaffold but hard to evolve.
 
-Many internal platforms survive their first year with weak boundaries because one or two people still remember the full system. ERP problems usually become visible later, when:
+### Decomposition by business domains
 
-- features accumulate;
-- support scenarios multiply;
-- accounting and operational exceptions increase;
-- more engineers or contributors touch the codebase.
+In Businext the system was decomposed around business domains.
 
-At that point, architecture quality is measured by how safely the system can change.
+Each business area operates as a module with clear responsibilities:
 
-Useful ERP architecture therefore emphasizes:
+CRM  
+HRM  
+SRM  
+PMS  
+EMS  
+RMS  
+IMS  
+SMS  
+AMS  
+EIS
 
-- explicit domain ownership;
-- service layers that model workflows;
-- data consistency over UI convenience;
-- observability around critical operational actions.
+Each module runs as a FastAPI application mounted within the same backend.
 
-## The modular monolith is often the right first shape
+Each domain maintains its own engineering structure:
 
-For many ERP products, a modular monolith is more effective than early microservices. The reason is not ideological. It is practical. Enterprise workflows frequently cross multiple domains, and splitting them too early often multiplies coordination cost before the domain model is mature.
+- SQLAlchemy models  
+- Pydantic schemas  
+- API routers  
+- domain services
 
-A modular monolith lets the platform keep:
+This approach allows each domain to evolve without spreading changes across the entire platform.
 
-- one deployment boundary;
-- one source of truth per domain inside the same codebase;
-- explicit internal contracts;
-- lower operational complexity while the platform is still discovering its right seams.
+### Architecture designed for evolution
 
-This only works if modularity is real. A monolith without boundaries is simply a shared regression machine.
+Many internal systems work well in the early stages even with weak boundaries. Problems appear when:
 
-## Where architecture decisions pay off
+- features grow  
+- operational exceptions increase  
+- more engineers interact with the system  
+- the business becomes dependent on the platform
 
-The strongest payoff appears in three areas:
+At that moment architecture quality is measured by **how safe it is to change the system**.
 
-### Change isolation
+A practical ERP architecture emphasizes:
 
-When finance rules change, sales should not have to reinterpret them manually. Consumers should call a finance capability, not rebuild finance logic locally.
+- explicit domain ownership  
+- service layers modeling business flows  
+- data consistency over implementation convenience  
+- visibility into operational state transitions
 
-### Supportability
+### Why the modular monolith worked
 
-ERP software lives inside operations. When users report issues, the system should make it possible to explain what happened, why it happened, and which state transition led there.
+For many ERP platforms adopting microservices too early increases operational complexity before the domain model stabilizes.
 
-### Reporting and trust
+Businext was built as a **modular monolith**.
 
-Cross-domain reporting should reflect owned truths from each area. If reporting requires duplicating hidden rules everywhere, confidence in the platform drops quickly.
+This allowed:
 
-## The common failure mode
+- a simple deployment boundary  
+- direct integration between domains  
+- explicit internal contracts  
+- lower operational complexity for a single developer  
+- fast system evolution while the model matured
 
-The usual failure mode is not a catastrophic rewrite. It is gradual erosion:
+A modular monolith only works when domain boundaries are real. Without clear boundaries it only centralizes coupling.
 
-- modules start reading each other's internals;
-- endpoints expose persistence models instead of workflow outcomes;
-- jobs encode business rules outside the main application layer;
-- teams lose clarity about which domain is authoritative.
+### Where good architecture pays off
 
-Once that happens, every feature costs more than expected because engineers first have to rediscover the platform.
+Solid ERP architecture produces benefits in three areas.
 
-## A practical architecture rule
+**Change isolation**
 
-A useful rule for ERP design is this: any workflow that matters to operations must have a clearly owned domain decision and a visible application path.
+When finance rules change, other modules should not reinterpret them. They should consume the capability exposed by the domain that owns the rule.
 
-If that rule is not true, the workflow is probably relying on accidental coupling.
+**Operational support**
 
-That is why ERP architecture is less about diagrams and more about the discipline to keep ownership explicit as the system grows.
+The system must make it possible to understand what happened, why it happened, and which state transition produced the result.
 
-For a deeper implementation angle, pair this topic with [ERP domain boundaries](/engineering/erp-modularity) and with [service-layer design in FastAPI](/engineering/backend-service-boundaries).
+**Trust in data**
+
+Reports should reflect truth owned by each domain.
+
+### A practical rule
+
+A useful ERP design rule is simple:
+
+**Every operationally important workflow should have a domain that owns the decision and a visible path for executing it.**
+
+If ownership is unclear, the workflow is probably relying on accidental coupling.
+
+**Businext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**

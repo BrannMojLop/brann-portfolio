@@ -1,6 +1,6 @@
 ---
 title: "Diseñar servicios en FastAPI alrededor de transacciones de negocio y no de CRUD"
-summary: "Por qué una capa de servicio orientada a transacciones produce APIs más estables para ERP y plataformas internas que endpoints que solo reflejan tablas y serializers."
+summary: "Por qué las APIs empresariales deben modelar acciones del negocio — pagos, aprobaciones, conciliaciones o movimientos — en lugar de exponer directamente operaciones CRUD sobre tablas."
 date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Patrón Backend"
@@ -12,95 +12,150 @@ tags:
   - Arquitectura Backend
 ---
 
-Muchas APIs internas se ven limpias el primer día porque mapean muy bien a tablas. Crear un registro. Actualizar un registro. Eliminar un registro. Devolver el modelo. Se siente ordenado, testeable y rápido de construir.
+### Cuando las APIs CRUD dejan de funcionar
 
-Esa estructura deja de ser útil cuando el endpoint ya no representa una sola escritura. En sistemas empresariales, una llamada API suele significar "aprobar un movimiento", "registrar un pago", "cerrar un periodo" o "generar un estado de cuenta". Esas son transacciones de negocio, no acciones CRUD.
+Muchas APIs internas se sienten limpias el primer día porque reflejan perfectamente la base de datos.
 
-Aquí es donde un backend en FastAPI madura hacia una capa de aplicación o empieza a dispersar reglas entre routers, modelos, jobs y excepciones específicas de UI.
+Crear un registro.  
+Actualizar un registro.  
+Eliminar un registro.  
+Devolver el modelo.
 
-## Por qué las APIs CRUD se rompen en sistemas de negocio
+Ese enfoque es rápido de construir y fácil de probar cuando el backend solo administra datos.
 
-Los endpoints CRUD asumen que la fila de base de datos es la unidad principal de intención. En ERP y sistemas financieros eso rara vez es cierto. La unidad real es el resultado de negocio:
+El problema aparece cuando la API ya no representa una sola escritura en una tabla. En sistemas empresariales una llamada API suele significar algo distinto:
 
-- un pago solo es válido si el estado de cuenta y las reglas lo permiten;
-- un periodo solo puede cerrarse bajo condiciones financieras definidas;
-- un movimiento de stock afecta más de una tabla y muchas veces más de un dominio;
-- una acción orientada al cliente puede activar requisitos de auditoría internos.
+- aprobar un movimiento
+- registrar un pago
+- cerrar un periodo
+- generar un estado de cuenta
+- aplicar un descuento o una conciliación
 
-Cuando la API se diseña como acceso directo a tablas, aparecen tres problemas:
+Esas acciones representan **transacciones de negocio**, no operaciones CRUD.
 
-1. La validación se distribuye entre capas porque ningún caso de uso posee la regla completa.
-2. Las respuestas se moldean por persistencia y no por significado de proceso.
-3. Las transiciones de estado se vuelven implícitas, lo que complica soporte y depuración.
+Cuando el backend sigue modelando la API como acceso directo a tablas, la lógica termina dispersándose entre routers, modelos, jobs y condiciones específicas de UI.
 
-La primera versión aún funciona. Las siguientes se vuelven frágiles.
+### El problema con APIs orientadas a tablas
 
-## La capa de servicio debe modelar acciones de negocio
+Los endpoints CRUD parten de una suposición implícita: la fila de base de datos representa la unidad de intención del sistema.
 
-La capa de servicio funciona mejor cuando modela una transacción completa. Eso implica que cada servicio debe:
+En sistemas ERP o financieros eso rara vez es cierto. La unidad real es el **resultado de negocio**.
 
-- validar precondiciones del dominio;
-- ejecutar la transición de estado pretendida;
-- registrar los efectos colaterales que importan operativamente;
-- devolver una respuesta alineada al proceso de negocio.
+Por ejemplo:
 
-En FastAPI esto suele significar que los routers quedan delgados. Parsean entrada, llaman a un servicio y transforman el resultado en respuesta HTTP. La capa de servicio se vuelve el lugar donde la política del sistema es visible.
+Un pago solo es válido si el estado de cuenta lo permite.  
+Un periodo contable solo puede cerrarse bajo ciertas condiciones financieras.  
+Un movimiento de inventario puede afectar múltiples tablas y dominios.  
+Una acción comercial puede activar reglas internas de auditoría.
 
-Eso es distinto a empujar reglas a modelos ORM o a handlers de rutas. Los modelos sirven para persistencia e invariantes locales. Los handlers sirven para HTTP. Las transacciones de negocio merecen una capa dedicada porque suelen cruzar múltiples repositorios, validaciones y eventos auditables.
+Cuando la API se diseña como acceso directo a tablas aparecen varios problemas.
 
-## Una forma práctica de estructurarlo
+La validación se dispersa entre capas porque ningún endpoint posee la regla completa.  
+Las respuestas reflejan persistencia y no significado del proceso.  
+Las transiciones de estado se vuelven implícitas y difíciles de explicar.
 
-Un patrón sano es:
+La primera versión del sistema funciona. Las siguientes empiezan a romperse bajo complejidad.
 
-- el router recibe la solicitud;
-- el esquema valida estructura;
-- el servicio coordina el caso de uso;
-- los repositorios persisten o consultan datos;
-- las respuestas orientadas al dominio comunican resultado y contexto.
+### Modelar transacciones de negocio en la capa de servicio
 
-Esta estructura es útil porque se parece más a cómo soporte y operación entienden el sistema. Si un pago falla, la pregunta no es "¿qué update se rompió?" sino "¿qué regla bloqueó el pago y en qué estado estaba la cuenta?"
+Una capa de servicio funciona mejor cuando representa una **transacción completa del dominio**.
 
-Los servicios facilitan exponer y probar esa respuesta.
+Un servicio debe encargarse de:
 
-## Las transiciones de estado deben ser explícitas
+- validar las precondiciones del dominio
+- ejecutar la transición de estado esperada
+- registrar efectos colaterales importantes
+- devolver una respuesta alineada al proceso de negocio
 
-Uno de los mayores riesgos backend en software empresarial es fingir que las transiciones son simples updates. No lo son. Pasar de pendiente a aprobado, o de abierto a cerrado, tiene significado operativo.
+En aplicaciones FastAPI esto normalmente significa que los routers permanecen delgados.
 
-Eso implica que una buena capa de servicio debe hacer explícito:
+El router:
 
-- qué estados actuales son válidos;
-- qué estados de destino están permitidos;
-- qué efectos deben ocurrir cuando la transición funciona;
-- qué registros o auditorías deben escribirse.
+- recibe la solicitud
+- valida entrada
+- invoca un servicio
 
-Cuando esto es explícito, la API gana estabilidad. Los detalles internos pueden evolucionar, pero la transacción sigue siendo coherente. Sin esa capa, las transiciones terminan en queries ad hoc, condiciones de frontend o utilidades difíciles de rastrear.
+El servicio:
 
-## El tradeoff: más estructura, menos complejidad accidental
+- ejecuta el caso de uso
+- coordina repositorios
+- aplica reglas del dominio
+- devuelve el resultado
 
-Una capa de servicio agrega forma. A algunos equipos eso les parece ceremonia. En una app trivial quizá sea una crítica válida. En un ERP, una plataforma crediticia o un backend operativo, omitirla suele ser una falsa economía.
+De esta forma la política del sistema vive en una capa visible y explícita.
+
+### Estructura práctica en FastAPI
+
+Una estructura común en backends empresariales es:
+
+Router → recibe la solicitud HTTP  
+Schema → valida estructura de datos  
+Service → coordina el caso de uso  
+Repository / ORM → accede a persistencia
+
+Esto refleja mejor cómo operación y soporte entienden el sistema.
+
+Si un pago falla, la pregunta no es:
+
+“¿qué update se rompió?”
+
+La pregunta real es:
+
+“¿qué regla bloqueó el pago y en qué estado estaba la cuenta?”
+
+Cuando los servicios modelan casos de uso, esa respuesta es visible en código.
+
+### Las transiciones de estado deben ser explícitas
+
+Uno de los mayores riesgos en software empresarial es fingir que las transiciones son simples updates.
+
+Pasar de:
+
+pendiente → aprobado  
+abierto → cerrado  
+provisional → confirmado
+
+tiene significado operativo.
+
+Una buena capa de servicio debe hacer explícito:
+
+- qué estados actuales son válidos
+- qué estados de destino están permitidos
+- qué efectos ocurren cuando la transición se completa
+- qué registros de auditoría se generan
+
+Cuando esto es explícito, la API gana estabilidad incluso si la implementación interna cambia.
+
+### El tradeoff
+
+Agregar una capa de servicio introduce más estructura.
+
+En aplicaciones pequeñas esto puede parecer innecesario. En sistemas empresariales suele ser lo contrario.
 
 El tradeoff es simple:
 
-- más diseño deliberado al inicio;
-- mucha menos ambigüedad cuando la plataforma crece.
+más diseño al inicio  
+menos complejidad accidental cuando el sistema crece
 
-Esto importa cuando el backend soporta jobs, reintentos, tooling administrativo, soporte operativo y consumidores externos. En ese punto necesitas un lugar donde el caso de uso se explique en código.
+Cuando el backend soporta jobs, tooling administrativo, soporte operativo y consumidores externos, es importante tener un lugar donde el caso de uso se explique claramente.
 
-## Qué cambia en el diseño de APIs
+### Cómo cambia el diseño de APIs
 
-Cuando el backend modela transacciones y no tablas, la superficie API cambia:
+Cuando las APIs representan **acciones de negocio** y no tablas, la superficie cambia.
 
-- los endpoints se nombran por acciones y flujos;
-- la validación se vuelve contextual, no solo estructural;
-- las respuestas reflejan resultado de negocio y siguiente estado;
-- la compatibilidad se vuelve más sostenible porque los consumidores dependen de un contrato de intención.
+Los endpoints se nombran por acciones.  
+La validación se vuelve contextual.  
+Las respuestas reflejan estado de negocio.  
+Los consumidores dependen de intención y no de persistencia.
 
-Ese último punto suele pasarse por alto. Una API orientada a tablas queda acoplada al modelo de persistencia. Una API orientada a casos de uso puede seguir sirviendo la misma intención aun cuando la implementación interna cambie.
+Esto vuelve la API más estable frente a cambios internos.
 
-## Impacto en producción
+### Impacto en producción
 
-En sistemas reales, el valor está en la claridad operativa. Los incidentes de soporte se diagnostican mejor. Las auditorías se alinean con más facilidad. Las pruebas de regresión pueden concentrarse en flujos críticos en lugar de updates dispersos.
+En sistemas reales el beneficio principal es operativo.
 
-Por eso el beneficio no es estético. Es la diferencia entre un backend que sobrevive al crecimiento y uno que se convierte en una colección de excepciones.
+Los incidentes se diagnostican más rápido.  
+Las auditorías encuentran decisiones claras.  
+Las pruebas pueden concentrarse en flujos críticos.
 
-Si trabajas en un stack similar, este patrón se vuelve más fuerte cuando se combina con [límites de dominio en un ERP](/es/engineering/erp-modularity) y con una decisión explícita sobre [monolito modular vs. microservicios](/es/engineering/modular-monolith-vs-microservices-enterprise-software).
+El resultado no es una API más elegante. Es un backend que puede seguir evolucionando sin convertirse en una colección de excepciones.

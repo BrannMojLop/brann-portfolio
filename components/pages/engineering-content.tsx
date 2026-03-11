@@ -80,15 +80,30 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
   };
 
   return (
-    <Section title={t.engineering.title} description={t.engineering.description}>
+    <Section
+      title={t.engineering.title}
+      description={t.engineering.description}
+      className="engineering-page relative overflow-hidden"
+    >
+      <div aria-hidden className="engineering-ambient">
+        <div className="engineering-grid" />
+        <span className="engineering-orbit engineering-orbit-a" />
+        <span className="engineering-orbit engineering-orbit-b" />
+        <span className="engineering-scanline" />
+      </div>
+
       <div className="space-y-14">
-        <p className="max-w-3xl text-[1rem] leading-7 text-muted-foreground md:text-[1.03rem]">
+        <div className="engineering-intro">
+          <span className="engineering-intro-line" />
+        </div>
+
+        <p className="engineering-intro-copy max-w-3xl text-[1rem] leading-7 text-muted-foreground md:text-[1.03rem]">
           {t.engineering.intro}
         </p>
 
         {postsByTheme.map(({ theme, posts: themePosts }) => (
-          <div key={theme} className="space-y-6">
-            <header className="space-y-2.5">
+          <div key={theme} className={`engineering-theme engineering-theme-${theme} space-y-6`}>
+            <header className="engineering-theme-header space-y-2.5">
               <h3 className="text-[1.22rem] font-semibold tracking-[-0.02em]">{themeCopy[theme].title}</h3>
               <p className="max-w-3xl text-[0.95rem] leading-6 text-muted-foreground">
                 {themeCopy[theme].description}
@@ -96,14 +111,19 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
             </header>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {themePosts.map((post) => {
+              {themePosts.map((post, index) => {
                 const style = themeStyles[theme];
                 const Icon = style.Icon;
 
                 return (
-                  <Link key={post.slug} href={localizePath(locale, `/engineering/${post.slug}`)}>
+                  <Link
+                    key={post.slug}
+                    href={localizePath(locale, `/engineering/${post.slug}`)}
+                    className="engineering-card-link group"
+                    style={{ animationDelay: `${Math.min(index, 5) * 70 + 180}ms` }}
+                  >
                     <Card
-                      className={`relative h-full overflow-hidden border-border/70 bg-card/92 before:absolute before:inset-x-0 before:top-0 before:h-px ${style.accent}`}
+                      className={`engineering-card relative h-full overflow-hidden border-border/70 bg-card/92 before:absolute before:inset-x-0 before:top-0 before:h-px ${style.accent}`}
                     >
                       <CardHeader className="space-y-5 p-6 pb-5">
                         <div className="flex items-start justify-between gap-4">
