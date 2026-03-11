@@ -60,16 +60,19 @@ export function SiteHeader() {
           <ThemeSwitcher />
         </div>
 
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen((open) => !open)}
-          className="mobile-menu-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card/78 text-foreground shadow-[0_10px_24px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-primary/35 hover:text-primary md:hidden"
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-site-menu"
-          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-        >
-          {mobileMenuOpen ? <X className="size-4.5" /> : <Menu className="size-4.5" />}
-        </button>
+        <div className="flex shrink-0 items-center gap-2 md:hidden">
+          <ThemeSwitcher />
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="mobile-menu-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card/78 text-foreground shadow-[0_10px_24px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-primary/35 hover:text-primary"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-site-menu"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          >
+            {mobileMenuOpen ? <X className="size-4.5" /> : <Menu className="size-4.5" />}
+          </button>
+        </div>
       </div>
 
       <div
@@ -98,19 +101,11 @@ export function SiteHeader() {
             </nav>
 
             <div className="mt-3 rounded-2xl border border-border/60 bg-background/36 p-3">
-              <div className="grid gap-3 min-[520px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                <div className="grid gap-2">
-                  <span className="px-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                    {t.common.language}
-                  </span>
-                  <LanguageSwitcher />
-                </div>
-                <div className="grid gap-2.5">
-                  <span className="px-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                    {t.common.theme}
-                  </span>
-                  <ThemeSwitcher />
-                </div>
+              <div className="grid gap-2">
+                <span className="px-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                  {t.common.language}
+                </span>
+                <LanguageSwitcher />
               </div>
             </div>
           </div>
