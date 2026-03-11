@@ -573,6 +573,268 @@ html.light .shell-grid {
   animation: signalPulse 4.8s ease-in-out infinite;
 }
 
+.about-flow > .about-panel {
+  position: relative;
+  overflow: hidden;
+  animation: panelReveal 780ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
+}
+
+.about-flow > .about-panel:nth-child(1) {
+  animation-delay: 120ms;
+}
+
+.about-flow > .about-panel:nth-child(2) {
+  animation-delay: 180ms;
+}
+
+.about-flow > .about-panel:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.about-flow > .about-panel:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+.about-flow > .about-panel:nth-child(5) {
+  animation-delay: 360ms;
+}
+
+.about-flow > .about-panel:nth-child(6) {
+  animation-delay: 420ms;
+}
+
+.about-flow > .about-panel:nth-child(7) {
+  animation-delay: 480ms;
+}
+
+.about-panel-intro {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 22%),
+    linear-gradient(135deg, rgba(94, 234, 212, 0.03), transparent 42%),
+    color-mix(in srgb, var(--card) 92%, transparent);
+}
+
+.about-panel-reference::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(94, 234, 212, 0.035), transparent);
+  transform: translateX(-118%);
+  animation: signalTraverse 18s linear infinite;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.about-intro-copy,
+.about-panel-shell,
+.about-section-copy {
+  animation: revealUp 720ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
+}
+
+.about-intro-copy {
+  animation-delay: 200ms;
+}
+
+.about-panel-intro > div > .about-panel-shell {
+  animation-delay: 300ms;
+}
+
+.about-panel:not(.about-panel-intro) .about-section-copy {
+  animation-delay: 180ms;
+}
+
+.about-heading {
+  position: relative;
+}
+
+.about-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 42%;
+  bottom: -0.7rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--hero-line), transparent);
+  opacity: 0.42;
+  animation: eyebrowSweep 820ms ease-out 220ms both;
+}
+
+.about-panel-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--hero-line), transparent);
+  opacity: 0.65;
+}
+
+.about-stat-card,
+.about-card,
+.about-list-card {
+  position: relative;
+  animation: revealUp 700ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.about-stat-card {
+  background:
+    linear-gradient(135deg, rgba(94, 234, 212, 0.025), transparent 44%),
+    rgba(8, 17, 31, 0.12);
+}
+
+.about-card,
+.about-list-card,
+.about-panel-shell {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.about-panel-shell {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    rgba(8, 17, 31, 0.12);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.about-stat-card:hover,
+.about-card:hover,
+.about-list-card:hover,
+.about-panel-shell:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--border) 62%, var(--primary));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 26px rgba(8, 17, 31, 0.1);
+}
+
+.about-card:hover {
+  transform: translateY(-2px);
+}
+
+.about-stat-card:nth-child(1),
+.about-card-grid > .about-card:nth-child(1) {
+  animation-delay: 220ms;
+}
+
+.about-stat-card:nth-child(2),
+.about-card-grid > .about-card:nth-child(2) {
+  animation-delay: 280ms;
+}
+
+.about-stat-card:nth-child(3),
+.about-card-grid > .about-card:nth-child(3) {
+  animation-delay: 340ms;
+}
+
+.about-stat-card:nth-child(4),
+.about-card-grid > .about-card:nth-child(4) {
+  animation-delay: 400ms;
+}
+
+.about-list-card:nth-child(1) {
+  animation-delay: 220ms;
+}
+
+.about-list-card:nth-child(2) {
+  animation-delay: 280ms;
+}
+
+.about-list-card:nth-child(3) {
+  animation-delay: 340ms;
+}
+
+.about-list-card:nth-child(4) {
+  animation-delay: 400ms;
+}
+
+.about-chip {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(94, 234, 212, 0.03);
+}
+
+.about-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(94, 234, 212, 0.08) 50%, transparent 100%);
+  opacity: 0;
+  transform: translateX(-28%);
+  transition: opacity 220ms ease, transform 320ms ease;
+}
+
+.about-chip:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-inline-link,
+.about-nav-link {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease,
+    background-color 220ms ease;
+}
+
+.about-inline-link::before,
+.about-nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(94, 234, 212, 0.08) 50%, transparent 100%);
+  opacity: 0;
+  transform: translateX(-38%);
+  transition: opacity 220ms ease, transform 320ms ease;
+}
+
+.about-inline-link:hover,
+.about-nav-link:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--border) 58%, var(--primary));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 12px 24px rgba(8, 17, 31, 0.08);
+}
+
+.about-inline-link:hover::before,
+.about-nav-link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.65rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0.42);
+  transform-origin: left;
+  opacity: 0.42;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.about-nav-link:hover::after {
+  transform: scaleX(1);
+  opacity: 0.85;
+}
+
 .mobile-nav {
   position: relative;
   padding-top: 0.1rem;
@@ -742,7 +1004,16 @@ html.light .mobile-nav-link {
   .systems-orbit,
   .system-panel,
   .system-panel::after,
+  .about-flow > .about-panel,
+  .about-panel-reference::after,
+  .about-intro-copy,
+  .about-panel-shell,
+  .about-section-copy,
+  .about-stat-card,
+  .about-card,
+  .about-list-card,
   .hero-eyebrow::after,
+  .about-heading::after,
   .hero-signal-card::after,
   .hero-signal-ping {
     animation: none;
@@ -753,6 +1024,17 @@ html.light .mobile-nav-link {
   .theme-toggle,
   .site-wordmark,
   .hero-chip::before,
+  .about-chip::before,
+  .about-inline-link,
+  .about-inline-link::before,
+  .about-inline-link::after,
+  .about-nav-link,
+  .about-nav-link::before,
+  .about-nav-link::after,
+  .about-panel-shell,
+  .about-stat-card,
+  .about-card,
+  .about-list-card,
   .hero-signal-card,
   .system-module,
   .system-stack,
