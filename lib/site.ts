@@ -40,3 +40,16 @@ export const siteConfig = {
     email: "mailto:brandonmojica95@gmail.com",
   },
 } as const;
+
+export const localizedSiteMetadata = {
+  en: {
+    title: "Brandon Mojica | Backend Engineer & Systems Architecture",
+    description:
+      "Backend engineer specialized in ERP systems, financial platforms, and software architecture. Creator of Businext ERP and the TR0V1 financial platform.",
+  },
+  es: {
+    title: "Brandon Mojica | Ingeniero Backend y Arquitectura de Sistemas",
+    description:
+      "Ingeniero backend especializado en sistemas ERP, plataformas financieras y arquitectura de software. Creador de Businext ERP y la plataforma financiera TR0V1.",
+  },
+} as const;

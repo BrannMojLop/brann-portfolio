@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 import { SiteShell } from "@/components/site-shell";
-import { siteConfig } from "@/lib/site";
+import { localizedSiteMetadata, siteConfig } from "@/lib/site";
 import "./../../globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: siteConfig.name,
-  description: siteConfig.description,
+  title: localizedSiteMetadata.es.title,
+  description: localizedSiteMetadata.es.description,
   keywords: [...siteConfig.keywords],
   manifest: "/site.webmanifest",
   icons: {

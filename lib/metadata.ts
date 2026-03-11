@@ -21,7 +21,9 @@ export function createPageMetadata({
   imagePath = siteConfig.ogImage,
   type = "website",
 }: CreatePageMetadataInput): Metadata {
-  const fullTitle = `${title} | ${siteConfig.shortName}`;
+  const fullTitle = title.includes(siteConfig.shortName)
+    ? title
+    : `${title} | ${siteConfig.shortName}`;
   const canonical = getLocalizedUrl(locale, path);
   const imageUrl = imagePath.startsWith("http")
     ? imagePath
