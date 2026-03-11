@@ -14,25 +14,28 @@ export function ContactContent() {
 
   return (
     <Section title={contact.title} description={contact.description} className="max-w-4xl">
-      <div className="space-y-5 rounded-2xl border border-border/70 bg-card/80 p-6">
-        <p className="max-w-3xl text-muted-foreground">{contact.intro}</p>
+      <div className="contact-shell rounded-2xl border border-border/70 bg-card/80 p-6">
+        <div aria-hidden className="contact-ambient">
+          <span className="contact-orbit" />
+          <span className="contact-scanline" />
+        </div>
 
-        <div className="space-y-5 rounded-xl border border-border/70 bg-background/70 p-5">
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">{contact.cardIntro}</p>
+        <div className="contact-panel space-y-5 rounded-xl border border-border/70 bg-background/70 p-5">
+          <p className="contact-copy max-w-2xl text-sm leading-7 text-muted-foreground">{contact.cardIntro}</p>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="contact-pill-row flex flex-wrap gap-2">
             {contact.pills.map((pill) => (
               <Badge
                 key={pill}
                 variant="secondary"
-                className="rounded-md border border-border/70 bg-card/90 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-foreground/80"
+                className="contact-pill rounded-md border border-border/70 bg-card/90 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-foreground/80"
               >
                 {pill}
               </Badge>
             ))}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="contact-grid grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/60 md:text-[11px]">
                 {contact.topicsTitle}
@@ -44,7 +47,7 @@ export function ContactContent() {
               </ul>
             </div>
 
-            <div className="rounded-xl border border-border/70 bg-card/80 p-4">
+            <div className="contact-email-card rounded-xl border border-border/70 bg-card/80 p-4">
               <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground/60 md:text-[11px]">
                 {contact.emailLabel}
               </p>
@@ -58,17 +61,17 @@ export function ContactContent() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-          <Link href={siteConfig.links.linkedin} target="_blank" rel="noreferrer">
-            <Button>{contact.linkedin}</Button>
-          </Link>
-          <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
-            <Button variant="secondary">{contact.github}</Button>
-          </Link>
-          <Link href={siteConfig.links.email}>
-            <Button variant="outline">{contact.email}</Button>
-          </Link>
-        </div>
+          <div className="contact-actions flex flex-wrap gap-3">
+            <Link href={siteConfig.links.linkedin} target="_blank" rel="noreferrer">
+              <Button>{contact.linkedin}</Button>
+            </Link>
+            <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
+              <Button variant="secondary">{contact.github}</Button>
+            </Link>
+            <Link href={siteConfig.links.email}>
+              <Button variant="outline">{contact.email}</Button>
+            </Link>
+          </div>
         </div>
       </div>
     </Section>

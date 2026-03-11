@@ -264,17 +264,17 @@ export const messages = {
     contact: {
       title: "Contact",
       description:
-        "Open to conversations about software architecture, backend engineering, enterprise platforms, and remote product opportunities.",
+        "Open to conversations about software architecture, backend engineering, enterprise platforms, and remote opportunities in product teams.",
       intro:
         "I’m open to conversations about software architecture, backend engineering, enterprise platforms and remote opportunities in product teams.",
       cardIntro:
-        "If you’d like to talk about ERP systems, backend platforms, FastAPI APIs or architecture for business software, feel free to reach out through any of these channels.",
+        "If you want to talk about ERP systems, backend platforms, FastAPI APIs, or architecture for business software, feel free to reach out through any of these channels.",
       topicsTitle: "Topics I usually discuss:",
       topics: [
-        "Backend architecture and APIs",
+        "Backend architecture and API design",
         "Enterprise systems and ERP platforms",
         "Financial platforms and credit workflows",
-        "Opportunities as a Software Engineer / Systems Architect",
+        "Remote roles as a Backend Engineer or Systems Architect",
       ],
       pills: [
         "Backend Architecture",
@@ -284,7 +284,7 @@ export const messages = {
       ],
       emailLabel: "Email",
       emailValue: "brandonmojica95@gmail.com",
-      note: "I usually respond best through LinkedIn or email.",
+      note: "I usually respond faster through LinkedIn or email.",
       linkedin: "LinkedIn",
       github: "GitHub",
       email: "Send email",
@@ -549,10 +549,10 @@ export const messages = {
         "Si quieres hablar sobre sistemas ERP, plataformas backend, APIs con FastAPI o arquitectura para software de negocio, puedes escribirme por cualquiera de estos medios.",
       topicsTitle: "Temas sobre los que normalmente converso:",
       topics: [
-        "Arquitectura backend y APIs",
-        "Sistemas empresariales y ERP",
+        "Arquitectura backend y diseño de APIs",
+        "Sistemas empresariales y plataformas ERP",
         "Plataformas financieras y flujos de crédito",
-        "Oportunidades como Software Engineer / Systems Architect",
+        "Roles remotos como Backend Engineer o Systems Architect",
       ],
       pills: [
         "Backend Architecture",
@@ -562,7 +562,7 @@ export const messages = {
       ],
       emailLabel: "Correo",
       emailValue: "brandonmojica95@gmail.com",
-      note: "Generalmente respondo mejor por LinkedIn o correo.",
+      note: "Normalmente respondo más rápido por LinkedIn o correo electrónico.",
       linkedin: "LinkedIn",
       github: "GitHub",
       email: "Enviar correo",
