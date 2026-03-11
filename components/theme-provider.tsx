@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
+import { applyThemeBranding } from "@/lib/theme-branding";
 import { defaultTheme, THEME_COOKIE_NAME, type Theme } from "@/lib/theme-storage";
 
 type ThemeContextValue = {
@@ -30,6 +31,7 @@ export function ThemeProvider({
     window.localStorage.setItem(THEME_COOKIE_NAME, theme);
     document.cookie = `${THEME_COOKIE_NAME}=${theme}; path=/; max-age=31536000; samesite=lax`;
     applyTheme(theme);
+    applyThemeBranding(theme);
   }, [theme]);
 
   const value = useMemo(

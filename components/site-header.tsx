@@ -7,12 +7,15 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
+import { useTheme } from "@/components/theme-provider";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { themeBranding } from "@/lib/theme-branding";
 import { localizePath } from "@/lib/routing";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const { locale, t } = useLanguage();
+  const { theme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigation = [
@@ -31,7 +34,7 @@ export function SiteHeader() {
           className="site-wordmark flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold tracking-[0.05em] text-foreground/92 transition-colors duration-300 sm:flex-none sm:gap-3 sm:tracking-[0.08em]"
         >
           <Image
-            src="/brand-mark.svg"
+            src={themeBranding[theme].logo}
             alt="Brandon Mojica logo"
             width={28}
             height={28}
