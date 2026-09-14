@@ -1,0 +1,289 @@
+---
+title: "Desarrollo guiado por especificaciones para cambios de software complejos"
+summary: "Cómo hago explícitos el alcance, las restricciones, las decisiones de arquitectura, la evidencia de aceptación y los handoffs antes de implementar."
+seoDescription: "Cómo uso especificaciones, decisiones de arquitectura, evidencia de aceptación y handoffs explícitos para revisar mejor cambios complejos de software."
+date: "2026-09-14"
+theme: "architecture"
+articleType: "Práctica de ingeniería"
+readingTime: "10 min de lectura"
+tags:
+  - SDD
+  - Arquitectura
+  - Flujo de ingeniería
+  - Revisión independiente
+  - Puertas de liberación
+---
+
+## A veces el código es la parte fácil del cambio
+
+Muchos cambios de software llegan disfrazados de solicitudes pequeñas:
+
+“Agrega un estado.”
+
+“Permite que un administrador reprograme esto.”
+
+“Expón un campo adicional en la API.”
+
+La primera implementación puede parecer obvia. La dificultad aparece cuando el
+cambio toca historial, autorización, reintentos, migraciones, tiempo o más de un
+consumidor. Una modificación de estado puede requerir un evento inmutable, un
+límite de permisos, un comando idempotente, un cambio en la API y una prueba
+para una condición de carrera que la solicitud nunca mencionó.
+
+Esta es la tensión que me ayuda a manejar el desarrollo guiado por
+especificaciones (SDD). La idea no es escribir más documentos, sino descubrir
+el límite real del sistema antes de que el código vuelva costosa una
+interpretación incompleta.
+
+## Por qué implementar primero crea ambigüedad
+
+Empezar por el código se siente productivo porque produce un resultado visible.
+Pero una implementación temprana también crea un registro accidental de
+decisiones. La forma de una tabla se convierte en el modelo del dominio. Una
+ruta se convierte en un contrato de API. Un control de la interfaz se convierte
+en una regla de autorización. Una actualización mutable se convierte en el
+único historial que conserva el sistema.
+
+Cuando esas suposiciones ya están incorporadas, aclararlas después parece
+retrabajo. Distintas personas o herramientas pueden optimizar interpretaciones
+distintas. El resultado puede ser un sistema difícil de explicar y de revisar.
+
+En el trabajo actual intento hacer visibles esas suposiciones antes de
+implementar. Una especificación da al responsable de planear, implementar,
+revisar y reunir evidencia un objeto común para inspeccionar, y permite devolver
+descubrimientos al diseño sin cambiar el alcance en silencio.
+
+## Qué entiendo por SDD
+
+Uso SDD como un registro de ingeniería proporcional para un cambio no trivial.
+Debe responder lo suficiente para que otra persona pueda entender qué cambia,
+por qué cambia y qué evidencia haría aceptable el resultado.
+
+No uso SDD para referirme a una plantilla universal. Me refiero al registro de
+decisiones más pequeño que vuelve revisable este cambio.
+
+Mi flujo actual es:
+
+```text
+Definición del problema
+          ↓
+Descubrimiento
+          ↓
+SDD / Arquitectura
+          ↓
+Plan de implementación
+          ↓
+Implementación
+          ↓
+Revisión independiente
+          ↓
+Evidencia / QA
+          ↓
+Puerta de liberación
+```
+
+La secuencia no significa que el trabajo sea lineal. El descubrimiento puede
+cambiar la especificación. La implementación puede revelar una restricción
+faltante. La revisión puede encontrar una suposición que necesita una nueva
+decisión. Lo importante es registrar el cambio cuando modifica la
+interpretación, en lugar de dejarlo únicamente en una conversación o en un
+diff.
+
+## Qué debe hacer explícito un SDD
+
+En cambios no triviales necesito hacer visibles estas partes:
+
+### Problema y resultado esperado
+
+¿Qué problema operativo estamos resolviendo? ¿Quién necesita el cambio? ¿Qué
+debería ser diferente al terminar? Esto conecta la solicitud técnica con
+un resultado de negocio o de usuario sin fingir que ese resultado ya fue medido.
+
+### Alcance y exclusiones
+
+El alcance dice qué incluye; las exclusiones, qué queda deliberadamente fuera.
+Es una de las formas más efectivas de evitar que una
+funcionalidad absorba dominios vecinos solo porque están cerca en el código.
+
+Por ejemplo, en un flujo de gestión laboral una especificación puede incluir la
+estructura organizacional, los horarios y las fechas de vigencia, mientras
+excluye de forma explícita la asistencia o la nómina. Ese límite es más útil que
+una promesa vaga de “cubrir la operación laboral”.
+
+### Lenguaje del dominio e invariantes
+
+Los términos necesitan responsables. ¿Un “estado” es una proyección actual, un
+evento de ciclo de vida o ambas cosas? ¿Qué transiciones son válidas? ¿Qué
+registros deben seguir siendo interpretables después? Estas preguntas revelan
+invariantes que no deberían quedar únicamente en un formulario o en una ruta.
+
+### Decisiones de arquitectura y trade-offs
+
+El SDD debe registrar las decisiones relevantes: qué módulo es dueño de una
+regla, dónde se aplica la autorización, si una escritura es mutable o de solo
+adición, cómo se deriva el contexto de tenant y dónde están los límites de
+transacción. También debe registrar las alternativas descartadas y por qué no
+se eligieron.
+
+Es planear la arquitectura primero, pero no de forma aislada: las decisiones
+aclaran los cortes de implementación y su evidencia.
+
+### Riesgos y modos de falla
+
+¿Qué podría salir mal? Algunos ejemplos son el crecimiento del alcance, los
+comandos duplicados, las escrituras obsoletas, el acceso entre tenants, una
+migración incompleta o una revisión que valida el camino feliz pero no una
+transición prohibida. Nombrar un riesgo no afirma que haya ocurrido en
+producción. Lo vuelve visible para el diseño y la validación.
+
+### Criterios de aceptación y evidencia
+
+Un criterio de aceptación debe describir un comportamiento observable o un
+invariante protegido. El plan de evidencia identifica cómo se comprobará: una
+prueba unitaria, una prueba de contrato de API, inspección de código, una
+verificación en navegador, una prueba de integración con la base de datos o una
+verificación de entorno/release.
+
+La distinción importa. Una prueba local puede mostrar un comportamiento bajo una
+configuración, pero no demuestra automáticamente producción, permisos de base
+de datos, accesibilidad o preparación para liberar. Un SDD útil hace visibles
+esas puertas antes de comenzar a implementar.
+
+## Una solicitud pequeña puede revelar un límite grande
+
+Consideremos un ejemplo sanitizado de un cambio de flujo de trabajo en
+Workforce, un producto independiente de gestión laboral actualmente en
+desarrollo. El punto público no es la funcionalidad, sino la forma del handoff:
+antes de implementar se registraron el alcance, las exclusiones, las preguntas
+de aceptación y los límites de revisión.
+
+El handoff produjo un registro delimitado, no una descripción privada de la
+funcionalidad:
+
+- **Alcance:** el corte específico del flujo y los límites del sistema que tocaba.
+- **Exclusiones:** el comportamiento adyacente que deliberadamente quedó fuera.
+- **Preguntas de aceptación:** historial, reintentos, autorización, escrituras
+  obsoletas, migraciones, comportamiento de la API, reprogramación y estados
+  terminales.
+- **Límites de revisión:** las decisiones, rutas de falla y evidencias que debían
+  abordar las siguientes responsabilidades de implementación y revisión.
+
+El handoff no impuso un diseño final desde el principio. Asignó las decisiones
+pendientes y vinculó el siguiente corte de implementación con su evidencia. Lo
+relevante aquí es el registro delimitado de decisiones, incertidumbre y pruebas,
+no la descripción privada de la funcionalidad.
+
+La implementación podría usar una mutación auditada, un registro de
+idempotencia, concurrencia optimista y autorización explícita, o podría elegir
+otro diseño. El valor está en que la decisión sea deliberada y revisable.
+
+## Arquitectura y plan de implementación están relacionados, pero no son lo mismo
+
+La planeación de arquitectura responde preguntas sobre límites y
+responsabilidades:
+
+- ¿Qué dominio es dueño de la regla?
+- ¿Qué datos deben mantener consistencia juntos?
+- ¿Qué capa es la autoridad para la autorización?
+- ¿Qué debe seguir siendo cierto después de reintentos o con el paso del tiempo?
+
+El plan de implementación responde cómo avanzar de forma segura:
+
+- ¿Qué migración o cambio de esquema va primero?
+- ¿Qué cambio de servicio y contrato de API deben avanzar juntos?
+- ¿Qué parte puede implementarse como un corte delimitado?
+- ¿Qué pruebas y verificaciones manuales demuestran cada criterio de aceptación?
+
+Separarlos evita dos fallas opuestas: una arquitectura abstracta puede quedar
+desconectada del código, mientras una lista detallada de tareas puede
+implementar con eficiencia el límite equivocado.
+
+## Los handoffs conservan decisiones, no solo contexto
+
+En un flujo con varias responsabilidades, un handoff debe ser más
+pequeño que la conversación completa y más rico que un título de tarea. Quiero
+que incluya:
+
+- el alcance y las exclusiones acordadas;
+- decisiones y trade-offs;
+- evidencia disponible;
+- preguntas abiertas y riesgos;
+- criterios de aceptación;
+- la responsabilidad siguiente y el resultado esperado.
+
+Esto reduce la posibilidad de que un implementador llene un vacío con una
+suposición silenciosa. También permite que un revisor compare el resultado con
+la decisión original en lugar de revisar solo el diff final.
+
+En mi flujo, la IA puede ayudar con inspecciones acotadas, comparaciones y
+borradores. Yo sigo siendo responsable de resolver la ambigüedad, aceptar las
+decisiones de arquitectura y decidir si la evidencia es suficiente para liberar.
+
+## La revisión y la evidencia deben planearse desde el principio
+
+La revisión es más útil cuando sus preguntas existen antes de implementar. Si
+la única definición de terminado es “las pruebas pasaron”, pueden quedar sin
+examinar dimensiones importantes:
+
+- ¿La implementación todavía coincide con el alcance aprobado?
+- ¿Las afirmaciones sobre el cambio tienen respaldo?
+- ¿Se controlan las transiciones prohibidas y las escrituras obsoletas?
+- ¿La interfaz muestra el estado y el idioma correctos?
+- ¿Siguen intactos los metadatos, encabezados, enlaces y la accesibilidad?
+- ¿Qué verificaciones de base de datos, despliegue o producción siguen siendo condicionales?
+
+Una revisión independiente no significa que todo revisor sea una persona ni que
+una herramienta sea infalible. Significa que la responsabilidad de comprobar el
+resultado está separada de la responsabilidad que lo produjo, y que el tipo de
+revisión se declara con claridad.
+
+## Cómo puede fallar un SDD
+
+Un SDD no es bueno automáticamente por estar escrito. Puede fallar cuando:
+
+- registra una solución antes de terminar el descubrimiento;
+- omite las exclusiones y permite que el alcance crezca sin hacerse visible;
+- describe intenciones como criterios de aceptación, pero no evidencia observable;
+- la implementación cambia el comportamiento sin actualizar la especificación;
+- un handoff conserva conclusiones, pero pierde la incertidumbre;
+- la revisión valida la implementación contra sí misma y no contra el alcance acordado;
+- una prueba local verde se trata como evidencia de todas las puertas posteriores.
+
+Estos son riesgos que he necesitado hacer visibles. Si la implementación revela
+información nueva, actualizo la decisión, explico el impacto y ajusto la
+evidencia.
+
+## Cuándo no uso un SDD completo
+
+Una especificación completa no es necesaria para cada cambio. Usaría un registro
+más ligero —o trabajaría directamente— cuando el cambio es pequeño, reversible,
+aislado y sencillo de validar: una corrección de copy, un ajuste de estilos o un
+refactor sin impacto en contratos, datos, autorización u operación.
+
+El umbral no es la ceremonia. Es la incertidumbre y la consecuencia. Conforme
+aumenta la cantidad de límites, consumidores, transiciones o modos de falla, una
+especificación compartida normalmente cuesta menos que recuperar la implícita.
+
+## Principios finales
+
+Para mí, SDD es una forma de hacer inspeccionables las decisiones de ingeniería
+antes de que sea caro cambiarlas.
+
+- Comenzar por el problema, no por la primera tabla o endpoint, y hacer
+  explícitos el alcance y las exclusiones.
+- Registrar propiedad, invariantes, trade-offs y riesgos.
+- Definir la evidencia de aceptación antes de implementar, incluyendo qué
+  verificaciones son locales, manuales, de base de datos, de despliegue o de
+  release.
+- Mantener separadas las decisiones de arquitectura, los cortes de
+  implementación y la revisión independiente.
+- Usar handoffs para conservar decisiones e incertidumbre, y actualizar la
+  especificación cuando el descubrimiento cambie el diseño.
+- Usar el proceso que la incertidumbre y la consecuencia del cambio necesitan,
+  y no más.
+
+Así uso actualmente el desarrollo guiado por especificaciones: no para congelar
+el software antes de construirlo, sino para hacer el cambio lo bastante
+deliberado como para aprender sin perder el control del límite del sistema.
+
+Notas relacionadas: [servicios FastAPI orientados a transacciones de negocio](/es/engineering/backend-service-boundaries) y [arquitectura de plataformas ERP](/es/engineering/erp-platform-architecture).

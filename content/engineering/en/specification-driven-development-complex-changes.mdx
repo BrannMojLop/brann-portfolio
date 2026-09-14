@@ -1,0 +1,287 @@
+---
+title: "Specification-driven development for complex software changes"
+summary: "How I make scope, constraints, architecture decisions, acceptance evidence, and handoffs explicit before implementation."
+seoDescription: "How I use specifications, architecture decisions, acceptance evidence, and explicit handoffs to make complex software changes easier to review."
+date: "2026-09-14"
+theme: "architecture"
+articleType: "Engineering Practice"
+readingTime: "10 min read"
+tags:
+  - SDD
+  - Architecture
+  - Engineering Workflow
+  - Independent Review
+  - Release Gates
+---
+
+## Coding is often the easy part of a difficult change
+
+Many software changes arrive disguised as small requests:
+
+“Add one status.”
+
+“Let an administrator reschedule this.”
+
+“Expose one more field in the API.”
+
+The first implementation can look obvious. The difficulty appears when the
+change touches history, authorization, retries, migrations, time, or more than
+one consumer. A status change may actually require an immutable event, a new
+permission boundary, an idempotent command, an API contract decision, and a
+test for a race that the original request never mentioned.
+
+This is the tension that specification-driven development (SDD) helps me
+handle. The point is not to write more documents. The point is to discover the
+real system boundary before code makes an incomplete interpretation expensive.
+
+## Why implementation-first creates ambiguity
+
+Starting with code feels productive because it produces a visible artifact. But
+an early implementation also creates an accidental decision record. A table
+shape becomes a domain model. A route becomes an API contract. A UI control
+becomes an authorization rule. A mutable update becomes the only history the
+system keeps.
+
+Once those assumptions are embedded, later clarification feels like rework.
+Different people or tools may then optimize different interpretations of the
+same request. The result is not necessarily broken code. It is a system whose
+behavior is harder to explain and whose review starts from moving targets.
+
+In current work, I try to surface those assumptions before implementation. A
+specification gives the planner, implementer, reviewer, and QA/evidence
+responsibility a shared object to inspect. It also gives implementation a safe
+way to send discoveries back into the design instead of silently changing the
+scope.
+
+## What I mean by SDD
+
+I use SDD as a proportional engineering record for a non-trivial change. It
+should answer enough questions that another engineer can understand what is
+being changed, why it is being changed, and what evidence would make the
+change acceptable.
+
+I am not using SDD to mean a universal template. I mean the smallest decision
+record that makes this change reviewable.
+
+My current workflow is:
+
+```text
+Problem framing
+      ↓
+Discovery
+      ↓
+SDD / Architecture
+      ↓
+Implementation plan
+      ↓
+Implementation
+      ↓
+Independent review
+      ↓
+Evidence / QA
+      ↓
+Release gate
+```
+
+The sequence is not a promise that the work is linear. Discovery can change the
+specification. Implementation can expose a missing constraint. Review can find
+an assumption that needs a new decision. The important property is that the
+change is recorded when it changes the interpretation, rather than being left
+only in a conversation or in a diff.
+
+## What belongs in an SDD
+
+The exact shape depends on risk, but I normally want to make these parts
+explicit:
+
+### Problem and desired outcome
+
+What operational problem are we solving? Who needs the change? What should be
+different when it is complete? This keeps a technical request connected to a
+business or user outcome without pretending that the outcome is already
+measured.
+
+### Scope and non-goals
+
+Scope says what the change includes. Non-goals say what it deliberately does
+not include. This is one of the most effective ways to prevent a feature from
+absorbing adjacent domains simply because they are nearby in the codebase.
+
+For a workforce workflow, for example, a specification may include organization
+structure, schedules, and effective dates while explicitly excluding attendance
+or payroll behavior. That boundary is more useful than a vague promise to
+“support workforce operations.”
+
+### Domain language and invariants
+
+Terms need owners. Is a “status” a current projection, a lifecycle event, or
+both? Which transitions are legal? Which records must remain interpretable
+after a later change? These questions reveal invariants that should not be left
+to a form or a single route.
+
+### Architecture decisions and trade-offs
+
+The SDD should record the meaningful choices: which module owns the rule, where
+authorization is enforced, whether a write is mutable or append-only, how tenant
+context is derived, and where transaction boundaries sit. It should also record
+the rejected alternatives and why they were not chosen.
+
+This is architecture-first planning, but it is not architecture in isolation.
+The decisions exist to make the implementation slices and their evidence
+clearer.
+
+### Risks and failure modes
+
+What could go wrong? Common examples include scope drift, duplicate commands,
+stale writes, cross-tenant access, an incomplete migration, or a review that
+checks the happy path but not a forbidden transition. Naming a risk does not
+claim that it happened in production. It makes the risk available for design
+and validation.
+
+### Acceptance criteria and evidence
+
+An acceptance criterion should describe observable behavior or a protected
+invariant. The evidence plan then identifies how that criterion will be
+checked: a unit test, an API contract test, source inspection, a browser check,
+a database integration test, or a release/environment verification.
+
+This distinction matters. A local test can show that one behavior works under
+one setup. It does not automatically prove production configuration, database
+permissions, accessibility, or release readiness. A useful SDD makes those
+different gates visible before implementation begins.
+
+## A small request can reveal a large boundary
+
+Consider a sanitized example from a workflow change in Workforce, an independent
+workforce-management product currently under development. The public point is
+not the feature itself, but the shape of the handoff: scope, exclusions,
+acceptance questions, and review boundaries were recorded before implementation.
+
+The handoff produced a bounded record rather than a private feature
+description:
+
+- **Scope:** the specific workflow slice and the system boundaries it touched.
+- **Exclusions:** adjacent behavior that was deliberately not part of the slice.
+- **Acceptance questions:** history, retries, authorization, stale writes,
+  migrations, API behavior, rescheduling, and terminal states.
+- **Review boundaries:** which decisions, failure paths, and evidence the next
+  implementation and review responsibilities had to address.
+
+The handoff did not prescribe a final design from the start. It assigned
+unresolved decisions and tied the next implementation slice to evidence. What
+matters here is the bounded record of decisions, uncertainty, and proof—not the
+private feature description.
+
+The eventual implementation may use an audited mutation, an idempotency
+receipt, optimistic concurrency, and explicit authorization—or it may choose a
+different design. The value is that the choice is deliberate and reviewable.
+
+## Architecture and implementation planning are related, not identical
+
+Architecture planning answers questions about boundaries and responsibility:
+
+- Which domain owns the rule?
+- Which data must be consistent together?
+- Which layer is authoritative for authorization?
+- What must remain true across retries or time?
+
+Implementation planning answers how to move through that design safely:
+
+- Which migration or schema change comes first?
+- Which service and API contract change together?
+- What can be implemented as a bounded slice?
+- Which tests and manual checks prove each acceptance criterion?
+
+Keeping them distinct prevents two opposite failures. An abstract architecture
+can remain disconnected from code. A detailed task list can implement the wrong
+boundary very efficiently.
+
+## Handoffs preserve decisions, not just context
+
+In a multi-responsibility workflow, a handoff should be smaller than the entire
+conversation and richer than a task title. I want it to carry:
+
+- the agreed scope and non-goals;
+- decisions and trade-offs;
+- evidence already available;
+- open questions and risks;
+- acceptance criteria;
+- the responsibility and output expected next.
+
+This reduces the chance that an implementer silently fills a gap with an
+assumption. It also lets a reviewer compare the result with the original
+decision instead of reviewing only the final diff.
+
+In my workflow, AI can help with bounded inspection, comparison, and drafting.
+I remain responsible for resolving ambiguity, accepting architecture decisions,
+and deciding whether the evidence is sufficient for release.
+
+## Review and evidence should be planned early
+
+Review is more useful when its questions exist before implementation. If the
+only definition of done is “the tests passed,” important dimensions can remain
+unexamined:
+
+- Does the implementation still match the approved scope?
+- Are the claims about the change supported?
+- Are forbidden transitions and stale writes handled?
+- Does the UI expose the correct state and language?
+- Are metadata, headings, links, and accessibility intact?
+- Which database, deployment, or production checks are still conditional?
+
+Independent review does not mean that every reviewer is a human or that a tool
+is infallible. It means the responsibility for checking the result is separate
+from the responsibility that produced it, with the review type stated clearly.
+
+## Where SDD can fail
+
+SDD is not automatically good because it is written down. It can fail when:
+
+- the document records a solution before discovery is complete;
+- non-goals are omitted, allowing scope to expand invisibly;
+- acceptance criteria describe intentions but not observable evidence;
+- implementation changes behavior without updating the specification;
+- a handoff copies conclusions but loses uncertainty;
+- review validates the implementation against itself rather than against the
+  agreed scope;
+- a green local test is treated as proof of every later gate.
+
+These are risks I have needed to make visible in current planning and review
+work. When implementation reveals new information, the right response is not
+to protect the original document. It is to update the decision, explain the
+impact, and adjust the evidence plan.
+
+## When I do not use a full SDD
+
+A full specification is unnecessary for every change. I would use a lighter
+record—or work directly—when a change is small, reversible, isolated, and easy
+to validate. Examples might include a copy correction, a local styling change,
+or a narrow refactor with no contract, data, authorization, or operational
+impact.
+
+The threshold is not ceremony. It is uncertainty and consequence. As the number
+of boundaries, consumers, state transitions, or failure modes grows, a shared
+specification usually costs less than recovering from an implicit one.
+
+## Final principles
+
+For me, SDD is a way to make engineering decisions inspectable before they are
+expensive to change.
+
+- Start with the problem, not the first table or endpoint, and make scope and
+  non-goals explicit.
+- Record ownership, invariants, trade-offs, and risks.
+- Define acceptance evidence before implementation, including which checks are
+  local, manual, database, deployment, or release evidence.
+- Keep architecture decisions, implementation slices, and independent review
+  distinct.
+- Use handoffs to preserve decisions and uncertainty, and update the
+  specification when discovery changes the design.
+- Use as much process as the uncertainty and consequence of the change warrant,
+  and no more.
+
+That is how I currently use specification-driven development: not to freeze
+software before it is built, but to make change deliberate enough to learn from
+without losing control of the system boundary.
+
+Related notes: [business-transaction-oriented FastAPI services](/engineering/backend-service-boundaries) and [ERP platform architecture](/engineering/erp-platform-architecture).

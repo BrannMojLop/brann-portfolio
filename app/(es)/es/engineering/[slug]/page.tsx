@@ -2,11 +2,14 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
 import { StructuredData } from "@/components/structured-data";
+import { EngineeringRelatedNotes } from "@/components/engineering-related-notes";
 import {
+  getAllEngineeringPosts,
   getEngineeringPostSlugs,
   getEngineeringPostSource,
   type EngineeringFrontmatter,
@@ -14,6 +17,7 @@ import {
 import { messages } from "@/lib/i18n";
 import { createPageMetadata } from "@/lib/metadata";
 import { mdxComponents } from "@/lib/mdx";
+import { localizePath } from "@/lib/routing";
 import { buildArticleSchema, buildBreadcrumbSchema } from "@/lib/structured-data";
 
 type Props = {
@@ -43,8 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return createPageMetadata({
     locale: "es",
-    title: String(data.title || messages.es.engineering.title),
-    description: String(data.summary || messages.es.engineering.description),
+    title: String(data.seoTitle || data.title || messages.es.engineering.title),
+    description: String(data.seoDescription || data.summary || messages.es.engineering.description),
     path: `/engineering/${slug}`,
     imagePath: "/engineering/opengraph-image",
     type: "article",
@@ -70,6 +74,7 @@ export default async function SpanishEngineeringPostPage({ params }: Props) {
       },
     },
   });
+  const relatedPosts = await getAllEngineeringPosts("es");
 
   return (
     <>
@@ -78,7 +83,7 @@ export default async function SpanishEngineeringPostPage({ params }: Props) {
           buildArticleSchema({
             locale: "es",
             title: frontmatter.title,
-            description: frontmatter.summary,
+            description: frontmatter.seoDescription || frontmatter.summary,
             path: `/engineering/${slug}`,
             datePublished: frontmatter.date,
             keywords: frontmatter.tags,
@@ -90,22 +95,26 @@ export default async function SpanishEngineeringPostPage({ params }: Props) {
           ]),
         ]}
       />
-      <article className="mx-auto w-full max-w-3xl px-6 py-16 md:py-20">
-        <p className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
-          {messages.es.engineering.title}
-        </p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">{frontmatter.summary}</p>
-        {frontmatter.articleType ? (
-          <p className="mt-4 text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
-            {frontmatter.articleType}
-          </p>
-        ) : null}
-        <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-          <p>{frontmatter.date}</p>
-          {frontmatter.readingTime ? <p>{frontmatter.readingTime}</p> : null}
-        </div>
-        <div className="mt-10">{content}</div>
+      <article className="article-reading-shell mx-auto w-full px-6 py-12 md:py-20">
+        <nav className="article-breadcrumbs" aria-label="Migas de pan">
+          <Link href={localizePath("es", "/")}>Inicio</Link>
+          <span aria-hidden="true">/</span>
+          <Link href={localizePath("es", "/engineering")}>Ingeniería</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{frontmatter.title}</span>
+        </nav>
+        <header className="article-header">
+          <p className="article-eyebrow">{messages.es.engineering.title}</p>
+          <h1>{frontmatter.title}</h1>
+          <p className="article-deck">{frontmatter.summary}</p>
+          <div className="article-meta" aria-label="Detalles del artículo">
+            {frontmatter.articleType ? <span>{frontmatter.articleType}</span> : null}
+            <time dateTime={frontmatter.date}>{frontmatter.date}</time>
+            {frontmatter.readingTime ? <span>{frontmatter.readingTime}</span> : null}
+          </div>
+        </header>
+        <div className="article-content">{content}</div>
+        <EngineeringRelatedNotes currentSlug={slug} locale="es" posts={relatedPosts} />
       </article>
     </>
   );

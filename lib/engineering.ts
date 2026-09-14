@@ -8,6 +8,8 @@ import type { Locale } from "@/lib/i18n";
 export type EngineeringFrontmatter = {
   title: string;
   summary: string;
+  seoTitle?: string;
+  seoDescription?: string;
   date: string;
   tags: string[];
   theme: EngineeringTheme;
@@ -55,6 +57,8 @@ export async function getAllEngineeringPosts(locale: Locale): Promise<Engineerin
           slug,
           title: String(data.title || "Untitled"),
           summary: String(data.summary || ""),
+          seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
+          seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
           date: String(data.date || "1970-01-01"),
           tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
           theme: engineeringThemeOrder.includes(data.theme as EngineeringTheme)

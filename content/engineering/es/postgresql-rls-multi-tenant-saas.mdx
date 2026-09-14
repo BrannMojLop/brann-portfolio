@@ -1,0 +1,347 @@
+---
+title: "Diseñar RLS de PostgreSQL para SaaS multi-tenant"
+summary: "El aislamiento por tenant es un límite del sistema: el contexto confiable, la autorización de aplicación, las políticas de base de datos y las pruebas deben estar alineados."
+seoTitle: "Diseñar RLS de PostgreSQL para SaaS Multi-Tenant | Brandon Mojica"
+seoDescription: "Una explicación basada en Workforce sobre RLS de PostgreSQL, contexto de tenant derivado del servidor, autorización y pruebas de aislamiento."
+date: "2026-09-14"
+theme: "architecture"
+articleType: "Práctica de ingeniería"
+readingTime: "12 min de lectura"
+tags:
+  - PostgreSQL
+  - Row-Level Security
+  - SaaS multi-tenant
+  - Arquitectura backend
+  - Autorización
+---
+## El problema del aislamiento por tenant
+
+En un sistema SaaS multi-tenant, la pregunta peligrosa no es solamente si una
+persona está autenticada. También debemos saber si cada lectura y mutación está
+limitada a la organización dentro de la cual esa solicitud está autorizada a
+operar.
+
+Ese límite atraviesa identidad, selección de organización, acción de negocio,
+transacción y acceso a filas. Un error en cualquiera de esas transiciones puede
+convertir una solicitud válida en una operación incorrecta entre organizaciones.
+
+El patrón común en la aplicación es agregar `WHERE organization_id = ...` a
+cada consulta. Esa condición es útil, pero es una convención que cada
+consumidor debe respetar. Una consulta olvidada, un join inseguro, un proceso en
+segundo plano o un camino del ORM que no use el repositorio esperado puede
+evadir la convención. El problema no es que los filtros de aplicación sean
+incorrectos. El problema es tratarlos como el límite completo de aislamiento.
+
+Mi enfoque actual hace que el límite coincida en varios niveles:
+
+- el servidor deriva el contexto de organización a partir de una membresía autenticada;
+- la autorización de aplicación decide si la acción solicitada está permitida;
+- la base de datos recibe un contexto con alcance transaccional;
+- PostgreSQL Row-Level Security (RLS) limita las filas visibles para el rol de base de datos;
+- las restricciones relacionales protegen invariantes que una política de visibilidad no puede expresar;
+- las pruebas de rutas negativas intentan cruzar el límite deliberadamente.
+
+RLS es más útil aquí como defensa en profundidad. Reduce el impacto potencial
+de un error; no reemplaza el resto del modelo de autorización.
+
+## Cuatro preguntas que deben mantenerse separadas
+
+Estos conceptos influyen en el mismo resultado de seguridad, pero mezclarlos
+hace más difícil razonar sobre el sistema:
+
+| Responsabilidad | Pregunta | Autoridad típica |
+| --- | --- | --- |
+| Autenticación | ¿Quién es esta persona usuaria? | Capa de identidad/sesión |
+| Membresía y autorización de aplicación | ¿Qué puede hacer dentro de esta organización? | Lógica de autorización del backend |
+| Contexto de tenant | ¿En qué organización opera esta solicitud? | Contexto derivado por el servidor |
+| RLS | ¿Qué filas puede observar o modificar esta sesión de base de datos? | Evaluación de políticas de PostgreSQL |
+
+Son capas complementarias: la autenticación no da acceso a todas las
+organizaciones, la membresía no establece por sí sola el contexto de base y RLS
+no conoce todas las capacidades del producto.
+
+Mantener estas responsabilidades explícitas evita un atajo frecuente: asumir
+que un `organization_id` correcto basta para autorizar toda la solicitud.
+
+## No confíes en la selección de tenant del cliente
+
+El cliente puede necesitar seleccionar una organización cuando una persona
+pertenece a más de una. Esa selección es un dato de entrada, no una autoridad.
+
+El backend debe resolver la identidad autenticada, comprobar que la
+organización solicitada corresponde a una membresía activa y válida, determinar
+las capacidades aplicables y solo entonces establecer `TenantContext`. Un
+selector del frontend, un campo oculto o un `organization_id` en el cuerpo de
+la solicitud no son un límite de autorización.
+
+El caso negativo importante es el de una persona que cambia únicamente el
+valor de organización y deja igual el resto de la solicitud. Ese cambio no debe
+redirigir la operación. Si falla la validación de membresía, el servidor no debe
+establecer el contexto que permitiría continuar.
+
+## De la identidad al contexto de base de datos
+
+El flujo conceptual que uso es:
+
+```text
+Persona autenticada
+        ↓
+Validación de membresía
+        ↓
+TenantContext derivado por el servidor
+        ↓
+Autorización de aplicación
+        ↓
+Contexto de PostgreSQL con alcance transaccional
+        ↓
+Políticas RLS
+        ↓
+Filas limitadas al tenant
+```
+
+La secuencia importa. Un ajuste creado a partir de un valor no validado solo
+mueve el problema de confianza a PostgreSQL. Un `TenantContext` derivado por el
+servidor es útil porque identidad y membresía establecieron antes su significado.
+
+## La autorización de aplicación y RLS tienen trabajos distintos
+
+La autorización de aplicación responde preguntas sobre intención y capacidad:
+¿esta membresía puede crear un Employee, cambiar una versión de horario o
+realizar una transición concreta? También puede exigir una llave de idempotencia
+o un ETag vigente.
+
+RLS responde una pregunta de base de datos más acotada: ¿este rol puede observar
+o modificar esta fila bajo el contexto actual?
+
+La lógica de aplicación puede explicar decisiones y devolver errores de dominio;
+RLS puede limitar caminos accidentales hacia otra organización. Ninguna capa es
+la otra.
+
+El modelo resultante está compuesto por capas que no son intercambiables:
+
+```text
+Autorización de aplicación
+          +
+RLS de PostgreSQL
+          +
+Restricciones relacionales y reglas de auditoría
+          +
+Pruebas de aislamiento
+          =
+Defensa en profundidad
+```
+
+Estos controles no ofrecen la misma garantía: una llave foránea protege una
+relación, una política RLS filtra filas, una comprobación de capacidades protege
+una acción y una prueba aporta evidencia sobre un contrato.
+
+## Qué me dice una política RLS —y qué no
+
+Una política genérica podría verse así:
+
+```sql
+ALTER TABLE employee ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY employee_tenant_isolation
+ON employee
+USING (
+  organization_id = current_setting('app.organization_id', true)::uuid
+);
+```
+
+La sintaxis es la parte fácil. Las preguntas arquitectónicas son más difíciles:
+
+- ¿Quién puede establecer `app.organization_id`?
+- ¿Se deriva después de validar la membresía?
+- ¿Tiene alcance solo dentro de la transacción actual?
+- ¿Qué ocurre cuando el ajuste falta o tiene un formato inválido?
+- ¿Cómo se limpia antes de reutilizar una conexión del pool?
+- ¿Qué roles pueden evadir RLS o son propietarios de la tabla?
+- ¿Se cubren con la misma intención los comportamientos de `INSERT`, `UPDATE` y `DELETE` que las lecturas?
+
+El ejemplo es educativo, no una copia de una política privada. El nombre del
+ajuste, la política, los privilegios, el cierre ante fallas y las políticas de
+escritura deben verificarse contra el código fuente y el entorno; un predicado
+de lectura no describe todo el comportamiento de escritura.
+
+El argumento `true` pide a PostgreSQL devolver `NULL` cuando falta el ajuste,
+en lugar de lanzar un error por una configuración personalizada inexistente. La
+comparación no produce una coincidencia autorizada, pero la aplicación también
+debe rechazar explícitamente una solicitud sin contexto. “Ausente” e “inválido”
+no deben convertirse accidentalmente en un modo administrativo.
+
+Hay otra distinción importante. `USING` controla qué filas existentes son
+visibles o elegibles para operaciones como `SELECT`, `UPDATE` y `DELETE`.
+`WITH CHECK` restringe las filas introducidas o resultantes de `INSERT` y
+`UPDATE`. Un diseño que habla de escrituras debe revisar ambos predicados;
+`USING` por sí solo no describe todo el comportamiento de una mutación.
+
+## Los límites transaccionales son parte del diseño
+
+El contexto de tenant es estado. El estado necesita un ciclo de vida.
+
+Para una solicitud, el modelo seguro es establecer el contexto validado dentro
+de la transacción que realizará el trabajo limitado por tenant, usarlo durante
+esa unidad y asegurarse de que el commit o rollback evite que afecte la siguiente
+unidad. Un ajuste local a la transacción, como `SET LOCAL`, es útil porque su
+vida sigue a la transacción y no a la conexión física.
+
+La secuencia es: validar `TenantContext`, iniciar la transacción, establecer el
+contexto local de base, ejecutar las consultas o mutaciones y hacer commit o
+rollback. El contexto no debe sobrevivir a esa unidad de trabajo.
+
+Una solicitud y una sesión de base tienen ciclos de vida distintos. Un pool
+reutiliza conexiones físicas, así que el estado de tenant a nivel de sesión
+puede llegar a la siguiente solicitud si el rollback y la limpieza quedan
+incompletos. El estado local a la transacción acota el contexto, pero hay que
+verificar el comportamiento de limpieza del driver y del pool.
+
+Los riesgos merecen pruebas y revisión explícitas:
+
+- establecer el contexto fuera de la transacción que lo usará;
+- terminar una transacción sin la limpieza esperada;
+- reutilizar una conexión del pool después de una excepción;
+- interpretar un ajuste vacío o antiguo como una organización válida;
+- ejecutar un worker que toma una conexión sin establecer contexto de tenant.
+
+La configuración correcta depende del driver, framework, pool y administrador de
+transacciones. Lo importante es el invariante, no una receta universal: el
+estado de tenant debe derivarse, tener alcance definido y limpiarse.
+
+## Roles, migraciones y caminos privilegiados
+
+RLS se evalúa en el contexto de roles de base de datos. Por eso la separación de
+roles es parte del diseño y no un detalle de despliegue.
+
+Los roles normales de API y worker no deberían tener silenciosamente los
+privilegios que vuelven irrelevante RLS. En el diseño local actual de Workforce,
+los contratos de aprovisionamiento y migración distinguen las responsabilidades
+de runtime de las responsabilidades de migración o administración, y los roles
+de runtime se configuran sin `BYPASSRLS`. Esta afirmación describe la
+implementación local, no un despliegue en producción.
+
+Habilitar RLS en una tabla no equivale a forzar a cada propietario o camino
+privilegiado a pasar por la política. La propiedad de la tabla y los atributos
+del rol pueden cambiar el límite efectivo; los roles con `BYPASSRLS` evaden las
+políticas. `FORCE ROW LEVEL SECURITY` puede ser apropiado en algunos modelos de
+propiedad, pero es una decisión deliberada, no un interruptor universal. Hay que
+revisar juntos propietario, grants, herencia y rol de runtime.
+
+Las migraciones necesitan acceso deliberado porque crean tablas, políticas,
+grants y funciones. Las tareas administrativas pueden requerir capacidades
+elevadas, pero deben ser explícitas, acotadas, auditables y separadas del tráfico
+normal. Un background job necesita un modo declarado: una organización validada
+o una operación de sistema controlada. “El worker puede ver todo” no es seguro.
+
+## Las restricciones relacionales complementan la visibilidad
+
+RLS controla qué filas puede acceder una sesión. No expresa por sí sola cada
+invariante relacional.
+
+Las restricciones pueden proteger reglas como:
+
+- una sola relación de membresía activa cuando el dominio solo permite una;
+- números de Employee únicos dentro de una organización;
+- estados de ciclo de vida válidos y transiciones respaldadas por el esquema;
+- llaves foráneas que impiden referenciar un dominio no relacionado;
+- relaciones consistentes entre entidades limitadas a la misma organización.
+
+Esto importa en Workforce porque User, Membership y Employee están separados:
+identidad; la relación con organización y rol; y un registro de persona de
+dominio que no implica login ni administración. La separación facilita revisar
+la autorización y las relaciones de base de datos.
+
+Las mutaciones auditadas, la idempotencia y los controles de concurrencia
+optimista o ETag protegen el historial y las escrituras en conflicto. Responden
+a fallas distintas y no reemplazan RLS ni la autorización de aplicación.
+
+## Cómo pruebo el aislamiento por tenant
+
+| Preocupación | Evidencia que debe reunirse |
+| --- | --- |
+| Aislamiento de lectura | La organización A no puede leer filas de B. |
+| Aislamiento de escritura | A no puede actualizar ni eliminar filas de B cambiando un identificador. |
+| Selección falsificada | Un valor de organización enviado por el cliente no establece contexto no autorizado. |
+| Contexto ausente | Una consulta sin contexto válido falla de forma cerrada o no devuelve filas de tenant. |
+| Ciclo de membresía | Una membresía inactiva o inválida no establece `TenantContext`. |
+| Alcance relacional | Un flujo no puede referenciar una entidad de B desde una operación de A. |
+| Mutación entre tenants | `INSERT`/`UPDATE` no puede crear ni producir estado de B desde una operación de A. |
+| Reutilización del pool | Una conexión reutilizada después de otra organización no conserva su contexto. |
+| Caminos privilegiados | El comportamiento de administración, migraciones y workers es explícito y se prueba por separado. |
+
+Separo tres clases de evidencia:
+
+- pruebas de aplicación para identidad, membresía, capacidades y reglas de dominio;
+- pruebas de políticas de base de datos usando roles de PostgreSQL y RLS real;
+- pruebas de integración que recorren todo el camino desde el contexto hasta la transacción.
+
+Un archivo de pruebas demuestra un contrato previsto y una ejecución demuestra
+lo que se ejecutó en un momento determinado. Ninguno debe inflarse hasta
+convertirse en una afirmación sobre configuración operativa o preparación para
+producción.
+
+Por eso la matriz describe públicamente los contratos que quiero verificar; no
+afirma que cada caso haya pasado en todos los entornos.
+
+## Modos de falla comunes
+
+Los errores más frecuentes son previsibles:
+
+1. Confiar en `tenant_id` u `organization_id` del cuerpo de la solicitud.
+2. Suponer que un filtro del ORM existe para siempre en todos los caminos.
+3. Escribir políticas permisivas o incompletas, especialmente para escrituras.
+4. Usar un rol con `BYPASSRLS`, propietario o privilegios heredados para tráfico normal.
+5. Fijar estado de sesión en una conexión del pool sin un ciclo de vida completo.
+6. Ejecutar workers o migraciones sin contexto ni modelo de acceso explícitos.
+7. Tratar User, Membership y Employee como intercambiables, o RLS como el
+   modelo completo de autorización.
+
+## Cuándo puede bastar el filtrado de aplicación
+
+RLS no es obligatorio para todos los sistemas SaaS. El filtrado en la aplicación
+puede ser razonable cuando el modelo de datos y los accesos son simples y
+acotados, el servicio es dueño de todas las consultas y el equipo puede
+verificar la convención. La decisión cambia con muchos servicios, workers,
+reportes, consumidores directos, datos de alto impacto o una posibilidad real de
+omitir el predicado; entonces la disciplina adicional puede justificar el límite
+impuesto por la base.
+
+La decisión debe seguir el modelo de amenazas y de operación, no un eslogan.
+RLS puede negar acceso legítimo cuando falta contexto o las políticas son muy
+estrictas, y puede producir una falsa sensación de seguridad cuando no se
+revisan los roles o las escrituras.
+
+## Workforce como ejemplo acotado
+
+Workforce es el sistema concreto detrás de este artículo. Es un producto
+independiente de gestión de fuerza laboral, en desarrollo local activo y no es
+software de producción. La implementación local tiene un backend FastAPI, un
+núcleo transaccional en PostgreSQL y una base multi-organización.
+
+Su arquitectura actual separa AuthenticationContext de TenantContext, deriva el
+contexto de organización en el backend después de resolver la membresía y usa
+roles de PostgreSQL y límites relacionados con RLS junto con la autorización de
+aplicación. User, Membership y Employee son conceptos separados.
+Los cortes de People/Employees y Structure/Scheduling están implementados
+localmente, con restricciones relacionales, mutaciones auditadas, idempotencia
+y controles de concurrencia optimista o ETag cuando el flujo correspondiente lo
+requiere.
+
+Ese es el límite de evidencia que considero adecuado explicar públicamente:
+muestra cómo razono sobre el límite y sus fallas, pero no afirma clientes,
+usuarios, uptime, SLOs, escala, cumplimiento, backups, recuperación puntual,
+pruebas externas de penetración ni despliegue.
+
+## Qué demuestra este diseño —y qué no
+
+Un flujo coherente de contexto, autorización explícita, RLS, separación de
+roles, restricciones y pruebas negativas aporta mejor evidencia que repetir un
+filtro, aunque crea más puntos que mantener alineados.
+
+La evidencia local puede mostrar que un límite está diseñado y ejercitado en un
+entorno particular, no que toda futura migración, rol, worker, configuración o
+instancia lo conserve. Por eso RLS es defensa en profundidad: una comprobación
+adicional mientras el modelo de confianza, autorización, transacciones,
+restricciones, pruebas y revisión humana siguen siendo necesarios.
+
+Para el flujo más amplio, consulta [Desarrollo guiado por especificaciones para cambios de software complejos](/es/engineering/specification-driven-development-complex-changes) y [Cómo estructuro agentes de IA especializados para ingeniería de software](/es/engineering/specialized-ai-agents-software-engineering). Para límites de sistemas: [Diseñar servicios FastAPI alrededor de transacciones de negocio en lugar de CRUD](/es/engineering/backend-service-boundaries) y [Arquitectura de plataformas ERP](/es/engineering/erp-platform-architecture).
