@@ -10,7 +10,7 @@ import { switchLocalePath } from "@/lib/routing";
 
 const locales: Locale[] = ["en", "es"];
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ onSelect }: { onSelect?: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
   const { locale, setLocale, t } = useLanguage();
@@ -38,11 +38,12 @@ export function LanguageSwitcher() {
             key={option}
             type="button"
             onClick={() => {
+              onSelect?.();
               setLocale(option);
               router.push(switchLocalePath(pathname, option));
             }}
             className={cn(
-              "relative z-10 flex-1 rounded-full px-3 py-2 text-[11px] font-semibold tracking-[0.14em] transition-all duration-200 md:min-w-11 md:flex-none md:px-3 md:py-1.5 md:text-[11px]",
+              "relative z-10 flex-1 rounded-full px-3 py-2 text-[11px] font-semibold tracking-[0.14em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:min-w-11 md:flex-none md:px-3 md:py-1.5 md:text-[11px]",
               locale === option
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground",

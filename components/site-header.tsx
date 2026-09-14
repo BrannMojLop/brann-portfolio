@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
@@ -16,7 +17,11 @@ import { cn } from "@/lib/utils";
 export function SiteHeader() {
   const { locale, t } = useLanguage();
   const { theme } = useTheme();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const menuPanelRef = useRef<HTMLDivElement>(null);
+  const wasMenuOpen = useRef(false);
 
   const navigation = [
     { href: localizePath(locale, "/"), label: t.nav.home },
@@ -26,12 +31,76 @@ export function SiteHeader() {
     { href: localizePath(locale, "/contact"), label: t.nav.contact },
   ] as const;
 
+  const isActive = (href: string) => {
+    const homePath = localizePath(locale, "/");
+    return pathname === href || (href !== homePath && pathname.startsWith(`${href}/`));
+  };
+
+  useEffect(() => {
+    const menuPanel = menuPanelRef.current;
+    if (!menuPanel) return;
+
+    const backgroundNodes = [document.querySelector("main"), document.querySelector("footer")].filter(
+      (node): node is HTMLElement => node instanceof HTMLElement,
+    );
+
+    menuPanel.toggleAttribute("inert", !mobileMenuOpen);
+    backgroundNodes.forEach((node) => node.toggleAttribute("inert", mobileMenuOpen));
+
+    if (!mobileMenuOpen) {
+      if (wasMenuOpen.current) {
+        menuTriggerRef.current?.focus();
+        wasMenuOpen.current = false;
+      }
+      return;
+    }
+
+    wasMenuOpen.current = true;
+    const getFocusableElements = () =>
+      Array.from(menuPanel.querySelectorAll<HTMLElement>("a, button, [tabindex]:not([tabindex='-1'])")).filter(
+        (element) => !element.hasAttribute("disabled"),
+      );
+
+    const focusFrame = window.requestAnimationFrame(() => getFocusableElements()[0]?.focus());
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusableElements = getFocusableElements();
+      if (!focusableElements.length) return;
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.removeEventListener("keydown", handleKeyDown);
+      backgroundNodes.forEach((node) => node.toggleAttribute("inert", false));
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <header className="site-chrome sticky top-0 z-30 border-b border-border/70 bg-background/78 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-3 sm:px-6">
         <Link
           href={localizePath(locale, "/")}
-          className="site-wordmark flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold tracking-[0.05em] text-foreground/92 transition-colors duration-300 sm:flex-none sm:gap-3 sm:tracking-[0.08em]"
+          className="site-wordmark flex min-w-0 flex-1 items-center gap-2 rounded-md text-sm font-semibold tracking-[0.05em] text-foreground/92 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:flex-none sm:gap-3 sm:tracking-[0.08em]"
         >
           <Image
             src={themeBranding[theme].logo}
@@ -51,7 +120,13 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-muted/55 hover:text-foreground"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={cn(
+                "rounded-full px-3 py-2 text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                isActive(item.href)
+                  ? "bg-primary/10 text-foreground"
+                  : "text-muted-foreground hover:bg-muted/55 hover:text-foreground",
+              )}
             >
               {item.label}
             </Link>
@@ -67,8 +142,9 @@ export function SiteHeader() {
           <ThemeSwitcher />
           <button
             type="button"
+            ref={menuTriggerRef}
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="mobile-menu-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card/78 text-foreground shadow-[0_10px_24px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-primary/35 hover:text-primary"
+            className="mobile-menu-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-border/70 bg-card/78 text-foreground shadow-[0_10px_24px_rgba(8,17,31,0.18),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:border-primary/35 hover:text-primary"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-site-menu"
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -80,6 +156,8 @@ export function SiteHeader() {
 
       <div
         id="mobile-site-menu"
+        ref={menuPanelRef}
+        aria-hidden={!mobileMenuOpen}
         className={cn(
           "mobile-menu-panel mx-auto grid w-full max-w-6xl overflow-hidden px-4 transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden sm:px-6",
           mobileMenuOpen
@@ -95,7 +173,13 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="mobile-drawer-link group flex items-center justify-between rounded-2xl border border-transparent bg-muted/30 px-4 py-3 text-sm font-medium text-foreground/88 transition-all duration-200 hover:border-primary/20 hover:bg-muted/55 hover:text-foreground"
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={cn(
+                    "mobile-drawer-link group flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    isActive(item.href)
+                      ? "border-primary/25 bg-primary/10 text-foreground"
+                      : "border-transparent bg-muted/30 text-foreground/88 hover:border-primary/20 hover:bg-muted/55 hover:text-foreground",
+                  )}
                 >
                   <span>{item.label}</span>
                   <ArrowUpRight className="size-4 text-primary/60 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
@@ -108,7 +192,7 @@ export function SiteHeader() {
                 <span className="px-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                   {t.common.language}
                 </span>
-                <LanguageSwitcher />
+                <LanguageSwitcher onSelect={() => setMobileMenuOpen(false)} />
               </div>
             </div>
           </div>
