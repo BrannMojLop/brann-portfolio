@@ -4,16 +4,19 @@ type SectionProps = {
   id?: string;
   title?: string;
   description?: string;
+  titleAs?: "h1" | "h2";
   className?: string;
   children: React.ReactNode;
 };
 
-export function Section({ id, title, description, className, children }: SectionProps) {
+export function Section({ id, title, description, titleAs = "h2", className, children }: SectionProps) {
+  const Heading = titleAs;
+
   return (
     <section id={id} className={cn("section-reveal mx-auto w-full max-w-6xl px-6 py-16 md:py-20", className)}>
       {(title || description) && (
         <header className="mb-10 space-y-3 md:mb-12">
-          {title && <h2 className="text-[1.9rem] font-semibold tracking-[-0.03em] md:text-[2.35rem]">{title}</h2>}
+          {title && <Heading className="text-[1.9rem] font-semibold tracking-[-0.03em] md:text-[2.35rem]">{title}</Heading>}
           {description && <p className="max-w-3xl text-[0.98rem] leading-7 text-muted-foreground md:text-[1.02rem]">{description}</p>}
         </header>
       )}

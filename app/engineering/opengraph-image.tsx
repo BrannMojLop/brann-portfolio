@@ -30,7 +30,7 @@ export default function EngineeringOpenGraphImage() {
             Architecture decisions from ERP and financial platforms.
           </div>
           <div style={{ fontSize: 30, lineHeight: 1.35, color: "#cbd5e1" }}>
-            Backend patterns, domain boundaries, FastAPI service layers, and operational reliability in production systems.
+            Backend patterns, domain boundaries, FastAPI service layers, and financial and operational correctness.
           </div>
         </div>
         <div style={{ display: "flex", gap: "18px", fontSize: 24, color: "#94a3b8" }}>

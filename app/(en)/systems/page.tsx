@@ -5,9 +5,9 @@ import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/structur
 
 export const metadata = createPageMetadata({
   locale: "en",
-  title: "Enterprise Systems Architecture",
+  title: "Systems shaped by operational constraints",
   description:
-    "Architecture case studies for Businext ERP and the TR0V1 Credit Platform, covering business context, domain boundaries, backend design, and operational reliability.",
+    "I describe each system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
   path: "/systems",
 });
 
@@ -18,8 +18,8 @@ export default function SystemsPage() {
         data={[
           buildCollectionPageSchema(
             "en",
-            "Enterprise Systems Architecture",
-            "Architecture case studies for ERP and financial platforms built for real operations.",
+            "Systems shaped by operational constraints",
+            "I describe each system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
             "/systems",
           ),
           buildBreadcrumbSchema("en", [

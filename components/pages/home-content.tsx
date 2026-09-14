@@ -18,12 +18,14 @@ export function HomeContent() {
   const [leadIntro, ...supportingIntro] = t.home.intro;
   const stack =
     locale === "en"
-      ? ["Python", "FastAPI", "React", "AWS", "Domain Architecture", "ERP Platforms"]
-      : ["Python", "FastAPI", "React", "AWS", "Arquitectura de Dominio", "Plataformas ERP"];
+      ? ["Python", "FastAPI", "React", "PostgreSQL", "Domain Modeling", "Evidence-based delivery"]
+      : ["Python", "FastAPI", "React", "PostgreSQL", "Modelado de Dominio", "Entrega basada en evidencia"];
+  const primarySignal = t.home.architectureSignals[0];
+  const PrimarySignalIcon = icons[0];
 
   return (
     <>
-      <Section className="hero-stage pb-10 pt-12 md:pt-16 lg:pt-20">
+      <Section className="hero-stage pb-10 pt-8 sm:pt-10 md:pt-16 lg:pt-20">
         <div aria-hidden className="hero-ambient">
           <div className="hero-grid" />
           <span className="hero-orbit hero-orbit-a" />
@@ -32,8 +34,8 @@ export function HomeContent() {
         </div>
 
         <div className="hero-shell grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
-          <div className="space-y-10 lg:space-y-12">
-            <div className="hero-copy space-y-9">
+          <div className="space-y-8 lg:space-y-12">
+            <div className="hero-copy space-y-7 md:space-y-9">
               <div className="hero-eyebrow flex items-center gap-3.5">
                 <span className="h-px w-12 bg-primary/35" />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/80 md:text-[11px]">
@@ -41,21 +43,49 @@ export function HomeContent() {
                 </p>
               </div>
 
-              <div className="space-y-7">
-                <h1 className="hero-title max-w-4xl text-[3.05rem] font-semibold leading-[0.9] tracking-[-0.065em] text-balance md:max-w-5xl md:text-[4.6rem] lg:max-w-[14ch] lg:text-[5.15rem]">
+              <div className="space-y-5 md:space-y-7">
+                <h1 className="hero-title max-w-4xl text-[2.5rem] font-semibold leading-[0.92] tracking-[-0.065em] text-balance sm:text-[3.3rem] md:max-w-5xl md:text-[4.6rem] md:leading-[0.9] lg:max-w-[14ch] lg:text-[5.15rem]">
                   {t.home.title}
                 </h1>
 
-                <div className="hero-intro max-w-[43rem] space-y-6">
+                <div className="hero-intro max-w-[43rem]">
                   <p className="max-w-[40rem] text-[1.08rem] leading-8 text-foreground/90 md:text-[1.24rem] md:leading-9">
                     {leadIntro}
                   </p>
-                  <div className="max-w-[39rem] border-l border-primary/18 pl-4.5 md:pl-6">
-                    <div className="space-y-3.5 text-[0.98rem] leading-7 text-muted-foreground/95 md:text-[1.03rem] md:leading-8">
-                      {supportingIntro.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
-                      ))}
-                    </div>
+                </div>
+
+                <div className="hero-proof-inline max-w-[40rem] border-l border-primary/30 pl-4 md:pl-6">
+                  <div className="flex items-center gap-2.5">
+                    <PrimarySignalIcon aria-hidden className="size-4 shrink-0 text-primary" />
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary/85 md:text-[11px]">
+                      {primarySignal.title}
+                    </p>
+                  </div>
+                  <p className="mt-2 text-base font-semibold tracking-[-0.02em] text-foreground">
+                    {primarySignal.value}
+                  </p>
+                </div>
+
+                <div className="hero-actions flex flex-wrap gap-3 pt-1">
+                  <Link href={localizePath(locale, "/systems")}>
+                    <Button size="lg" className="group hero-cta-primary">
+                      {t.home.exploreSystems}
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                    </Button>
+                  </Link>
+                  <Link href={localizePath(locale, "/engineering")}>
+                    <Button size="lg" variant="outline" className="group hero-cta-secondary">
+                      {t.home.readNotes}
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="hero-supporting-intro max-w-[39rem] border-l border-primary/18 pl-4 md:pl-6">
+                  <div className="space-y-3.5 text-[0.98rem] leading-7 text-muted-foreground/95 md:text-[1.03rem] md:leading-8">
+                    {supportingIntro.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -80,20 +110,6 @@ export function HomeContent() {
               </div>
             </div>
 
-            <div className="hero-actions flex flex-wrap gap-3 pt-1">
-              <Link href={localizePath(locale, "/systems")}>
-                <Button size="lg" className="group hero-cta-primary">
-                  {t.home.exploreSystems}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
-              <Link href={localizePath(locale, "/engineering")}>
-                <Button size="lg" variant="outline" className="group hero-cta-secondary">
-                  {t.home.readNotes}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
-            </div>
           </div>
 
           <aside className="hero-panel rounded-2xl border border-border/70 bg-card/95 p-5 shadow-sm lg:p-6">
@@ -147,6 +163,9 @@ export function HomeContent() {
           <div className="border-b border-border/70 pb-4">
             <h2 className="text-xl font-semibold tracking-tight">{t.home.matrixTitle}</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{t.home.matrixNote}</p>
+            <p className="mt-4 max-w-4xl text-xs leading-6 text-foreground/75 md:text-sm">
+              {t.home.workflowSequence}
+            </p>
           </div>
 
           <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -164,23 +183,23 @@ export function HomeContent() {
         <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
           <article className="rounded-2xl border border-border/70 bg-card/85 p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
-              {locale === "en" ? "PORTFOLIO CONTEXT" : "ENFOQUE DEL PORTAFOLIO"}
+              {locale === "en" ? "THREE DIMENSIONS" : "TRES DIMENSIONES"}
             </p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight">
               {locale === "en"
-                ? "Engineering portfolio focused on real-world enterprise systems."
-                : "Portafolio de ingeniería centrado en sistemas empresariales reales."}
+                ? "Systems I build, how I design them, and how I engineer software."
+                : "Los sistemas que construyo, cómo los diseño y cómo hago ingeniería de software."}
             </h2>
             <div className="mt-4 max-w-3xl space-y-4 text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
               <p>
                 {locale === "en"
-                  ? "This site documents platforms built for real-world operations, including an enterprise ERP and financial systems running in production."
-                  : "Este sitio documenta plataformas construidas para operación real, incluyendo un ERP empresarial y sistemas financieros utilizados en producción."}
+                  ? "Selected systems show the domain, architecture, and operational constraints behind the work."
+                  : "Los sistemas seleccionados muestran el dominio, la arquitectura y las restricciones operativas detrás del trabajo."}
               </p>
               <p>
                 {locale === "en"
-                  ? "The goal is to show how architectural decisions, domain modeling, and backend design support business workflows and long-term platform evolution."
-                  : "El objetivo es mostrar cómo decisiones de arquitectura, modelado de dominio y diseño backend sostienen flujos de negocio y evolución de plataforma a largo plazo."}
+                  ? "The engineering workflow makes scope, responsibilities, evidence, and review visible before a change moves toward release."
+                  : "El flujo de ingeniería hace visibles el alcance, las responsabilidades, la evidencia y la revisión antes de que un cambio avance hacia la liberación."}
               </p>
             </div>
           </article>
@@ -195,24 +214,24 @@ export function HomeContent() {
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "Explore Businext ERP and TR0V1 as real architecture case studies."
-                  : "Explorar Businext ERP y TR0V1 como casos reales de arquitectura."}
+                  ? "Explore Businext ERP, TR0V1, and Workforce as architecture cases."
+                  : "Explorar Businext ERP, TR0V1 y Workforce como casos de arquitectura."}
               </Link>
               <Link
                 href={localizePath(locale, "/about")}
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "Review professional background, current role, and technical focus."
-                  : "Ver trayectoria profesional, rol actual y enfoque tecnológico."}
+                  ? "Review professional background, current role, and engineering practice."
+                  : "Ver trayectoria profesional, rol actual y práctica de ingeniería."}
               </Link>
               <Link
                 href={localizePath(locale, "/engineering")}
                 className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
               >
                 {locale === "en"
-                  ? "Read engineering notes about ERP architecture, service layers, and financial consistency."
-                  : "Leer notas técnicas sobre arquitectura ERP, capas de servicio y consistencia financiera."}
+                  ? "Read engineering notes about system design, PostgreSQL, concurrency, and evidence."
+                  : "Leer notas de ingeniería sobre diseño de sistemas, PostgreSQL, concurrencia y evidencia."}
               </Link>
             </div>
           </aside>

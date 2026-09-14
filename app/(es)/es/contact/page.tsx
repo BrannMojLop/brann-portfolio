@@ -7,7 +7,7 @@ export const metadata = createPageMetadata({
   locale: "es",
   title: "Contacto",
   description:
-    "Contacto de Brandon Mojica Lopez para conversar sobre arquitectura backend, sistemas ERP, FastAPI y oportunidades remotas en producto.",
+    "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
   path: "/contact",
 });
 
@@ -19,7 +19,7 @@ export default function SpanishContactPage() {
           buildCollectionPageSchema(
             "es",
             "Contacto con Brandon Mojica Lopez",
-            "Página de contacto para conversaciones sobre backend engineering, ERP, sistemas financieros y producto.",
+            "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
             "/contact",
           ),
           buildBreadcrumbSchema("es", [

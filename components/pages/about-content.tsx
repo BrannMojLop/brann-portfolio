@@ -14,7 +14,7 @@ export function AboutContent() {
   const about = t.about;
 
   return (
-    <Section title={about.title} description={about.description}>
+    <Section title={about.title} description={about.description} titleAs="h1">
       <div className="about-flow space-y-8">
         <article className="about-panel about-panel-intro rounded-3xl border border-border/70 bg-card/90 p-6 shadow-sm md:p-8">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
@@ -148,6 +148,23 @@ export function AboutContent() {
           </div>
         </article>
 
+        <article className="about-panel rounded-3xl border border-border/70 bg-card/85 p-6 md:p-8">
+          <div className="about-section-copy max-w-3xl">
+            <h3 className="about-heading text-[1.55rem] font-semibold tracking-[-0.03em]">
+              {about.workflow.title}
+            </h3>
+            <p className="mt-3 text-[0.98rem] leading-7 text-muted-foreground">
+              {about.workflow.description}
+            </p>
+            <p className="mt-5 rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-7 text-foreground/85">
+              {about.workflow.sequence}
+            </p>
+            <p className="mt-4 text-[0.98rem] leading-7 text-muted-foreground">
+              {about.workflow.note}
+            </p>
+          </div>
+        </article>
+
         <article className="about-panel about-panel-reference rounded-3xl border border-border/70 bg-card/85 p-6 md:p-8">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="about-section-copy">
@@ -271,36 +288,6 @@ export function AboutContent() {
           </div>
         </article>
 
-        <article className="about-panel rounded-3xl border border-border/70 bg-card/85 p-6 md:p-8">
-          <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
-            <div className="about-section-copy">
-              <h3 className="about-heading text-[1.55rem] font-semibold tracking-[-0.03em]">
-                {about.lookingFor.title}
-              </h3>
-              <p className="mt-3 text-[0.98rem] leading-7 text-muted-foreground">
-                {about.lookingFor.description}
-              </p>
-              <div className="mt-5 space-y-4 text-[0.98rem] leading-7 text-muted-foreground">
-                {about.lookingFor.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-
-            <aside className="about-panel-shell rounded-2xl border border-border/70 bg-background/80 p-5">
-              <div className="space-y-3 text-sm leading-6 text-muted-foreground">
-                {about.lookingFor.opportunities.map((item) => (
-                  <div
-                    key={item}
-                    className="about-list-card rounded-xl border border-border/65 bg-card/75 px-4 py-3"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-        </article>
       </div>
     </Section>
   );

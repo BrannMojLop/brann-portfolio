@@ -36,126 +36,149 @@ export const messages = {
     },
     home: {
       eyebrow: "SYSTEMS ENGINEERING PORTFOLIO",
-      title: "Enterprise platforms and backend systems built for real-world operations.",
+      title: "Software engineer focused on software architecture and backend systems.",
       intro: [
-        "Backend engineer specialized in ERP platforms, APIs, and financial systems using Python and FastAPI.",
-        "This portfolio documents production software — including Businext ERP and the TR0V1 credit platform — with a focus on domain architecture, service layers, and operational reliability.",
+        "I design and lead the evolution of business-critical platforms around real operational constraints.",
+        "My work connects business rules, domain modeling, backend architecture, and maintainable APIs across enterprise and financial workflows.",
       ],
-      stackLabel: "TECHNICAL FOCUS",
+      stackLabel: "ENGINEERING FOCUS",
       profileBadge: "ENGINEERING PROFILE",
-      exploreSystems: "Explore Production Systems",
-      readNotes: "Explore Engineering",
-      signalBoard: "Core Engineering Areas",
-      matrixTitle: "Types of systems I work on",
+      exploreSystems: "Explore Systems",
+      readNotes: "Read Engineering Notes",
+      signalBoard: "Business-critical platforms",
+      matrixTitle: "How I engineer software",
       matrixNote:
-        "Platforms and systems where I apply backend architecture, domain modeling, and engineering decisions for real-world operations.",
-      majorSystemsTitle: "Platforms in Production",
+        "A current, human-led workflow from problem framing to evidence and release gates.",
+      majorSystemsTitle: "Selected systems",
       majorSystemsDesc:
-        "Businext ERP and the TR0V1 credit platform as enterprise systems built for real-world operations, including architectural decisions, technical constraints, and operational outcomes.",
+        "I describe each selected system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
       architectureSignals: [
         {
           title: "BUSINESS DOMAINS",
           value: "Finance | HR | Sales | Inventory",
-          note: "Business process modeling and real operational rules.",
+          note: "Business process modeling and explicit operational rules.",
         },
         {
           title: "BACKEND ARCHITECTURE",
-          value: "FastAPI + Service Layer",
-          note: "Backend architecture focused on APIs, explicit business logic, and modular services.",
+          value: "FastAPI + Service Layers",
+          note: "APIs and service boundaries that keep business logic understandable.",
         },
         {
-          title: "FINANCIAL SYSTEMS",
-          value: "Credit, payments, interest, and reconciliation",
-          note: "Financial workflows with operational traceability and transactional consistency.",
-        },
-        {
-          title: "PLATFORM SCALE",
-          value: "Businext ERP with 125K+ LOC",
-          note: "Enterprise platform in production with continuous evolution.",
+          title: "DATA & AUTHORIZATION",
+          value: "PostgreSQL + tenant boundaries",
+          note: "Relational integrity, transaction boundaries, and layered authorization.",
         },
       ],
       focusTracks: [
         {
-          name: "ERP PLATFORMS",
-          description:
-            "Enterprise systems that integrate finance, sales, inventory, human resources, and operational workflows into a single platform.",
-        },
-        {
-          name: "API ARCHITECTURE",
-          description:
-            "Backend APIs and service layers designed to support business rules, transaction workflows, and maintainable platform evolution.",
-        },
-        {
-          name: "FINANCIAL PLATFORMS",
-          description:
-            "Systems for credit, payments, interest, reconciliation, and account statements where operational consistency is part of the architecture.",
-        },
-      ],
+            name: "SPECIFY BEFORE BUILDING",
+            description:
+            "Use SDD to make scope, constraints, decisions, and acceptance evidence explicit.",
+          },
+          {
+            name: "SEPARATE RESPONSIBILITIES",
+            description:
+            "Plan architecture first, then keep planning, implementation, and review distinct.",
+          },
+          {
+            name: "REVIEW WITH EVIDENCE",
+            description:
+            "Use bounded AI-assisted roles, explicit handoffs, independent review, and release gates.",
+          },
+        ],
+      workflowSequence:
+        "Problem framing → Discovery → SDD / Architecture → Implementation plan → Specialized AI-assisted roles → Implementation → Independent review → Evidence / QA → Release gate",
     },
     systems: {
-      title: "ERP and financial systems built for real-world operations",
+      title: "Systems shaped by operational constraints",
       description:
-        "Enterprise platforms developed from real business needs, with backend architecture focused on domain modeling, APIs, and reliable operational workflows.",
-      businessContextLabel: "Business context",
+        "I describe each system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
+      businessContextLabel: "Context",
+      responsibilityLabel: "My responsibility",
       solutionLabel: "What it solves",
-      stackLabel: "Core technologies",
-      architectureLabel: "Architectural approach",
-      impactLabel: "Impact",
+      stackLabel: "Technology context",
+      architectureLabel: "Architecture decisions",
+      constraintsLabel: "Constraints",
+      impactLabel: "Current verified state",
     },
     engineering: {
       title: "Engineering Notes",
       description:
-        "Architecture decisions and lessons learned while building real enterprise systems in production.",
+        "Notes about the decisions, constraints, and evidence involved in designing and evolving backend and business systems.",
       intro:
-        "This section documents ideas, patterns and technical decisions that emerged while designing ERP platforms, financial systems and backend architectures running in production environments.",
+        "Architecture, PostgreSQL, concurrency, authorization, SDD, and review practices for systems that must remain understandable as they evolve.",
       metadata: {
         publishedOn: "Published",
         readingTime: "Reading time",
       },
       themes: {
         architecture: {
-          title: "Architecture",
+          title: "Architecture under constraints",
           description:
-            "Boundaries, service decomposition, and platform decisions shaped by real ERP constraints.",
+            "Boundaries, service decomposition, and platform decisions shaped by operational requirements.",
         },
         backendEngineering: {
-          title: "Backend Engineering",
+          title: "Backend and API design",
           description:
-            "Implementation patterns for service layers, APIs, and operational reliability in production.",
+            "Service layers, APIs, and implementation patterns that keep responsibilities explicit.",
         },
         financialSystems: {
-          title: "Financial Systems",
+          title: "Financial and operational correctness",
           description:
             "Credit, reconciliation, and transactional controls where correctness matters more than CRUD.",
         },
       },
+      currentThemesTitle: "Current engineering themes",
+      currentThemesDescription:
+        "The current practice extends beyond a framework list: data integrity, concurrency, authorization, system design, and disciplined delivery.",
+      currentThemes: [
+        {
+          title: "PostgreSQL and data integrity",
+          description: "Relational constraints, transaction boundaries, tenant isolation, and reliable state changes.",
+        },
+        {
+          title: "Concurrency and authorization",
+          description: "Optimistic concurrency, authorization boundaries, and workflows that remain safe under change.",
+        },
+        {
+          title: "Specification-driven engineering",
+          description: "SDD, architecture reviews, specialized responsibilities, evidence, and release gates.",
+        },
+        {
+          title: "Distributed workflow design",
+          description: "Durable handoffs, idempotency, and asynchronous patterns considered with explicit trade-offs.",
+        },
+        {
+          title: "AI-assisted engineering",
+          description: "Bounded specialized roles that support analysis and implementation while engineering decisions remain human.",
+        },
+      ],
     },
     about: {
       title: "About",
       description:
-        "Senior backend engineer and systems architect focused on enterprise platforms, ERP systems, API architecture, and production software for finance and operations.",
+        "Software engineer focused on software architecture and backend systems, designing and leading the evolution of business-critical platforms.",
       metadata: {
         title: "About",
         description:
-          "Professional engineering profile of Brandon Mojica Lopez, focused on backend architecture, ERP platforms, and production systems.",
+          "Professional profile of Brandon Mojica Lopez, focused on software architecture, backend systems, and business-critical platforms.",
       },
       intro: {
         eyebrow: "ENGINEERING PROFILE",
-        title: "Backend engineer and systems architect focused on enterprise platforms, API architecture, and business-critical software for finance and operations.",
+        title: "Software engineer focused on software architecture and backend systems.",
         lead:
-          "I design and build systems where operational clarity, domain modeling, and backend reliability matter more than superficial complexity.",
+          "I design and lead the evolution of business-critical platforms around real operational constraints.",
         paragraphs: [
-          "My path started by leading the evolution of internal systems and later evolved into directly designing and building enterprise backend platforms used daily by operational and financial teams.",
-          "My work focuses on business systems — ERP, credit, and financial platforms — built on API-oriented backend architectures used every day by operational and administrative teams.",
-          "That means translating real business rules into stable architecture, defining clear boundaries between domains, services, and business workflows, and building backend platforms that can evolve without breaking operations.",
+          "My work connects business rules, domain modeling, backend architecture, and maintainable APIs across enterprise and financial workflows.",
+          "I design and evolve ERP, credit, and financial systems by translating domain rules into explicit services, APIs, state transitions, and operational controls.",
+          "The focus is practical: make boundaries clear, keep rules close to the domain, and build systems that can evolve without losing operational clarity.",
         ],
         stats: [
-          { value: "5+ years", label: "building enterprise software in production" },
-          { value: "125K+ LOC", label: "across ERP platforms in production" },
-          { value: "2019 - present", label: "leading systems at Elements Of Steel" },
-          { value: "2 enterprise platforms in production", label: "Businext ERP + TR0V1 Credit Platform" },
+          { value: "Head of Systems", label: "Elements Of Steel · 2019–Present" },
+          { value: "Career progression", label: "QA · Junior development · Project leadership" },
+          { value: "Full-stack development", label: "Alongside systems leadership" },
         ],
-        badges: ["ERP Platforms", "Backend Architecture", "Financial Systems", "FastAPI", "AWS"],
+        badges: ["ERP Platforms", "Backend Architecture", "PostgreSQL", "System Design", "Engineering Workflow"],
       },
       build: {
         title: "Systems I design and build",
@@ -165,35 +188,44 @@ export const messages = {
           {
             title: "Enterprise platforms",
             description:
-              "ERP and internal platforms that integrate finance, sales, inventory, human resources and reporting within a unified domain-oriented operational model.",
+              "ERP platforms that integrate finance, sales, inventory, human resources, dashboards, and accounting workflows.",
           },
           {
             title: "Backend service architecture",
             description:
-              "API platforms with explicit business logic, traceable state transitions and clear service boundaries that support long-term system evolution.",
+              "API platforms with explicit business logic, traceable state transitions, and clear service boundaries.",
           },
           {
             title: "Financial systems",
             description:
-              "Credit, payments, reconciliation, account statements and accounting controls where consistency, traceability and auditability are part of the architecture.",
+              "Credit, interest, payments, reconciliation, and account statements where consistency and traceability are part of the architecture.",
           },
         ],
       },
       background: {
-        title: "Professional Path",
+        title: "Professional path",
         description:
-          "A career built inside real business operations, designing and evolving systems that support the company’s daily operations.",
+          "A progression inside real business operations, from QA and junior development through project leadership, systems leadership, and full-stack development.",
         paragraphs: [
-          "I currently lead system architecture and internal platform development at Elements Of Steel, where since 2019 I have been responsible for designing, building and evolving software critical to business operations.",
-          "The most representative project of this work is Businext ERP, an enterprise platform built from scratch to support finance, sales, inventory, human resources, operational dashboards and administrative workflows used daily in production.",
-          "My academic background includes a Computer Systems Engineering degree and a Master’s in Data Science for Business from UTEL. This combination strengthened both my software engineering discipline and my approach to designing systems informed by data and operational decision making.",
+          "I joined Elements Of Steel in 2019. Over time, my work progressed through QA, junior software development, project leadership, and ultimately Head of Systems together with full-stack software development.",
+          "The focus throughout this progression has been connecting software with the real needs of business operations. I design and evolve systems where domain rules, service boundaries, and maintainability are part of the engineering work.",
+          "My academic background includes a Computer Systems Engineering degree and a Master’s Degree in Data Science for Business from UTEL.",
         ],
         highlights: [
-          "System architecture and software engineering lead at Elements Of Steel.",
-          "Architect and lead developer of Businext ERP.",
-          "Builder of backend and financial platforms using Python, FastAPI, React and AWS.",
-          "Native Spanish speaker and professional working proficiency in English.",
+          "Head of Systems at Elements Of Steel.",
+          "Progression through QA, junior development, and project leadership.",
+          "Full-stack software development across ERP, credit, and financial systems.",
+          "Spanish — Native · English — B1 · Intermediate.",
         ],
+      },
+      workflow: {
+        title: "How I engineer software",
+        description:
+          "In current work, I use specifications and architecture-first planning to make scope, constraints, decisions, and acceptance evidence explicit before implementation.",
+        sequence:
+          "Problem framing → Discovery → SDD / Architecture → Implementation plan → Specialized AI-assisted roles → Implementation → Independent review → Evidence / QA → Release gate",
+        note:
+          "AI can accelerate bounded analysis and implementation support, but engineering responsibility remains human. Handoffs record decisions, evidence, open questions, and acceptance criteria.",
       },
       systemsThinking: {
         title: "Architecture principles",
@@ -203,84 +235,84 @@ export const messages = {
           {
             title: "Model the business before the code",
             description:
-              "I start with business flows, responsibilities and failure points before designing the technical model. A useful architecture reflects how the business actually works and how its rules evolve.",
+            "Start with business flows, responsibilities, and failure points before designing the technical model.",
           },
           {
             title: "Keep logic close to the domain",
             description:
-              "In business systems, correctness depends on where the rules live. I prefer service layers and explicit domain logic instead of thin CRUD around the database.",
+            "Use service layers and explicit domain logic instead of thin CRUD around the database.",
           },
           {
-            title: "Optimize for maintainability under growth",
+            title: "Make boundaries explicit",
             description:
-              "Systems become costly when modules know too much about each other. Clear domain boundaries and expressive code allow platforms to evolve without becoming fragile.",
+            "Clear domain boundaries and expressive APIs help systems evolve without becoming fragile.",
           },
           {
-            title: "Reliability as a design decision",
+            title: "Design for traceability",
             description:
-              "Auditability, predictable state transitions, system events and idempotency mechanisms are not post-launch concerns. They must exist in the system model from the beginning.",
+            "Predictable state transitions, auditability, and operational controls belong in the system model from the beginning.",
           },
         ],
       },
       technologyFocus: {
-        title: "Technology Focus",
+        title: "Technology focus",
         description:
-          "Technologies I most frequently use to design, build and operate enterprise systems with a strong backend focus.",
+          "A curated technical focus for designing, building, and evolving enterprise systems with a strong backend orientation.",
         groups: [
           {
-            title: "Backend",
+            title: "Backend & APIs",
             items: ["Python", "FastAPI", "SQLAlchemy", "Pydantic", "REST APIs"],
           },
           {
-            title: "Frontend",
-            items: ["React", "TypeScript", "TailwindCSS", "MUI", "Axios"],
+            title: "Data & Persistence",
+            items: ["PostgreSQL", "MySQL / MariaDB", "Relational integrity", "Transaction boundaries"],
           },
           {
-            title: "Infrastructure",
-            items: ["AWS EC2", "AWS S3", "Linux", "Nginx", "System operation and production deployment"],
+            title: "Architecture & System Design",
+            items: ["Domain modeling", "Concurrency", "Idempotency", "Authorization boundaries", "Multi-tenant isolation"],
           },
           {
-            title: "Architecture",
-            items: ["ERP systems", "Financial systems", "Service layers", "Domain boundaries", "Operational automation"],
+            title: "Product, Platform & Workflow",
+            items: ["React", "TypeScript", "AWS", "Nginx", "SDD", "Independent review", "Release gates"],
           },
         ],
       },
       lookingFor: {
-        title: "What I'm Looking For",
+        title: "Current technical focus",
         description:
-          "I look for environments where backend engineering and systems thinking directly influence product quality.",
+          "Software architecture, backend systems, and business-critical platforms.",
         paragraphs: [
-          "I'm interested in platforms where architecture, maintainability and domain clarity are central to development rather than afterthoughts.",
-          "I aim to contribute as a senior backend engineer or systems architect in products where designing, evolving and operating complex systems is part of the daily work.",
+          "My work focuses on architecture, maintainability, and domain clarity.",
+          "I design and evolve systems where clear boundaries and operational consistency matter.",
         ],
         opportunities: [
-          "Enterprise SaaS platforms",
-          "Financial systems",
-          "Large-scale backend platforms",
-          "Products where architecture and maintainability matter more than development speed",
+          "ERP platforms",
+          "Financial workflows",
+          "Backend service architecture",
+          "Domain modeling and maintainability",
         ],
       },
     },
     contact: {
       title: "Contact",
       description:
-        "Open to conversations about software architecture, backend engineering, enterprise platforms, and remote opportunities in product teams.",
+        "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
       intro:
-        "I’m open to conversations about software architecture, backend engineering, enterprise platforms and remote opportunities in product teams.",
+        "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
       cardIntro:
-        "If you want to talk about ERP systems, backend platforms, FastAPI APIs, or architecture for business software, feel free to reach out through any of these channels.",
+        "If you want to discuss architecture for business software, domain modeling, APIs, PostgreSQL, or reliable operational workflows, you can reach me through these channels.",
       topicsTitle: "Topics I usually discuss:",
       topics: [
-        "Backend architecture and API design",
+        "Software architecture and API design",
         "Enterprise systems and ERP platforms",
-        "Financial platforms and credit workflows",
-        "Remote roles as a Backend Engineer or Systems Architect",
+        "Credit workflows and financial domain modeling",
+        "PostgreSQL, data integrity, and authorization",
       ],
       pills: [
-        "Backend Architecture",
+        "Software Architecture",
         "ERP Systems",
-        "Financial Platforms",
-        "Remote Opportunities",
+        "PostgreSQL",
+        "Engineering Workflow",
       ],
       emailLabel: "Email",
       emailValue: "brandonmojica95@gmail.com",
@@ -314,126 +346,149 @@ export const messages = {
     },
     home: {
       eyebrow: "PORTAFOLIO DE INGENIERÍA DE SISTEMAS",
-      title: "Plataformas empresariales y sistemas backend construidos para operación real.",
+      title: "Ingeniero de software enfocado en arquitectura de software y sistemas backend.",
       intro: [
-        "Ingeniero backend especializado en ERP, APIs y sistemas financieros con Python y FastAPI.",
-        "Este portafolio documenta software en producción — incluyendo Businext ERP y la plataforma de crédito TR0V1 — con énfasis en arquitectura de dominio, capas de servicio y confiabilidad operativa.",
+        "Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
+        "Mi trabajo conecta reglas de negocio, modelado de dominio, arquitectura backend y APIs mantenibles en flujos empresariales y financieros.",
       ],
-      stackLabel: "ENFOQUE TÉCNICO",
+      stackLabel: "ENFOQUE DE INGENIERÍA",
       profileBadge: "PERFIL DE INGENIERÍA",
-      exploreSystems: "Explorar Sistemas en Producción",
-      readNotes: "Explorar Ingeniería",
-      signalBoard: "Áreas clave de ingeniería",
-      matrixTitle: "Tipos de sistemas en los que trabajo",
+      exploreSystems: "Explorar Sistemas",
+      readNotes: "Leer Notas de Ingeniería",
+      signalBoard: "Plataformas críticas para el negocio",
+      matrixTitle: "Cómo hago ingeniería de software",
       matrixNote:
-        "Plataformas y sistemas donde aplico arquitectura backend, modelado de dominio y diseño orientado a operación real.",
-      majorSystemsTitle: "Plataformas en producción",
+        "Un flujo actual y dirigido por personas, desde definir el problema hasta reunir evidencia y pasar las puertas de liberación.",
+      majorSystemsTitle: "Sistemas seleccionados",
       majorSystemsDesc:
-        "Businext ERP y la plataforma de crédito TR0V1 como sistemas empresariales desarrollados para operación real, con decisiones de arquitectura, restricciones técnicas y resultados operativos.",
+        "Describo cada sistema seleccionado a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
       architectureSignals: [
         {
           title: "DOMINIOS DE NEGOCIO",
           value: "Finanzas | RH | Ventas | Inventario",
-          note: "Modelado de procesos de negocio y reglas operativas reales.",
+          note: "Modelado de procesos de negocio y reglas operativas explícitas.",
         },
         {
           title: "ARQUITECTURA BACKEND",
-          value: "FastAPI + Capa de Servicios",
-          note: "Arquitectura backend orientada a APIs, lógica de negocio explícita y servicios modulares.",
+          value: "FastAPI + Capas de servicio",
+          note: "APIs y límites de servicio que mantienen clara la lógica de negocio.",
         },
         {
-          title: "SISTEMAS FINANCIEROS",
-          value: "Crédito, pagos, interés y conciliación",
-          note: "Flujos financieros con trazabilidad operativa y consistencia transaccional.",
-        },
-        {
-          title: "ESCALA DE PLATAFORMA",
-          value: "Businext ERP con +125K LOC",
-          note: "Plataforma empresarial en producción con evolución continua.",
+          title: "DATOS Y AUTORIZACIÓN",
+          value: "PostgreSQL + límites de tenant",
+          note: "Integridad relacional, límites transaccionales y autorización por capas.",
         },
       ],
       focusTracks: [
         {
-          name: "PLATAFORMAS ERP",
-          description:
-            "Sistemas empresariales que integran finanzas, ventas, inventario, recursos humanos y procesos operativos dentro de una misma plataforma.",
-        },
-        {
-          name: "ARQUITECTURA DE APIS",
-          description:
-            "APIs backend y capas de servicio diseñadas para soportar reglas de negocio, transacciones y evolución mantenible de plataforma.",
-        },
-        {
-          name: "PLATAFORMAS FINANCIERAS",
-          description:
-            "Sistemas para crédito, pagos, interés, conciliación y estados de cuenta donde la consistencia operativa es parte de la arquitectura.",
-        },
-      ],
+            name: "ESPECIFICAR ANTES DE CONSTRUIR",
+            description:
+            "Usar SDD para hacer explícitos el alcance, las restricciones, las decisiones y la evidencia de aceptación.",
+          },
+          {
+            name: "SEPARAR RESPONSABILIDADES",
+            description:
+            "Planificar la arquitectura primero y mantener separados el diseño, la implementación y la revisión.",
+          },
+          {
+            name: "REVISAR CON EVIDENCIA",
+            description:
+            "Usar roles con apoyo de IA, transferencias explícitas entre etapas, revisión independiente y puertas de liberación.",
+          },
+        ],
+      workflowSequence:
+        "Definición del problema → Descubrimiento → SDD / Arquitectura → Plan de implementación → Roles especializados con apoyo de IA → Implementación → Revisión independiente → Evidencia / QA → Puerta de liberación",
     },
     systems: {
-      title: "Sistemas ERP y financieros construidos para operación real",
+      title: "Sistemas definidos por restricciones operativas",
       description:
-        "Plataformas empresariales desarrolladas desde necesidades reales de negocio, con arquitectura backend orientada a dominio, APIs y flujos operativos confiables.",
-      businessContextLabel: "Contexto de negocio",
+        "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
+      businessContextLabel: "Contexto",
+      responsibilityLabel: "Mi responsabilidad",
       solutionLabel: "Qué resuelve",
-      stackLabel: "Tecnologías principales",
-      architectureLabel: "Enfoque arquitectónico",
-      impactLabel: "Impacto",
+      stackLabel: "Contexto tecnológico",
+      architectureLabel: "Decisiones de arquitectura",
+      constraintsLabel: "Restricciones",
+      impactLabel: "Estado actual verificable",
     },
     engineering: {
       title: "Notas de ingeniería",
       description:
-        "Decisiones de arquitectura y aprendizajes surgidos al construir sistemas empresariales en producción.",
+        "Notas sobre las decisiones, restricciones y evidencias que intervienen al diseñar y evolucionar sistemas backend y empresariales.",
       intro:
-        "Esta sección documenta ideas, patrones y decisiones técnicas surgidas al diseñar plataformas ERP, sistemas financieros y arquitecturas backend utilizadas en entornos reales de operación.",
+        "Arquitectura, PostgreSQL, concurrencia, autorización, SDD y prácticas de revisión para sistemas que deben seguir siendo entendibles al evolucionar.",
       metadata: {
         publishedOn: "Publicado",
         readingTime: "Tiempo de lectura",
       },
       themes: {
         architecture: {
-          title: "Arquitectura",
+          title: "Arquitectura bajo restricciones",
           description:
-            "Límites de dominio, descomposición de servicios y decisiones de plataforma surgidas de restricciones reales de un ERP.",
+            "Límites, descomposición de servicios y decisiones de plataforma definidas por requisitos operativos.",
         },
         backendEngineering: {
-          title: "Ingeniería Backend",
+          title: "Diseño backend y de APIs",
           description:
-            "Patrones de implementación para capas de servicio, APIs y confiabilidad operativa en producción.",
+            "Capas de servicio, APIs y patrones de implementación que mantienen explícitas las responsabilidades.",
         },
         financialSystems: {
-          title: "Sistemas Financieros",
+          title: "Corrección financiera y operativa",
           description:
             "Crédito, conciliación y controles transaccionales donde la corrección importa más que el CRUD.",
         },
       },
+      currentThemesTitle: "Temas actuales de ingeniería",
+      currentThemesDescription:
+        "La práctica actual va más allá de una lista de frameworks: integridad de datos, concurrencia, autorización, diseño de sistemas y entrega disciplinada.",
+      currentThemes: [
+        {
+          title: "PostgreSQL e integridad de datos",
+          description: "Restricciones relacionales, límites transaccionales, aislamiento por tenant y cambios de estado confiables.",
+        },
+        {
+          title: "Concurrencia y autorización",
+          description: "Concurrencia optimista, límites de autorización y flujos que permanecen seguros ante los cambios.",
+        },
+        {
+          title: "Ingeniería guiada por especificaciones",
+          description: "SDD, revisiones de arquitectura, responsabilidades especializadas, evidencia y puertas de liberación.",
+        },
+        {
+          title: "Diseño de flujos distribuidos",
+          description: "Transferencias durables entre etapas, idempotencia y patrones asíncronos considerados con decisiones técnicas explícitas.",
+        },
+        {
+          title: "Ingeniería con apoyo de IA",
+          description: "Roles especializados y acotados que apoyan el análisis y la implementación mientras las decisiones de ingeniería siguen siendo humanas.",
+        },
+      ],
     },
     about: {
       title: "Sobre mí",
       description:
-        "Ingeniero backend senior y arquitecto de sistemas enfocado en plataformas empresariales, sistemas ERP, arquitectura API y software productivo para finanzas y operación.",
+        "Ingeniero de software enfocado en arquitectura de software y sistemas backend, diseñando y liderando la evolución de plataformas críticas para el negocio.",
       metadata: {
         title: "Sobre mí",
         description:
-          "Perfil profesional de ingeniería de Brandon Mojica Lopez, enfocado en arquitectura backend, plataformas ERP y sistemas en producción.",
+          "Perfil profesional de Brandon Mojica Lopez, enfocado en arquitectura de software, sistemas backend y plataformas críticas para el negocio.",
       },
       intro: {
-        eyebrow: "PERFIL DE INGENIERIA",
-        title: "Ingeniero backend y arquitecto de sistemas enfocado en plataformas empresariales, arquitectura API y software crítico para finanzas y operación.",
+        eyebrow: "PERFIL DE INGENIERÍA",
+        title: "Ingeniero de software enfocado en arquitectura de software y sistemas backend.",
         lead:
-          "Diseño y construyo sistemas donde la claridad operativa, el modelado de dominio y la confiabilidad backend importan más que la complejidad superficial.",
+          "Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
         paragraphs: [
-          "Mi trayectoria comenzó liderando la evolución de sistemas internos y derivó en el diseño y desarrollo directo de plataformas backend empresariales utilizadas diariamente por equipos operativos y financieros.",
-          "Mi trabajo se centra en sistemas de negocio — ERP, crédito y plataformas financieras — construidos sobre arquitecturas backend orientadas a APIs utilizadas diariamente por equipos operativos y administrativos.",
-          "Eso implica traducir reglas de negocio reales en arquitectura estable, definir límites claros entre dominios, servicios y flujos de negocio, y construir plataformas backend que evolucionen sin romper la operación.",
+          "Mi trabajo conecta reglas de negocio, modelado de dominio, arquitectura backend y APIs mantenibles en flujos empresariales y financieros.",
+          "Diseño y evoluciono sistemas ERP, de crédito y financieros al traducir reglas de dominio en servicios explícitos, APIs, transiciones de estado y controles operativos.",
+          "El enfoque es práctico: hacer claros los límites, mantener las reglas cerca del dominio y construir sistemas que evolucionen sin perder claridad operativa.",
         ],
         stats: [
-          { value: "5+ años", label: "construyendo software empresarial en producción" },
-          { value: "125K+ LOC", label: "en plataformas ERP en producción" },
-          { value: "2019 - actualidad", label: "liderando sistemas en Elements Of Steel" },
-          { value: "2 plataformas empresariales en producción", label: "Businext ERP + TR0V1 Credit Platform" },
+          { value: "Jefe de Sistemas", label: "Elements Of Steel · 2019–actualidad" },
+          { value: "Trayectoria progresiva", label: "QA · Desarrollo junior · Liderazgo de proyectos" },
+          { value: "Desarrollo full-stack", label: "Junto con liderazgo de sistemas" },
         ],
-        badges: ["Plataformas ERP", "Arquitectura Backend", "Sistemas Financieros", "FastAPI", "AWS"],
+        badges: ["Plataformas ERP", "Arquitectura Backend", "PostgreSQL", "Diseño de Sistemas", "Flujo de Ingeniería"],
       },
       build: {
         title: "Tipos de sistemas que diseño y construyo",
@@ -443,35 +498,44 @@ export const messages = {
           {
             title: "Plataformas empresariales",
             description:
-              "ERP y sistemas internos que integran finanzas, ventas, inventario, recursos humanos y reporteo dentro de un mismo modelo operativo orientado a dominio.",
+              "Plataformas ERP que integran finanzas, ventas, inventario, recursos humanos, dashboards y flujos contables.",
           },
           {
             title: "Arquitectura de servicios backend",
             description:
-              "Plataformas API con lógica de negocio explícita, transiciones de estado trazables y límites claros entre servicios que permiten evolución y mantenibilidad a largo plazo.",
+              "Plataformas API con lógica de negocio explícita, transiciones de estado trazables y límites claros entre servicios.",
           },
           {
             title: "Sistemas financieros",
             description:
-              "Crédito, pagos, conciliación, estados de cuenta y controles contables donde la consistencia de datos, la trazabilidad y la auditabilidad forman parte de la arquitectura.",
+              "Crédito, intereses, pagos, conciliación y estados de cuenta donde la consistencia y la trazabilidad forman parte de la arquitectura.",
           },
         ],
       },
       background: {
         title: "Trayectoria profesional",
         description:
-          "Una trayectoria construida dentro de operaciones reales de negocio, diseñando y evolucionando sistemas que soportan la operación diaria de la empresa.",
+          "Una progresión dentro de operaciones reales de negocio, desde QA y desarrollo junior hasta liderazgo de proyectos, jefatura de sistemas y desarrollo full-stack.",
         paragraphs: [
-          "Actualmente lidero la arquitectura de sistemas y el desarrollo de plataformas internas en Elements Of Steel, donde desde 2019 soy responsable de diseñar, construir y evolucionar software crítico para la operación del negocio.",
-          "El proyecto más representativo de este trabajo es Businext ERP, una plataforma empresarial construida desde cero para soportar finanzas, ventas, inventario, recursos humanos, dashboards operativos y flujos administrativos utilizados diariamente en producción.",
-          "Mi formación académica incluye una Ingeniería en Sistemas Computacionales y una Maestría en Ciencia de Datos para Negocios en UTEL. Esta combinación fortaleció tanto mi disciplina en ingeniería de software como mi enfoque para diseñar sistemas orientados a datos y toma de decisiones operativas.",
+          "Me incorporé a Elements Of Steel en 2019. Con el tiempo, mi trabajo evolucionó por QA, desarrollo de software junior, liderazgo de proyectos y finalmente Jefe de Sistemas, junto con desarrollo de software full-stack.",
+          "El foco de esta trayectoria ha sido conectar el software con las necesidades reales de la operación empresarial. Diseño y evoluciono sistemas donde las reglas de dominio, los límites de servicio y la mantenibilidad forman parte del trabajo de ingeniería.",
+          "Mi formación académica incluye una Ingeniería en Sistemas Computacionales y una Maestría en Ciencia de Datos para Negocios en UTEL.",
         ],
         highlights: [
-          "Responsable de arquitectura de sistemas e ingeniería de software en Elements Of Steel.",
-          "Arquitecto y desarrollador principal de Businext ERP.",
-          "Constructor de plataformas backend y financieras con Python, FastAPI, React y AWS.",
-          "Español nativo e inglés con dominio profesional.",
+          "Jefe de Sistemas en Elements Of Steel.",
+          "Trayectoria por QA, desarrollo junior y liderazgo de proyectos.",
+          "Desarrollo full-stack en sistemas ERP, de crédito y financieros.",
+          "Español — Nativo · Inglés — B1 · Intermedio.",
         ],
+      },
+      workflow: {
+        title: "Cómo hago ingeniería de software",
+        description:
+          "En el trabajo actual utilizo especificaciones y planificación con arquitectura primero para hacer explícitos el alcance, las restricciones, las decisiones y la evidencia de aceptación antes de implementar.",
+        sequence:
+          "Definición del problema → Descubrimiento → SDD / Arquitectura → Plan de implementación → Roles especializados con apoyo de IA → Implementación → Revisión independiente → Evidencia / QA → Puerta de liberación",
+        note:
+          "La IA puede acelerar análisis acotados y apoyo a la implementación, pero la responsabilidad de ingeniería sigue siendo humana. Las transferencias explícitas entre etapas registran decisiones, evidencia, preguntas abiertas y criterios de aceptación.",
       },
       systemsThinking: {
         title: "Principios de arquitectura de sistemas",
@@ -481,84 +545,84 @@ export const messages = {
           {
             title: "Modelar el negocio antes que el código",
             description:
-              "Empiezo por flujos de negocio, responsabilidades y puntos de fallo antes de diseñar el modelo técnico. Una arquitectura útil refleja cómo funciona el negocio y cómo evolucionan sus reglas operativas.",
+              "Empezar por flujos de negocio, responsabilidades y puntos de fallo antes de diseñar el modelo técnico.",
           },
           {
             title: "Mantener la lógica cerca del dominio",
             description:
-              "En sistemas de negocio la corrección depende de dónde viven las reglas. Prefiero capas de servicio y lógica de dominio explícita en lugar de CRUD delgado alrededor de la base de datos.",
+              "Usar capas de servicio y lógica de dominio explícita en lugar de CRUD delgado alrededor de la base de datos.",
           },
           {
-            title: "Optimizar para mantenibilidad bajo crecimiento",
+            title: "Hacer explícitos los límites",
             description:
-              "Los sistemas se vuelven costosos cuando cada módulo conoce demasiado. Me importan los límites de dominio, el lenguaje del código y la capacidad de evolución para que la plataforma absorba nuevas funciones sin volverse frágil.",
+              "Los límites claros de dominio y las APIs expresivas permiten evolucionar sin volver frágil la plataforma.",
           },
           {
-            title: "Confiabilidad como decisión de arquitectura",
+            title: "Diseñar para la trazabilidad",
             description:
-              "La auditabilidad, las transiciones de estado predecibles, los eventos del sistema y mecanismos de idempotencia no son preocupaciones posteriores al lanzamiento. Deben formar parte del modelo del sistema desde el inicio.",
+              "Las transiciones de estado predecibles, la auditabilidad y los controles operativos pertenecen al modelo desde el inicio.",
           },
         ],
       },
       technologyFocus: {
         title: "Enfoque tecnológico",
         description:
-          "Herramientas y tecnologías que utilizo con mayor frecuencia para diseñar, construir y operar sistemas empresariales con fuerte enfoque backend.",
+          "Un enfoque técnico curado para diseñar, construir y evolucionar sistemas empresariales con orientación backend.",
         groups: [
           {
-            title: "Backend",
+            title: "Backend y APIs",
             items: ["Python", "FastAPI", "SQLAlchemy", "Pydantic", "APIs REST"],
           },
           {
-            title: "Frontend",
-            items: ["React", "TypeScript", "TailwindCSS", "MUI", "Axios"],
+            title: "Datos y persistencia",
+            items: ["PostgreSQL", "MySQL / MariaDB", "Integridad relacional", "Límites transaccionales"],
           },
           {
-            title: "Infraestructura",
-            items: ["AWS EC2", "AWS S3", "Linux", "Nginx", "Operación y despliegue en producción"],
+            title: "Arquitectura y diseño de sistemas",
+            items: ["Modelado de dominio", "Concurrencia", "Idempotencia", "Límites de autorización", "Aislamiento multi-tenant"],
           },
           {
-            title: "Arquitectura",
-            items: ["Sistemas ERP", "Sistemas financieros", "Capas de servicio", "Límites de dominio", "Automatización operativa"],
+            title: "Producto, plataforma y flujo",
+            items: ["React", "TypeScript", "AWS", "Nginx", "SDD", "Revisión independiente", "Puertas de liberación"],
           },
         ],
       },
       lookingFor: {
-        title: "Qué estoy buscando",
+        title: "Enfoque técnico actual",
         description:
-          "Busco entornos donde la ingeniería backend y el pensamiento de sistemas influyan directamente en la calidad del producto.",
+          "Arquitectura de software, sistemas backend y plataformas críticas para el negocio.",
         paragraphs: [
-          "Me interesa trabajar en plataformas donde la arquitectura, la mantenibilidad y la claridad del dominio sean parte central del desarrollo, no solo preocupaciones posteriores.",
-          "Quiero contribuir como ingeniero backend senior o arquitecto de sistemas en productos donde diseñar, evolucionar y operar sistemas complejos sea parte del trabajo diario.",
+          "Mi trabajo se enfoca en arquitectura, mantenibilidad y claridad de dominio.",
+          "Diseño y evoluciono sistemas donde importan los límites claros y la consistencia operativa.",
         ],
         opportunities: [
-          "Plataformas SaaS empresariales",
-          "Sistemas financieros",
-          "Plataformas backend de gran escala",
-          "Productos donde la arquitectura y la mantenibilidad importen más que la velocidad de desarrollo",
+          "Plataformas ERP",
+          "Flujos financieros",
+          "Arquitectura de servicios backend",
+          "Modelado de dominio y mantenibilidad",
         ],
       },
     },
     contact: {
       title: "Contacto",
       description:
-        "Abierto a conversaciones sobre arquitectura de software, backend engineering, plataformas empresariales y oportunidades remotas en equipos de producto.",
+        "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
       intro:
-        "Estoy abierto a conversaciones sobre arquitectura de software, backend engineering, plataformas empresariales y oportunidades remotas en equipos de producto.",
+        "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
       cardIntro:
-        "Si quieres hablar sobre sistemas ERP, plataformas backend, APIs con FastAPI o arquitectura para software de negocio, puedes escribirme por cualquiera de estos medios.",
+        "Si quieres hablar sobre arquitectura para software de negocio, modelado de dominio, APIs, PostgreSQL o flujos operativos confiables, puedes escribirme por cualquiera de estos medios.",
       topicsTitle: "Temas sobre los que normalmente converso:",
       topics: [
-        "Arquitectura backend y diseño de APIs",
+        "Arquitectura de software y diseño de APIs",
         "Sistemas empresariales y plataformas ERP",
-        "Plataformas financieras y flujos de crédito",
-        "Roles remotos como Backend Engineer o Systems Architect",
+        "Flujos de crédito y modelado financiero",
+        "PostgreSQL, integridad de datos y autorización",
       ],
       pills: [
-        "Backend Architecture",
-        "ERP Systems",
-        "Financial Platforms",
-        "Remote Opportunities",
+        "Arquitectura de Software",
+        "Plataformas ERP",
+        "PostgreSQL",
+        "Flujo de Ingeniería",
       ],
       emailLabel: "Correo",
       emailValue: "brandonmojica95@gmail.com",

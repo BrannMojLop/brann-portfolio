@@ -11,6 +11,8 @@ import type { SystemEntry } from "@/lib/systems";
 export function SystemCard({ system, showDetails = false }: { system: SystemEntry; showDetails?: boolean }) {
   const { locale, t } = useLanguage();
   const content = system.content[locale];
+  const cardFocus = system.cardFocus?.[locale];
+  const cardItems = cardFocus?.items ?? system.technologies;
 
   return (
     <Card className="flex h-full flex-col border-border/70 bg-card/80">
@@ -23,10 +25,10 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
 
         <div className="space-y-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/75">
-            {t.systems.stackLabel}
+            {cardFocus?.label ?? t.systems.stackLabel}
           </p>
           <div className="flex flex-wrap gap-2">
-          {system.technologies.map((tech) => (
+          {cardItems.map((tech) => (
             <Badge key={tech} variant="outline">
               {tech}
             </Badge>

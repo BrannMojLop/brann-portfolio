@@ -13,25 +13,29 @@ function resolveSiteUrl() {
 }
 
 export const siteConfig = {
-  name: "Brandon Mojica Lopez | Software Engineer & Systems Architect",
+  name: "Brandon Mojica Lopez | Software Engineer",
   shortName: "Brandon Mojica",
   description:
-    "Software Engineer portfolio focused on ERP systems, backend architecture, FastAPI services, financial platforms, and enterprise software built for real operations.",
+    "Software engineer portfolio focused on software architecture, backend systems, ERP platforms, financial workflows, and business-critical operations.",
   url: resolveSiteUrl(),
   ogImage: "/opengraph-image",
   engineeringOgImage: "/engineering/opengraph-image",
   keywords: [
     "Software Engineer Portfolio",
-    "ERP Systems Engineer",
-    "Python FastAPI Backend Engineer",
-    "Systems Architect",
-    "Enterprise Software Engineer",
-    "Financial Systems Engineer",
+    "Software Architecture",
+    "Backend Systems",
+    "ERP Platforms",
+    "Financial Workflows",
+    "Enterprise Software",
+    "PostgreSQL",
+    "System Design",
+    "Specification-driven Development",
+    "Engineering Workflow",
   ],
   author: {
     name: "Brandon Mojica Lopez",
-    role: "Software Engineer and Systems Architect",
-    jobTitle: "Head of Systems / Lead Software Engineer",
+    role: "Software Engineer focused on software architecture and backend systems",
+    jobTitle: "Head of Systems",
     company: "Elements Of Steel",
   },
   links: {
@@ -43,13 +47,13 @@ export const siteConfig = {
 
 export const localizedSiteMetadata = {
   en: {
-    title: "Brandon Mojica | Backend Engineer & Systems Architecture",
+    title: "Brandon Mojica | Software Engineer",
     description:
-      "Backend engineer specialized in ERP systems, financial platforms, and software architecture. Creator of Businext ERP and the TR0V1 financial platform.",
+      "Software engineer focused on software architecture and backend systems. I design and lead the evolution of business-critical platforms around real operational constraints.",
   },
   es: {
-    title: "Brandon Mojica | Ingeniero Backend y Arquitectura de Sistemas",
+    title: "Brandon Mojica | Ingeniero de Software",
     description:
-      "Ingeniero backend especializado en sistemas ERP, plataformas financieras y arquitectura de software. Creador de Businext ERP y la plataforma financiera TR0V1.",
+      "Ingeniero de software enfocado en arquitectura de software y sistemas backend. Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
   },
 } as const;

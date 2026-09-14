@@ -14,6 +14,7 @@ export function SystemsContent() {
     <Section
       title={t.systems.title}
       description={t.systems.description}
+      titleAs="h1"
       className="systems-page relative overflow-hidden"
     >
       <div aria-hidden className="systems-ambient">
@@ -22,106 +23,114 @@ export function SystemsContent() {
         <span className="systems-orbit systems-orbit-b" />
       </div>
 
-      <div className="systems-intro">
+      <div className="systems-intro" aria-hidden="true">
         <span className="systems-intro-line" />
       </div>
 
-      <div className="space-y-7 md:space-y-8">
-        {systems.map((system) => {
+      <div className="space-y-12 md:space-y-16">
+        {systems.map((system, index) => {
           const content = system.content[locale];
 
           return (
             <article
               key={system.slug}
-              className="system-panel rounded-[1.7rem] border border-border/70 p-6 shadow-sm md:p-7"
+              data-system={system.slug}
+              className="system-case-study border-t border-border/70 pt-7 md:pt-9"
             >
-              <span aria-hidden className="system-panel-rail" />
-              <div className="space-y-6 md:space-y-7">
-                <header className="system-panel-header space-y-2 border-b border-border/70 pb-5">
-                  <h3 className="text-2xl font-semibold tracking-[-0.03em] md:text-[1.95rem]">
+              <header className="system-case-study-header grid gap-5 border-b border-border/70 pb-6 md:grid-cols-[minmax(0,0.9fr)_minmax(15rem,0.7fr)] md:items-end md:gap-10 md:pb-8">
+                <div className="space-y-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80 md:text-[11px]">
+                    {String(index + 1).padStart(2, "0")} · {t.systems.architectureLabel}
+                  </p>
+                  <h2 className="text-[2rem] font-semibold tracking-[-0.04em] md:text-[2.65rem]">
                     {content.name}
-                  </h3>
-                  <p className="max-w-3xl text-sm leading-6 text-muted-foreground md:text-[0.96rem]">
+                  </h2>
+                  <p className="max-w-3xl text-base leading-7 text-muted-foreground md:text-[1.02rem]">
                     {content.tagline}
                   </p>
-                </header>
-
-                <div className="system-module system-module-accent rounded-2xl border border-primary/12 p-5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary/85">
-                    {t.systems.businessContextLabel}
-                  </p>
-                  <p className="mt-3 max-w-4xl text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
-                    {content.businessContext}
-                  </p>
                 </div>
 
-                <div className="system-module space-y-2 rounded-2xl border border-border/65 px-4 py-4 md:px-5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary/85">
-                    {t.systems.solutionLabel}
+                <div className="system-case-study-signal border-l border-primary/35 pl-4 md:justify-self-end md:max-w-sm md:pl-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
+                    {t.systems.impactLabel}
                   </p>
-                  <p className="max-w-4xl text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
-                    {content.solution}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-foreground/85">{content.impact[0]}</p>
+                </div>
+              </header>
+
+              <div className="system-case-study-body grid gap-9 pt-7 md:gap-12 md:pt-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(17rem,0.72fr)] lg:gap-16">
+                <div className="system-case-study-narrative space-y-8 md:space-y-10">
+                  <section className="system-case-study-section space-y-3">
+                    <h3>{t.systems.businessContextLabel}</h3>
+                    <p>{content.businessContext}</p>
+                  </section>
+
+                  <section className="system-case-study-section system-case-study-solution space-y-3">
+                    <h3>{t.systems.solutionLabel}</h3>
+                    <p>{content.solution}</p>
+                  </section>
+
+                  <section className="system-case-study-section system-case-study-current space-y-4">
+                    <h3>{t.systems.impactLabel}</h3>
+                    <ul>
+                      {content.results.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
                 </div>
 
-                <div className="system-stack rounded-xl border border-border/70 px-4 py-3">
-                  <p className="text-sm leading-6 text-foreground/90">
-                    <span className="font-medium text-foreground">{t.systems.stackLabel}: </span>
-                    <span className="text-muted-foreground">{content.stack}</span>
-                  </p>
-                </div>
+                <aside className="system-case-study-rail space-y-7 border-t border-border/70 pt-7 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+                  <section className="system-case-study-section space-y-3">
+                    <h3>{t.systems.responsibilityLabel}</h3>
+                    <p>{content.responsibility}</p>
+                  </section>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="system-list-block rounded-2xl border border-border/65 px-4 py-4 md:px-5">
-                    <h4 className="text-base font-semibold">{t.systems.architectureLabel}</h4>
-                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-muted-foreground">
+                  <section className="system-case-study-section space-y-3">
+                    <h3>{t.systems.architectureLabel}</h3>
+                    <ul>
                       {content.architectureApproach.map((item) => (
-                        <li key={item}>• {item}</li>
+                        <li key={item}>{item}</li>
                       ))}
                     </ul>
-                  </div>
+                  </section>
 
-                  <div className="system-list-block rounded-2xl border border-border/65 px-4 py-4 md:px-5">
-                    <h4 className="text-base font-semibold">{t.systems.impactLabel}</h4>
-                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-muted-foreground">
-                      {content.impact.map((item) => (
-                        <li key={item}>• {item}</li>
+                  <section className="system-case-study-section space-y-3">
+                    <h3>{t.systems.constraintsLabel}</h3>
+                    <ul>
+                      {content.constraints.map((item) => (
+                        <li key={item}>{item}</li>
                       ))}
                     </ul>
-                  </div>
-                </div>
+                  </section>
 
-                <div className="system-list-block rounded-2xl border border-border/65 px-4 py-4 md:px-5">
-                  <h4 className="text-base font-semibold">
-                    {locale === "en" ? "Technical challenges" : "Retos técnicos"}
-                  </h4>
-                  <ul className="mt-3 space-y-2.5 text-sm leading-6 text-muted-foreground">
-                    {content.technicalChallenges.map((item) => (
-                      <li key={item}>• {item}</li>
-                    ))}
-                  </ul>
-                </div>
+                  <section className="system-case-study-section space-y-3">
+                    <h3>{locale === "en" ? "Technical challenges" : "Retos técnicos"}</h3>
+                    <ul>
+                      {content.technicalChallenges.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
 
-                <div className="system-list-block system-results rounded-2xl border border-border/65 px-4 py-4 md:px-5">
-                  <h4 className="text-base font-semibold">
-                    {locale === "en" ? "Operational results" : "Resultados operativos"}
-                  </h4>
-                  <ul className="mt-3 space-y-2.5 text-sm leading-6 text-muted-foreground">
-                    {content.results.map((item) => (
-                      <li key={item}>• {item}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="hidden pt-1">
-                  <Link
-                    href={localizePath(locale, "/contact")}
-                    className="system-cta inline-flex items-center text-sm font-medium text-primary transition-colors hover:text-primary/80"
-                  >
-                    {content.ctaLabel}
-                  </Link>
-                </div>
+                  <section className="system-case-study-section system-case-study-stack space-y-3">
+                    <h3>{t.systems.stackLabel}</h3>
+                    <p>{content.stack}</p>
+                  </section>
+                </aside>
               </div>
+
+              <footer className="system-case-study-footer mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border/70 pt-5 md:mt-10 md:pt-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {t.systems.constraintsLabel} · {content.constraints.length}
+                </p>
+                <Link
+                  href={localizePath(locale, "/contact")}
+                  className="system-cta inline-flex items-center text-sm font-medium text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  {content.ctaLabel}
+                </Link>
+              </footer>
             </article>
           );
         })}

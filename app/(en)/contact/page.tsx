@@ -7,7 +7,7 @@ export const metadata = createPageMetadata({
   locale: "en",
   title: "Contact",
   description:
-    "Contact Brandon Mojica Lopez about backend engineering, ERP systems, FastAPI architecture, and enterprise software opportunities.",
+    "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
   path: "/contact",
 });
 
@@ -19,7 +19,7 @@ export default function ContactPage() {
           buildCollectionPageSchema(
             "en",
             "Contact Brandon Mojica Lopez",
-            "Contact page for architecture, backend engineering, ERP systems, and product opportunities.",
+            "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
             "/contact",
           ),
           buildBreadcrumbSchema("en", [

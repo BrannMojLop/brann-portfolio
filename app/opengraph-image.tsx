@@ -23,14 +23,14 @@ export default function OpenGraphImage() {
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "74%" }}>
           <div style={{ fontSize: 22, letterSpacing: "0.3em", textTransform: "uppercase", color: "#5eead4" }}>
-            Software Engineer Portfolio
+            Software Architecture Portfolio
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
             <div style={{ fontSize: 74, fontWeight: 700, lineHeight: 1 }}>
               Brandon Mojica Lopez
             </div>
             <div style={{ fontSize: 34, lineHeight: 1.3, color: "#cbd5e1" }}>
-              ERP Systems Engineer, Python FastAPI Backend Engineer, and Systems Architect focused on enterprise software.
+              Software engineer focused on architecture, backend systems, and business-critical platforms.
             </div>
           </div>
           <div style={{ display: "flex", gap: "16px", fontSize: 24, color: "#94a3b8" }}>

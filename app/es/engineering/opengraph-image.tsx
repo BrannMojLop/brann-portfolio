@@ -30,7 +30,7 @@ export default function SpanishEngineeringOpenGraphImage() {
             Decisiones de arquitectura construidas en plataformas ERP y financieras.
           </div>
           <div style={{ fontSize: 30, lineHeight: 1.35, color: "#cbd5e1" }}>
-            Patrones backend, limites de dominio, capas de servicio con FastAPI y confiabilidad operativa en produccion.
+            Patrones backend, límites de dominio, capas de servicio con FastAPI y corrección financiera y operativa.
           </div>
         </div>
         <div style={{ display: "flex", gap: "18px", fontSize: 24, color: "#94a3b8" }}>

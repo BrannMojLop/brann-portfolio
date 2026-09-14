@@ -5,9 +5,9 @@ import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/structur
 
 export const metadata = createPageMetadata({
   locale: "es",
-  title: "Arquitectura de Sistemas Empresariales",
+  title: "Sistemas definidos por restricciones operativas",
   description:
-    "Casos de arquitectura de Businext ERP y TR0V1 Credit Platform con contexto de negocio, decisiones de dominio, diseño backend y confiabilidad operativa.",
+    "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
   path: "/systems",
 });
 
@@ -18,8 +18,8 @@ export default function SpanishSystemsPage() {
         data={[
           buildCollectionPageSchema(
             "es",
-            "Arquitectura de Sistemas Empresariales",
-            "Casos de arquitectura de plataformas ERP y financieras construidas para operación real.",
+            "Sistemas definidos por restricciones operativas",
+            "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
             "/systems",
           ),
           buildBreadcrumbSchema("es", [
