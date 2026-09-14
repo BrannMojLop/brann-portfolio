@@ -59,6 +59,41 @@ claim sources were left outside this slice.
 This slice is ready for human QA and release review. It was not deployed and no
 commit was created.
 
+## Release continuation
+
+- Mode: `release`
+- Human authorization: approved commits and deployment of the current
+  pre-release-approved portfolio state.
+- `portfolio-orchestrator`: release scope, commit grouping, and gate
+  coordination completed.
+- `portfolio-maintainer`: approved implementation validation, commit creation,
+  repository push, deployment coordination, and release evidence completed.
+- Independent post-deploy roles: `portfolio-experience-reviewer` and
+  `portfolio-seo-accessibility-reviewer`.
+- Deployment target: Vercel production at `https://brandonmojica.dev`.
+- Release commits: `d6045c3`, `b69ca38`, `9a90972`, `288a831`.
+
+## Release gates
+
+| Gate | State | Reason |
+|---|---|---|
+| G0 Context | PASS | Release was limited to the already approved V3 state; no new feature or editorial decision was introduced. |
+| G1 Claim/Scope | PASS | Public content matches the approved bilingual positioning, bounded Workforce scope, and Article 01–03 evidence. |
+| G2 Plan | PASS | Commit grouping and the established Vercel/Git deployment path were confirmed before release. |
+| G3 Implementation | PASS | Approved portfolio source, Articles 01–03, and experience changes were committed without the runtime tooling files. |
+| G4 Experience | PASS | Independent production review passed on desktop/mobile spot checks with no P0/P1 regression. |
+| G5 SEO/Accessibility | PASS | Independent production review passed for metadata, alternates, JSON-LD, semantics, links, robots, sitemap, and overflow. |
+| G6 Validate | PASS | `pnpm lint`, `pnpm build`, `git diff --check`, and production HTTP/browser checks passed. |
+| G7 Release | PASS | The authorized commits were pushed to `main`; Vercel served the new version at the canonical production domain. |
+| G8 Knowledge | PASS | Production smoke evidence, reviewer findings, limitations, and the metadataBase classification were recorded. |
+| G9 Close | PASS | No targeted regression fix or unrelated backlog change remains required for this release. |
+
+## Final release decision
+
+`PORTFOLIO V3 RELEASE = PASS`
+
+`PORTFOLIO V3 IS LIVE`
+
 ## Pre-release final QA
 
 The complete portfolio was checked in EN/ES across 30 routes and four viewport
