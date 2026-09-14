@@ -1,0 +1,291 @@
+# Cómo estructuro agentes de IA especializados para ingeniería de software
+
+*Separo la planeación, la implementación, la revisión y la aprobación de entrega para que los cambios complejos asistidos por IA sean inspeccionables.*
+
+## El riesgo de que un solo agente haga todo
+
+Un agente de código de propósito general puede inspeccionar un repositorio,
+proponer un diseño, editar archivos, ejecutar verificaciones y declarar la tarea
+terminada. Esa comodidad se vuelve riesgosa cuando un cambio reúne varios tipos
+de incertidumbre.
+
+El mismo contexto puede decidir qué significaban los requisitos, qué evidencia
+cuenta y si el resultado está listo. Una suposición de alcance puede llegar a la
+autorrevisión, un detalle privado a un borrador público y una prueba verde puede
+tratarse como prueba más allá de la configuración que ejercitó.
+
+El problema no es la capacidad, sino la mezcla de responsabilidades. Prefiero
+separar las decisiones y hacer visibles los límites.
+
+La idea central no es que la IA escriba software. Es un flujo estructurado:
+
+- responsabilidades separadas;
+- contexto e insumos explícitos;
+- transferencias duraderas;
+- evidencia proporcional al riesgo;
+- revisión independiente cuando importa;
+- responsabilidad humana sobre las decisiones y la publicación.
+
+Uso estos roles para volver más inspeccionable el trabajo de ingeniería; no son
+ingenieros autónomos.
+
+## Especialización significa responsabilidad delimitada
+
+Un agente es especializado en este flujo cuando es dueño de una decisión o un
+artefacto definido, conoce sus insumos y resultados, y entiende qué queda fuera
+de su autoridad.
+
+Esta definición me resulta más útil que una lista de herramientas. Un rol puede
+estar especializado porque es responsable de una pregunta de planeación, una
+revisión de afirmaciones, un corte de implementación o una verificación
+independiente. La especialización proviene del límite y de los criterios de
+aceptación.
+
+Por ejemplo, un orquestador puede clasificar la solicitud, seleccionar un modo
+de trabajo y activar las puertas apropiadas. No debería inventar una afirmación
+profesional. Un estratega puede definir audiencia y posicionamiento. No debería
+publicar un dato laboral sin fuente. Un implementador puede modificar archivos
+aprobados. No debería autorizar su propia publicación.
+
+## Un flujo representativo
+
+Un flujo representativo puede verse así:
+
+```text
+Problema / solicitud
+        ↓
+Router / Orquestador
+        ↓
+Descubrimiento / Estrategia
+        ↓
+Especificación / Planeación
+        ↓
+Rol especializado de implementación
+        ↓
+Revisor independiente
+        ↓
+Evidencia / QA
+        ↓
+Decisión humana de publicación
+```
+
+Es un modelo mental, no un marco universal. Algunos cambios necesitan
+un especialista de dominio. Otros necesitan revisión de base de datos o una
+verificación en navegador. Algunos deberían detenerse en descubrimiento porque
+la solicitud todavía no está suficientemente definida. El flujo debe crecer o
+reducirse según la incertidumbre y la consecuencia.
+
+El orden no significa que cada etapa ocurra una sola vez. El descubrimiento
+puede cambiar la especificación, la revisión puede devolver un hallazgo a
+implementación y nueva evidencia puede exigir otra decisión. Cada transición
+debe conservar una responsabilidad explícita y un resultado visible.
+
+## Qué aporta cada responsabilidad
+
+### Router u orquestador
+
+El router establece el límite inicial: solicitud, rutas e idiomas afectados,
+complejidad, evidencia y puertas aplicables. Devuelve un documento de alcance
+para la siguiente responsabilidad. No decide que una afirmación sin fuente sea
+verdadera ni convierte una propuesta en una afirmación pública aprobada.
+
+### Estrategia o descubrimiento
+
+La estrategia pregunta para qué sirve el trabajo, quién debe entenderlo y qué
+hechos tienen respaldo. Separa práctica actual, implementación local, trabajo
+planeado y afirmaciones que no deben publicarse. El descubrimiento también
+revela límites, consumidores, riesgos y preguntas abiertas; su resultado es un
+documento de alcance listo para decidir, no una promesa de diseño correcto.
+
+### Especificación, dominio o caso de estudio
+
+Esta responsabilidad da forma al cambio: define un límite de sistema, describe
+una narrativa sanitizada o convierte una pregunta operativa en criterios de
+aceptación y compromisos técnicos. Hace explícitas las restricciones sin ampliar
+el contexto privado y dice qué debe decidir o dejar fuera el siguiente rol.
+
+### Rol especializado de implementación
+
+El implementador trabaja dentro del alcance aprobado: puede incluir
+editar código o contenido, conservar la paridad entre idiomas y ejecutar las
+verificaciones de implementación. No tiene autoridad final sobre el alcance,
+la seguridad de las afirmaciones ni las condiciones de publicación, aunque el
+resultado sea técnicamente sólido.
+
+### Revisor independiente
+
+El revisor hace una pregunta diferente: ¿el resultado coincide con el alcance,
+respalda sus rutas de falla y afirmaciones públicas, y conserva la experiencia
+renderizada, metadatos, enlaces, semántica y accesibilidad?
+
+“Independiente” describe el límite de responsabilidad, no garantiza que toda
+revisión la haga una persona. La revisión debe indicar si es automatizada,
+asistida por agentes o humana, y debe cuestionar el resultado en lugar de
+repetir el resumen de implementación.
+
+### Responsabilidad de evidencia y QA
+
+La evidencia reúne la prueba apropiada: inspección de código, pruebas, lint,
+compilación, validación de base de datos, navegador, revisión de arquitectura o
+QA manual. Después, una persona decide si es suficiente para la publicación.
+
+## Las transferencias de responsabilidad son puntos de control
+
+Una transferencia de responsabilidad (handoff) no es una transcripción de la
+conversación anterior. Es un registro compacto y durable que permite a la
+siguiente responsabilidad continuar sin adivinar.
+
+Una transferencia útil debe llevar:
+
+- el alcance y las exclusiones acordadas;
+- decisiones y compromisos técnicos;
+- evidencia disponible;
+- preguntas sin resolver y restricciones;
+- criterios de aceptación;
+- la siguiente responsabilidad y el resultado esperado.
+
+Esto evita dos errores opuestos: copiar cada detalle produce ruido, mientras
+omitir la historia de decisiones obliga a reconstruir la intención desde un
+contexto incompleto.
+
+Para explicarlo públicamente puedo mostrar la forma de una transferencia sin
+exponer un prompt privado ni un registro de proyecto:
+
+```text
+Alcance: un cambio delimitado
+Restricciones: datos, autorización, privacidad e idioma
+Decisiones: opciones aceptadas y alternativas descartadas
+Evidencia: verificaciones ya completadas
+Preguntas abiertas: riesgos o decisiones pendientes
+Aceptación: condiciones observables para la siguiente puerta
+Siguiente responsabilidad: rol y resultado esperado
+```
+
+Los campos no son una plantilla obligatoria: mantienen el contexto revisable y
+limitado para proteger la privacidad.
+
+## Por qué implementación y revisión deben estar separadas
+
+La implementación optimiza para hacer el cambio. La revisión busca dónde el
+resultado puede no significar lo que todos creen. Un implementador puede conocer
+por qué tomó un atajo y tratar esa razón, inconscientemente, como evidencia; un
+revisor independiente regresa al alcance aprobado y a las restricciones
+declaradas.
+
+Esto importa cuando la IA ayudó a producir la implementación. La revisión no es
+una discusión entre personas y máquinas, sino un límite de responsabilidad que
+comprueba el resultado contra la decisión, la evidencia y la operación que
+depende de él.
+
+## La evidencia es más que pasar pruebas
+
+Las pruebas son valiosas, pero responden las preguntas para las que fueron
+diseñadas. Una prueba unitaria puede proteger una regla. Una prueba de
+integración puede verificar un límite de base de datos. Una compilación puede
+mostrar que la aplicación compila. Una verificación en navegador puede mostrar
+que una ruta, idioma, enlace o maquetación está presente.
+
+Nada de eso demuestra automáticamente las demás puertas. Una prueba local no es
+la configuración de producción. Una compilación exitosa no es una revisión
+independiente. Una página renderizada no demuestra que una afirmación sin fuente
+sea segura para publicar.
+
+Por eso trato la evidencia como un mapa y no como una sola luz verde. Cada
+criterio debe apuntar a una verificación capaz de respaldarlo, y las condiciones
+no verificadas deben permanecer visibles.
+
+## El runtime del portafolio como ejemplo público seguro
+
+El propio portafolio ofrece un ejemplo concreto sin requerir detalles privados
+de negocio. El refresh actual del Artículo 01 siguió una secuencia como esta:
+
+```text
+Descubrimiento
+    → inventario de afirmaciones
+    → estrategia
+    → decisiones humanas
+    → borrador editorial
+    → implementación
+    → revisiones independientes de experiencia y SEO/accesibilidad
+    → validación técnica
+    → QA humano / decisión de publicación
+```
+
+Los roles tenían propósitos distintos. `portfolio-orchestrator` dirigió el
+trabajo. `portfolio-strategist` y `case-study-architect` estructuraron la
+dirección aprobada. Una persona resolvió las afirmaciones y los límites editoriales.
+`portfolio-maintainer` integró el MDX aprobado. `portfolio-experience-reviewer`
+y `portfolio-seo-accessibility-reviewer` verificaron la experiencia y
+SEO/accesibilidad. La validación técnica reunió evidencia local. El trabajo no
+se trató como liberado solo porque terminó la implementación y pasaron las
+verificaciones automatizadas.
+
+Este ejemplo demuestra estructura de flujo, no un resultado universal de
+ingeniería. La evidencia pública describe la forma del proceso sin exponer
+prompts ocultos, configuraciones de modelos ni contexto privado.
+
+Este es un ejemplo de control del trabajo de ingeniería, no una afirmación de
+que agentes especializados construyan o publiquen software productivo de forma
+independiente. En la actualización del Artículo 01, la evidencia local de
+implementación no cerró la publicación: las comprobaciones de escritorio y de la
+experiencia renderizada pasaron, mientras la verificación móvil y la decisión
+humana de publicación siguieron siendo puertas separadas.
+
+## Dónde permanece el juicio humano
+
+La IA puede apoyar trabajo de ingeniería acotado. Yo sigo siendo responsable de
+la ambigüedad, las decisiones de arquitectura, la evidencia y la publicación.
+
+En la práctica, todavía decido si el problema y el alcance están claros, qué
+compromisos técnicos son aceptables, si las afirmaciones tienen fuentes
+suficientes, qué información privada queda excluida, si la evidencia responde a
+las preguntas de aceptación y si la publicación está justificada.
+
+Los agentes pueden proponer alternativas, resumir evidencia, comparar archivos,
+estructurar borradores y coordinar verificaciones. Una respuesta segura de sí
+misma no transfiere la propiedad de esas decisiones.
+
+## Modos de falla y recuperación
+
+Los roles especializados solo reducen ambigüedad cuando se mantienen sus
+límites. El flujo todavía puede fallar por:
+
+- contexto obsoleto que cruza una transferencia;
+- expansión de alcance escondida en detalles de implementación;
+- roles superpuestos que producen decisiones incompatibles;
+- suposiciones sin respaldo presentadas como hechos;
+- revisores que repiten al implementador en vez de cuestionarlo;
+- agentes que optimizan por pasar una puerta en lugar de resolver el problema;
+- exceso de proceso aplicado a un cambio sencillo;
+- un tipo de evidencia ausente que deja una condición de publicación sin probar.
+
+La respuesta no es agregar agentes indefinidamente. Prefiero devolver el trabajo
+a la decisión mínima que falta: aclarar el alcance, actualizar la transferencia,
+registrar la restricción, solicitar la fuente o elegir una verificación adecuada.
+Si la topología genera más coordinación que confianza, conviene simplificarla.
+
+## Cuándo este flujo es innecesario
+
+Un typo, un bug pequeño y aislado, un ajuste local de estilos o una corrección
+trivial de texto normalmente no necesitan un orquestador, un planificador, un
+implementador y varios revisores. El trabajo directo con una verificación
+proporcional suele ser mejor.
+
+Uso más estructura cuando el cambio cruza datos, autorización, afirmaciones públicas,
+varios consumidores, operaciones irreversibles o un riesgo operativo relevante.
+El umbral no es el número de agentes, sino la incertidumbre y la consecuencia de
+la decisión.
+
+## Principios finales
+
+Dar a cada responsabilidad una decisión, un artefacto y un límite claros. Hacer
+durables los insumos, resultados, restricciones y preguntas abiertas; usar
+transferencias sin copiar contexto privado; ajustar la evidencia y la revisión
+al riesgo real; mantener separadas implementación, revisión, QA y autoridad de
+publicación; y reducir el flujo cuando el cambio sea sencillo.
+
+Así funcionan los agentes de IA especializados dentro de mi flujo actual de
+ingeniería: apoyo acotado alrededor de decisiones humanas, con suficiente
+separación para volver inspeccionable el trabajo complejo.
+
+Notas relacionadas: [Desarrollo guiado por especificaciones para cambios de software complejos](/es/engineering/specification-driven-development-complex-changes), [servicios FastAPI orientados a transacciones de negocio](/es/engineering/backend-service-boundaries) y [arquitectura de plataformas ERP](/es/engineering/erp-platform-architecture).

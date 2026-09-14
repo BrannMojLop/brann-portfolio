@@ -1,0 +1,283 @@
+# How I structure specialized AI agents for software engineering
+
+*I separate planning, implementation, review, and release decisions so complex AI-assisted changes remain inspectable.*
+
+## The risk of one agent doing everything
+
+A general-purpose coding agent can inspect a repository, propose a design, edit
+files, run checks, and declare the task complete. That convenience becomes risky
+when one change carries several kinds of uncertainty.
+
+The same context may decide what requirements meant, which evidence counts, and
+whether the result is ready. A scope assumption can survive into self-review, a
+private detail can reach a public draft, and a green test can be treated as proof
+beyond the setup it exercised.
+
+The problem is not capability; it is blurred responsibility. When the work
+matters, I prefer to separate the decisions and make the boundaries visible.
+
+The central idea is not that AI writes software. It is a structured workflow:
+
+- separate responsibilities;
+- explicit context and inputs;
+- durable handoffs;
+- evidence matched to the risk;
+- independent review where it matters;
+- human accountability for decisions and release.
+
+I use these roles to make engineering work easier to inspect; they are not
+autonomous engineers.
+
+## Specialization means bounded responsibility
+
+An agent is specialized in this workflow when it owns a defined decision or
+artifact, understands its inputs and outputs, and knows what is outside its
+authority.
+
+That definition is more useful to me than a list of tools or model names. A role
+can own a planning question, claim review, implementation slice, or independent
+check. The specialization comes from its boundary and acceptance criteria.
+
+For example, an orchestrator can classify the request, select a work mode, and
+activate the appropriate gates. It should not invent a professional claim. A
+strategist can define audience and positioning. It should not publish an
+unverified employment fact. An implementer can change approved source files. It
+should not authorize its own release.
+
+## A representative workflow
+
+A representative workflow may look like this:
+
+```text
+Problem / request
+        ↓
+Router / Orchestrator
+        ↓
+Discovery / Strategy
+        ↓
+Specification / Planning
+        ↓
+Specialized implementation role
+        ↓
+Independent reviewer
+        ↓
+Evidence / QA
+        ↓
+Human release decision
+```
+
+This is a useful mental model, not a universal framework. Some changes need a
+domain specialist. Some need a database review or a browser check. Some should
+stop at discovery because the request is not sufficiently defined. The
+workflow should expand or contract according to uncertainty and consequence.
+
+The ordering does not mean that every stage happens once. Discovery can change
+the specification, review can return a finding to implementation, and new
+evidence can require another decision record. Each transition still needs an
+explicit responsibility and visible result.
+
+## What each role contributes
+
+### Router or orchestrator
+
+The router sets the initial boundary: request, affected paths and locales,
+complexity, evidence level, and gates. It returns a change brief for the next
+responsibility. It does not decide that an unsupported claim is true or turn a
+proposal into an approved public statement.
+
+### Strategy or discovery
+
+Strategy asks what the work is for, who needs to understand it, and which facts
+are supported. It separates current practice, local implementation, planned
+work, and claims that should not be published. Discovery also surfaces
+boundaries, consumers, risks, and open questions; its output is a decision-ready
+brief, not a promise that the design is correct.
+
+### Specification, domain, or case-study responsibility
+
+This responsibility gives the change a coherent shape: a system boundary, a
+sanitized project narrative, or acceptance criteria and trade-offs. It makes
+constraints explicit without expanding private context, and states what the
+next role must decide or leave alone.
+
+### Specialized implementation role
+
+The implementer works inside the approved scope: editing code or content,
+preserving locale parity, and running implementation checks. It is not the final
+authority on scope, claim safety, or release conditions, even when the result is
+technically sound.
+
+### Independent reviewer
+
+The reviewer asks a different question: does the result match approved scope,
+have supported failure paths and public claims, and preserve rendered experience,
+metadata, links, semantics, and accessibility?
+
+“Independent” describes the responsibility boundary, not a guarantee that every
+review is performed by a human. The review should state whether it is automated,
+agent-assisted, or human, and it should challenge the result rather than repeat
+the implementation summary.
+
+### Evidence and QA responsibility
+
+Evidence gathers the proof appropriate to the change. It can include source
+inspection, tests, lint, build output, database validation, browser checks,
+architecture review, or manual QA. A person then decides whether the evidence
+is sufficient for the intended release boundary.
+
+## Handoffs are control points
+
+A handoff is not a transcript of the previous conversation. It is a compact,
+durable record that lets the next responsibility continue without guessing.
+
+I want a useful handoff to carry:
+
+- the agreed scope and exclusions;
+- decisions and trade-offs;
+- evidence already available;
+- unresolved questions and constraints;
+- acceptance criteria;
+- the next responsibility and expected output.
+
+This avoids two opposite mistakes: copying every detail creates noise, while
+omitting decision history forces intent to be reconstructed from incomplete
+context.
+
+For public explanation, I can show the shape of a handoff without exposing a
+private prompt or project record:
+
+```text
+Scope: one bounded change
+Constraints: data, authorization, privacy, and locale boundaries
+Decisions: accepted choices and rejected alternatives
+Evidence: checks already completed
+Open questions: unresolved risks or decisions
+Acceptance: observable conditions for the next gate
+Next responsibility: role and expected result
+```
+
+The fields are not a mandatory template. They remind me to keep context
+reviewable and limited enough to protect privacy.
+
+## Why implementation and review should be separate
+
+Implementation optimizes for making the change. Review looks for where the
+result may not mean what everyone thinks it means. An implementer may know why a
+shortcut was taken and unconsciously treat that reason as evidence; an
+independent reviewer returns to the approved scope and stated constraints.
+
+This matters when AI helped produce the implementation. The review is not an
+argument between humans and machines. It is a responsibility boundary that
+checks the output against the decision, the evidence, and the person or operator
+who depends on it.
+
+## Evidence is more than passing tests
+
+Tests are valuable, but they answer the questions they were designed to answer.
+A unit test may protect a rule. An integration test may verify a database
+boundary. A build may show that the application compiles. A browser check may
+show that a route, language, link, or layout is present.
+
+None of those automatically proves every other gate. A local test is not
+production configuration. A successful build is not independent review. A
+rendered page is not proof that an unverified claim is safe to publish.
+
+I therefore treat evidence as a map rather than a single green light. Each
+acceptance criterion should point to the kind of check that can support it, and
+the remaining unverified conditions should stay visible.
+
+## The portfolio runtime as a safe public example
+
+The portfolio itself provides a concrete example without requiring private
+business details. The current Article 01 refresh moved through a sequence like
+this:
+
+```text
+Discovery
+    → claim inventory
+    → strategy
+    → human decisions
+    → editorial draft
+    → implementation
+    → independent experience and SEO/accessibility reviews
+    → technical validation
+    → human QA / release decision
+```
+
+The roles had different purposes. `portfolio-orchestrator` routed the work.
+`portfolio-strategist` and `case-study-architect` shaped the approved direction.
+A human resolved the claims and editorial boundaries. `portfolio-maintainer`
+integrated the approved MDX. `portfolio-experience-reviewer` and
+`portfolio-seo-accessibility-reviewer` checked the experience and
+SEO/accessibility. Technical validation collected local evidence. The work was
+not treated as released merely because implementation and automated checks
+completed.
+
+This example demonstrates workflow structure, not a universal engineering
+outcome. It also demonstrates why public evidence should describe the shape of
+the process rather than exposing hidden prompts, model settings, or private
+project context.
+
+This is an engineering-control example, not a claim that specialized agents
+independently build or release production software. In the Article 01 refresh,
+local implementation evidence did not close the release: desktop and rendered
+checks passed, while mobile verification and the human release decision remained
+separate gates.
+
+## Where human judgment remains
+
+AI can support bounded engineering work. I remain responsible for ambiguity,
+architecture decisions, evidence and release.
+
+In practice, I still decide whether the problem and scope are clear, which
+trade-offs are acceptable, whether claims have sufficient sources, what private
+information stays excluded, whether evidence answers acceptance questions, and
+whether release is justified.
+
+Agents can propose alternatives, summarize evidence, compare files, draft
+structures, and coordinate checks. A confident answer does not transfer
+ownership of those decisions.
+
+## Failure modes and recovery
+
+Specialized roles reduce ambiguity only when the boundaries are maintained. The
+workflow can still fail through:
+
+- stale context carried across a handoff;
+- scope expansion hidden inside implementation detail;
+- overlapping roles that produce two incompatible decisions;
+- unsupported assumptions presented as facts;
+- reviewers repeating the implementer instead of challenging it;
+- agents optimizing for a passing gate instead of the actual problem;
+- excessive process applied to a simple change;
+- a missing evidence type that leaves a release condition untested.
+
+The response is not to add agents indefinitely. I prefer to return the work to
+the smallest missing decision: clarify scope, update the handoff, record the new
+constraint, request the missing source, or select a better check. If the
+topology costs more coordination than it creates confidence, simplify it.
+
+## When this workflow is unnecessary
+
+A typo, a small isolated bug, a local style adjustment, or a trivial copy change
+usually does not need an orchestrator, planner, implementer, and several
+reviewers. Direct work with a proportionate check is often the better choice.
+
+I use more structure when the change crosses data, authorization, public claims,
+multiple consumers, irreversible operations, or meaningful operational risk.
+The threshold is not the number of agents. It is the uncertainty and
+consequence of the decision.
+
+## Final principles
+
+Give each responsibility a clear decision, artifact, and boundary. Make inputs,
+outputs, constraints, and open questions durable; use handoffs without copying
+private context; match evidence and review to the actual risk; and keep
+implementation, review, QA, and release authority distinct. Scale the workflow
+down when the change is simple.
+
+That is the role specialized AI agents play in my current engineering workflow:
+bounded support around human-owned decisions, with enough separation to make
+complex work inspectable.
+
+Related notes: [Specification-driven development for complex software changes](/engineering/specification-driven-development-complex-changes), [business-transaction-oriented FastAPI services](/engineering/backend-service-boundaries), and [ERP platform architecture](/engineering/erp-platform-architecture).
