@@ -10,7 +10,7 @@ export type EngineeringFrontmatter = {
   summary: string;
   seoTitle?: string;
   seoDescription?: string;
-  date: string;
+  date?: string;
   tags: string[];
   theme: EngineeringTheme;
   articleType?: string;
@@ -59,7 +59,7 @@ export async function getAllEngineeringPosts(locale: Locale): Promise<Engineerin
           summary: String(data.summary || ""),
           seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
           seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
-          date: String(data.date || "1970-01-01"),
+          date: data.date ? String(data.date) : undefined,
           tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
           theme: engineeringThemeOrder.includes(data.theme as EngineeringTheme)
             ? (data.theme as EngineeringTheme)
@@ -78,7 +78,14 @@ export async function getAllEngineeringPosts(locale: Locale): Promise<Engineerin
       return themeDelta;
     }
 
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+    if (a.date && b.date) {
+      const dateDelta = new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (dateDelta !== 0) return dateDelta;
+    } else if (a.date || b.date) {
+      return a.date ? -1 : 1;
+    }
+
+    return a.slug.localeCompare(b.slug);
   });
 }
 

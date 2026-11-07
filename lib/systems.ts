@@ -10,8 +10,8 @@ type SystemText = {
   architectureApproach: string[];
   constraints: string[];
   technicalChallenges: string[];
-  impact: string[];
-  results: string[];
+  impact?: string[];
+  results?: string[];
   ctaLabel: string;
 };
 
@@ -22,21 +22,156 @@ export interface SystemEntry {
   content: Record<Locale, SystemText>;
 }
 
+/** Public case-study narrative kept separate so Systems can evolve without changing Home cards. */
+export type SystemsCaseStudyText = {
+  context: string;
+  purpose: string;
+  responsibility: string;
+  decisions: string[];
+  considerations: string[];
+  technology: string;
+  status?: string;
+  ctaLabel: string;
+};
+
+export const systemsCaseStudies: Record<SystemEntry["slug"], Record<Locale, SystemsCaseStudyText>> = {
+  "businext-erp": {
+    en: {
+      context:
+        "An enterprise platform spanning finance, sales, inventory, human resources, and accounting workflows.",
+      purpose:
+        "Bring those operational domains into one ERP model while allowing their business rules to evolve deliberately.",
+      responsibility:
+        "My work focuses on backend and systems evolution around business rules, service boundaries, and operating constraints.",
+      decisions: [
+        "Separate domain responsibilities across finance, inventory, HR, sales, and accounting.",
+        "Use explicit APIs and service layers to represent business workflows rather than mirror database tables.",
+        "Keep cross-domain workflows coherent as modules evolve.",
+      ],
+      considerations: [
+        "Accounting and inventory rules need clear ownership while workflows can cross domain boundaries.",
+        "Changes to one area should be considered against their effects on connected workflows.",
+      ],
+      technology: "Python · FastAPI · React · MySQL / MariaDB · REST APIs · AWS · Linux · Nginx",
+      ctaLabel: "Discuss related work",
+    },
+    es: {
+      context:
+        "Una plataforma empresarial que abarca flujos de finanzas, ventas, inventario, recursos humanos y contabilidad.",
+      purpose:
+        "Reunir esos dominios operativos en un modelo ERP y permitir que sus reglas de negocio evolucionen de forma deliberada.",
+      responsibility:
+        "Mi trabajo se centra en la evolución backend y de sistemas alrededor de las reglas de negocio, los límites de servicio y las restricciones operativas.",
+      decisions: [
+        "Separar responsabilidades de dominio entre finanzas, inventario, RH, ventas y contabilidad.",
+        "Usar APIs explícitas y capas de servicio para representar flujos de negocio en lugar de reflejar tablas de base de datos.",
+        "Mantener coherentes los flujos entre dominios conforme evolucionan los módulos.",
+      ],
+      considerations: [
+        "Las reglas contables y de inventario necesitan responsabilidades claras aunque los flujos crucen dominios.",
+        "Los cambios en un área deben evaluarse considerando sus efectos en flujos conectados.",
+      ],
+      technology: "Python · FastAPI · React · MySQL / MariaDB · APIs REST · AWS · Linux · Nginx",
+      ctaLabel: "Conversemos sobre un proyecto similar",
+    },
+  },
+  "tr0v1-credit-platform": {
+    en: {
+      context:
+        "The portfolio documents a credit-management platform with workflows for credit lines, installments, interest, payments, reconciliation, and account statements.",
+      purpose:
+        "Represent credit operations as explicit financial workflows and state transitions, with APIs serving administrative tools and client interfaces.",
+      responsibility:
+        "I work on architecture and backend evolution that express financial rules and state transitions through services and APIs.",
+      decisions: [
+        "Model credit accounts, payment flows, and interest calculations around the domain rules.",
+        "Design services for financial workflows rather than direct CRUD operations.",
+      ],
+      considerations: [
+        "Retries, partial payments, interest calculations, and reconciliation require careful handling of financial state.",
+        "Balance consistency must be considered across workflow transitions.",
+      ],
+      technology: "Python · FastAPI · SQLAlchemy · React · REST APIs",
+      ctaLabel: "Discuss related work",
+    },
+    es: {
+      context:
+        "Una plataforma de gestión de crédito con flujos para líneas de crédito, parcialidades, intereses, pagos, conciliación y estados de cuenta.",
+      purpose:
+        "Representar las operaciones de crédito como flujos financieros y transiciones de estado explícitos, con APIs utilizadas por herramientas administrativas e interfaces de clientes.",
+      responsibility:
+        "Trabajo en la arquitectura y la evolución backend que expresan reglas financieras y transiciones de estado mediante servicios y APIs.",
+      decisions: [
+        "Modelar créditos, flujos de pago y cálculos de intereses alrededor de las reglas del dominio.",
+        "Diseñar servicios para flujos financieros en lugar de operaciones CRUD directas.",
+      ],
+      considerations: [
+        "Los reintentos, pagos parciales, cálculos de intereses y conciliaciones requieren manejar cuidadosamente el estado financiero.",
+        "La consistencia de saldos debe considerarse a través de las transiciones del flujo.",
+      ],
+      technology: "Python · FastAPI · SQLAlchemy · React · APIs REST",
+      ctaLabel: "Conversemos sobre un proyecto similar",
+    },
+  },
+  workforce: {
+    en: {
+      context:
+        "An independent workforce-management project with a documented local-development scope.",
+      purpose:
+        "Explore workflows for people, organizational structure, and work schedules.",
+      responsibility:
+        "I shape the system design and implementation direction around organization context, authorization, data integrity, and auditable workflows.",
+      decisions: [
+        "Keep the backend API and web frontend as distinct parts of a modular system.",
+        "Separate user, membership, and employee responsibilities in the model.",
+        "Version organizational and scheduling configuration as it evolves.",
+      ],
+      considerations: [
+        "Organization context and authorization boundaries need to remain explicit across workflows.",
+        "This is local development scope, not production software.",
+      ],
+      technology: "FastAPI · React · PostgreSQL",
+      status: "Local-development scope · Not production software",
+      ctaLabel: "Discuss related work",
+    },
+    es: {
+      context:
+        "Proyecto independiente de gestión laboral con un alcance documentado de desarrollo local.",
+      purpose:
+        "Explorar flujos para personas, estructura organizacional y horarios de trabajo.",
+      responsibility:
+        "Defino el diseño del sistema y la dirección de implementación alrededor del contexto organizacional, la autorización, la integridad de datos y los flujos auditables.",
+      decisions: [
+        "Mantener el backend API y el frontend web como partes diferenciadas de un sistema modular.",
+        "Separar las responsabilidades de usuario, membresía y empleado en el modelo.",
+        "Versionar la configuración organizacional y de horarios conforme evoluciona.",
+      ],
+      considerations: [
+        "El contexto organizacional y los límites de autorización deben permanecer explícitos entre los flujos.",
+        "El alcance corresponde a desarrollo local; no es software en producción.",
+      ],
+      technology: "FastAPI · React · PostgreSQL",
+      status: "Alcance de desarrollo local · No es software en producción",
+      ctaLabel: "Conversemos sobre un proyecto similar",
+    },
+  },
+};
+
 export const systems: SystemEntry[] = [
   {
     slug: "businext-erp",
     technologies: ["Python", "FastAPI", "React", "AWS", "MySQL / MariaDB", "REST APIs"],
     content: {
       en: {
-        name: "Businext ERP",
+        name: "BusiNext ERP",
         tagline:
           "An ERP platform bringing finance, sales, inventory, human resources, dashboards, and accounting workflows into one operational model.",
         businessContext:
-          "Businext originated inside a real business operation that initially relied on a legacy POS system developed in C# and running on physical servers. That system presented technological limitations, vendor dependency, and difficulties evolving toward new operational requirements. A first web version was later developed using Web2py focused on sales and inventory. Although this version still operates certain processes such as point-of-sale and stock control, its functional evolution stopped. Based on that experience, Businext ERP was created as a new platform designed to progressively replace previous systems and centralize the company's operational infrastructure.",
+          "BusiNext originated inside a real business operation that initially relied on a legacy POS system developed in C# and running on physical servers. That system presented technological limitations, vendor dependency, and difficulties evolving toward new operational requirements. A first web version was later developed using Web2py focused on sales and inventory. Although this version still operates certain processes such as point-of-sale and stock control, its functional evolution stopped. Based on that experience, BusiNext ERP was created as a new platform designed to progressively replace previous systems and centralize the company's operational infrastructure.",
         responsibility:
           "I design and lead backend and systems evolution around the business rules, service boundaries, and operational constraints that the platform must preserve.",
         solution:
-          "Businext ERP is an ERP platform bringing finance, sales, inventory, human resources, dashboards, and accounting workflows into one operational model.",
+          "BusiNext ERP is an ERP platform bringing finance, sales, inventory, human resources, dashboards, and accounting workflows into one operational model.",
         stack:
           "Python · FastAPI · React · MySQL / MariaDB · REST APIs · AWS · Linux · Nginx",
         architectureApproach: [
@@ -53,26 +188,18 @@ export const systems: SystemEntry[] = [
         constraints: [
           "Cross-domain workflows must remain coherent while the ERP evolves without making every change a platform-wide regression.",
         ],
-        impact: [
-          "The platform provides a maintainable foundation for continuing enterprise-system evolution across the documented operational domains.",
-        ],
-        results: [
-          "Reduced process fragmentation by consolidating administrative workflows in one operational model.",
-          "Made finance, sales, inventory, and HR changes easier to reason about through explicit service boundaries.",
-          "Created a maintainable internal ERP foundation that can absorb new modules without reworking the whole platform.",
-        ],
         ctaLabel: "Explore system architecture",
       },
       es: {
-        name: "Businext ERP",
+        name: "BusiNext ERP",
         tagline:
           "Plataforma ERP que reúne finanzas, ventas, inventario, recursos humanos, dashboards y flujos contables en un mismo modelo operativo.",
         businessContext:
-          "Businext surgió dentro de una operación empresarial real que inicialmente dependía de un sistema POS legacy desarrollado en C# y ejecutado en servidores físicos. Ese sistema presentaba limitaciones tecnológicas, dependencia del proveedor original y dificultades para evolucionar hacia nuevas necesidades operativas. Posteriormente se desarrolló una primera versión web utilizando Web2py enfocada en ventas e inventario. Aunque esta versión continúa operando algunos procesos como puntos de venta y control de stock, su evolución funcional se detuvo. A partir de esa experiencia se inició el desarrollo de Businext ERP, una nueva plataforma diseñada para reemplazar progresivamente los sistemas anteriores y centralizar la operación empresarial.",
+          "BusiNext surgió dentro de una operación empresarial real que inicialmente dependía de un sistema POS legacy desarrollado en C# y ejecutado en servidores físicos. Ese sistema presentaba limitaciones tecnológicas, dependencia del proveedor original y dificultades para evolucionar hacia nuevas necesidades operativas. Posteriormente se desarrolló una primera versión web utilizando Web2py enfocada en ventas e inventario. Aunque esta versión continúa operando algunos procesos como puntos de venta y control de stock, su evolución funcional se detuvo. A partir de esa experiencia se inició el desarrollo de BusiNext ERP, una nueva plataforma diseñada para reemplazar progresivamente los sistemas anteriores y centralizar la operación empresarial.",
         responsibility:
           "Diseño y lidero la evolución backend y de sistemas alrededor de las reglas de negocio, los límites de servicio y las restricciones operativas que la plataforma debe conservar.",
         solution:
-          "Businext ERP es una plataforma ERP que reúne finanzas, ventas, inventario, recursos humanos, dashboards y flujos contables en un mismo modelo operativo.",
+          "BusiNext ERP es una plataforma ERP que reúne finanzas, ventas, inventario, recursos humanos, dashboards y flujos contables en un mismo modelo operativo.",
         stack:
           "Python · FastAPI · React · MySQL / MariaDB · APIs REST · AWS · Linux · Nginx",
         architectureApproach: [
@@ -88,14 +215,6 @@ export const systems: SystemEntry[] = [
         ],
         constraints: [
           "Los flujos que cruzan dominios deben mantenerse coherentes mientras el ERP evoluciona sin convertir cada cambio en una regresión transversal.",
-        ],
-        impact: [
-          "La plataforma ofrece una base mantenible para continuar la evolución de sistemas empresariales en los dominios operativos documentados.",
-        ],
-        results: [
-          "Redujo la fragmentación operativa al consolidar flujos administrativos en un mismo modelo.",
-          "Hizo más entendibles los cambios en finanzas, ventas, inventario y RH mediante límites claros de servicio.",
-          "Creó una base ERP mantenible capaz de absorber nuevos módulos sin rehacer toda la plataforma.",
         ],
         ctaLabel: "Explorar arquitectura del sistema",
       },
@@ -134,11 +253,6 @@ export const systems: SystemEntry[] = [
         impact: [
           "The platform is organized around traceable financial workflows and explicit rules for credit lifecycle operations.",
         ],
-        results: [
-          "Made credit lifecycle rules explicit across charges, billing periods, payments, and statements.",
-          "Improved operational control by detecting reconciliation differences early.",
-          "Delivered a backend platform supporting both internal operations and client visibility.",
-        ],
         ctaLabel: "Explore system architecture",
       },
       es: {
@@ -170,11 +284,6 @@ export const systems: SystemEntry[] = [
         impact: [
           "La plataforma está organizada alrededor de flujos financieros trazables y reglas explícitas para las operaciones del ciclo crediticio.",
         ],
-        results: [
-          "Hizo explícitas las reglas del ciclo crediticio entre cargos, periodos, pagos y estados de cuenta.",
-          "Mejoró el control operativo al detectar diferencias de conciliación antes de que escalaran.",
-          "Entregó una plataforma backend que soporta operación interna y visibilidad para clientes.",
-        ],
         ctaLabel: "Explorar arquitectura del sistema",
       },
     },
@@ -196,9 +305,9 @@ export const systems: SystemEntry[] = [
       en: {
         name: "Workforce",
         tagline:
-          "An independent workforce-management product in active development.",
+          "An independent workforce-management product with a documented local-development scope.",
         businessContext:
-          "Its current local implementation covers a secure multi-organization foundation, People and Employee management, and configuration of organizational structure and work schedules.",
+          "The documented local implementation covers a secure multi-organization foundation, People and Employee management, and configuration of organizational structure and work schedules.",
         responsibility:
           "I shape the system design and implementation direction around organization context, authorization, data integrity, and auditable operational workflows.",
         solution:
@@ -217,17 +326,17 @@ export const systems: SystemEntry[] = [
         technicalChallenges: [
           "Keeping organization context explicit across authorization and workflow operations.",
           "Designing people and scheduling workflows that remain auditable as responsibilities evolve.",
-          "Keeping current local implementation scope distinct from future product capabilities.",
+          "Keeping the documented local-development scope distinct from future product capabilities.",
         ],
         constraints: [
           "The architecture is designed for local development scope; Workforce is not production software.",
         ],
         impact: [
-          "Workforce is an independent workforce-management product in active local development.",
+          "Workforce is an independent workforce-management product with a documented local-development scope.",
         ],
         results: [
           "The local implementation covers Foundation, People / Employees, and Structure / Scheduling.",
-          "Workforce remains separate from the Businext and TR0V1 system narratives.",
+          "Workforce remains separate from the BusiNext and TR0V1 system narratives.",
           "Workforce is not production software.",
         ],
         ctaLabel: "Explore system architecture",
@@ -235,9 +344,9 @@ export const systems: SystemEntry[] = [
       es: {
         name: "Workforce",
         tagline:
-          "Producto independiente de gestión laboral en desarrollo activo.",
+          "Producto independiente de gestión laboral con un alcance documentado de desarrollo local.",
         businessContext:
-          "Su implementación local actual cubre una base segura multi-organización, la gestión de Personas y Empleados, y la configuración de estructura organizacional y horarios de trabajo.",
+          "La implementación local documentada cubre una base segura multi-organización, la gestión de Personas y Empleados, y la configuración de estructura organizacional y horarios de trabajo.",
         responsibility:
           "Defino el diseño de sistemas y la dirección de implementación alrededor del contexto de organización, la autorización, la integridad de datos y los flujos operativos auditables.",
         solution:
@@ -256,17 +365,17 @@ export const systems: SystemEntry[] = [
         technicalChallenges: [
           "Mantener explícito el contexto de organización entre autorizaciones y operaciones de flujo.",
           "Diseñar flujos de personas y horarios que mantengan auditabilidad conforme evolucionan las responsabilidades.",
-          "Mantener separado el alcance de la implementación local actual de las capacidades futuras del producto.",
+          "Mantener separado el alcance documentado de desarrollo local de las capacidades futuras del producto.",
         ],
         constraints: [
           "La arquitectura está diseñada para el alcance de desarrollo local; Workforce no es software en producción.",
         ],
         impact: [
-          "Workforce es un producto independiente de gestión laboral en desarrollo local activo.",
+          "Workforce es un producto independiente de gestión laboral con un alcance documentado de desarrollo local.",
         ],
         results: [
           "La implementación local cubre Base, Personas / Empleados y Estructura / Horarios.",
-          "Workforce permanece separado de las narrativas de Businext y TR0V1.",
+          "Workforce permanece separado de las narrativas de BusiNext y TR0V1.",
           "Workforce no es software en producción.",
         ],
         ctaLabel: "Explorar arquitectura del sistema",

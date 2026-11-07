@@ -1,7 +1,6 @@
 ---
-title: "Why Businext uses a modular monolith"
-summary: "A practical analysis of why a modular monolith was the right choice for Businext ERP: lower operational complexity, simpler deployments, direct integration between domains, and faster evolution for a small engineering team."
-date: "2026-03-09"
+title: "Why BusiNext uses a modular monolith"
+summary: "A comparison of modular-monolith and microservices trade-offs for ERP platforms, with BusiNext's documented modular FastAPI architecture as context."
 theme: "architecture"
 articleType: "Tradeoff Analysis"
 readingTime: "10 min read"
@@ -12,7 +11,7 @@ tags:
   - Architecture Decisions
 ---
 
-### The real discussion is not monolith vs microservices
+## The real discussion is not monolith vs microservices
 
 In enterprise architecture, the debate between monoliths and microservices is often framed as a maturity path.
 
@@ -28,7 +27,7 @@ The correct decision depends on:
 
 ERP platforms amplify these questions because many domains share a **single operational truth**.
 
-### The nature of ERP systems
+## The nature of ERP systems
 
 ERP platforms combine several business domains:
 
@@ -47,7 +46,7 @@ Financial reconciliation may depend on events produced by other modules.
 
 Many flows therefore require **coordinated state transitions and reliable auditability**.
 
-### Why teams often move too early
+## Why teams often move too early
 
 Microservices promise real benefits:
 
@@ -65,9 +64,9 @@ However, when services are extracted before domain boundaries mature, systems of
 
 For growing enterprise platforms, this can mean **too much complexity too early**.
 
-### The modular monolith approach
+## The modular monolith approach
 
-Businext was designed as a **modular monolith**.
+BusiNext was designed as a **modular monolith**.
 
 All domains live inside the same backend but maintain explicit boundaries.
 
@@ -86,16 +85,15 @@ EIS
 
 Each module is implemented as a FastAPI application mounted inside the same backend.
 
-This architecture provides:
+This design has properties that shape the trade-offs:
 
-- direct integration between domains
-- simpler transactional consistency
-- single deployment boundary
-- lower operational complexity
+- domain modules within one backend
+- direct coordination between modules
+- a shared backend boundary for integration
 
-These properties are especially valuable for small teams.
+The design keeps these modules within one backend; it does not make them independently deployed services.
 
-### The problem this approach avoids
+## The problem this approach avoids
 
 A modular monolith avoids a common issue in prematurely distributed systems: moving coupling from code to the network.
 
@@ -108,7 +106,7 @@ When domains still require coordinated decisions, separating services often repl
 
 This increases operational complexity without necessarily improving domain clarity.
 
-### When microservices become useful
+## When microservices become useful
 
 Microservices become more valuable once several conditions exist:
 
@@ -119,7 +117,7 @@ Microservices become more valuable once several conditions exist:
 
 At that point service boundaries can reduce risk rather than increase it.
 
-### Three useful questions
+## Three useful questions
 
 Before extracting a service, three questions are often more useful than generic checklists:
 
@@ -129,7 +127,20 @@ Before extracting a service, three questions are often more useful than generic 
 
 If the coupling remains the same, the service likely isn’t ready to exist independently.
 
-### A pragmatic approach
+## A special constraint in enterprise software
+
+ERP and financial systems often rely on a shared operational view.
+
+Many workflows require coordinated state:
+
+- approvals cross several business concepts;
+- financial close depends on coherent account states;
+- reconciliation needs reliable data across domains;
+- support needs enough context to explain a sequence of events.
+
+These dependencies can make premature distribution costly.
+
+## A pragmatic approach
 
 Instead of asking *“when should we adopt microservices?”*, a better question is:
 
@@ -144,4 +155,4 @@ For many internal enterprise platforms the most practical path is:
 
 This keeps architecture aligned with business reality rather than architectural trends.
 
-**Businext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**
+**BusiNext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**

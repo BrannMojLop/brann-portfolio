@@ -1,119 +1,67 @@
 ---
-title: "Jobs de conciliación como control sistémico en plataformas financieras"
-summary: "Por qué los jobs de conciliación deben diseñarse como un mecanismo de control continuo que detecta inconsistencias entre pagos y cargos, genera alertas operativas y preserva la integridad financiera en plataformas de crédito como TR0V1."
-date: "2026-03-09"
+title: "Jobs de conciliación para flujos financieros"
+summary: "Cómo diseñar jobs de conciliación repetibles que comparen movimientos financieros con el estado esperado de una cuenta y canalicen excepciones para revisión."
 theme: "financial-systems"
 articleType: "Patrón de Control"
 readingTime: "8 min de lectura"
 tags:
   - Conciliación
   - Sistemas Financieros
-  - Jobs de Control
-  - Plataforma de Crédito
+  - Jobs en Segundo Plano
+  - Manejo de Excepciones
 ---
 
-### Conciliación: más que una tarea de soporte
+## La conciliación forma parte del diseño del sistema
 
-En muchos sistemas financieros, la conciliación aparece tarde en el diseño.  
-Se agrega como una herramienta de soporte para revisar errores cuando los usuarios detectan algo extraño.
+La conciliación compara registros relacionados o un estado calculado de forma independiente para encontrar diferencias que el flujo transaccional principal no puede explicar por sí solo.
 
-Ese enfoque suele fallar.
-
-En plataformas de crédito y pagos, la conciliación no debería ser una herramienta ocasional. Debe diseñarse como **un mecanismo sistémico de control**.
-
-Su objetivo no es solo revisar datos. Es verificar continuamente que el flujo financiero del sistema siga siendo coherente.
+Conviene diseñar la comparación junto con el flujo que produce los registros. Así, la fuente de verdad, los identificadores relevantes y las transiciones de estado esperadas quedan explícitos antes de que sea necesario investigar una excepción.
 
 ---
 
-### El problema real: operaciones que parecen válidas
+## Definir qué compara el job
 
-En plataformas financieras, muchos errores no rompen inmediatamente el sistema.
+Comienza con una relación específica, no con un recorrido amplio. Por ejemplo, una regla de conciliación puede comparar:
 
-Un pago puede registrarse correctamente desde el punto de vista técnico, pero quedar mal aplicado respecto al estado real del crédito.
+- un pago con su aplicación a una cuenta;
+- un cargo con el periodo en que tiene efecto;
+- movimientos contables con un saldo calculado.
 
-Un cargo puede existir en la base de datos pero no reflejar correctamente el saldo esperado.
-
-Esto ocurre por varias razones comunes:
-
-- reintentos de operaciones
-- ejecuciones concurrentes
-- errores en generación de cargos
-- cálculos financieros dependientes del estado
-- errores humanos en procesos operativos
-
-Por eso los sistemas financieros necesitan una segunda capa de verificación.
+Documenta qué sistema o registro es dueño de cada valor. Si los datos llegan de forma asíncrona, distingue un insumo temporalmente incompleto de una diferencia real.
 
 ---
 
-### Qué concilia TR0V1
+## Hacer repetible cada ejecución
 
-En TR0V1, el proceso de conciliación revisa principalmente la relación entre:
+Un job de conciliación puede programarse o activarse mediante un evento. Su frecuencia depende de los requisitos de actualización, el volumen de datos y la capacidad operativa; la frecuencia por sí sola no demuestra efectividad.
 
-- **pagos registrados**
-- **cargos aplicados al crédito**
-
-El objetivo es detectar divergencias entre lo que el sistema espera financieramente y lo que realmente está registrado.
-
-Esto permite identificar casos como:
-
-- pagos aplicados incorrectamente
-- cargos faltantes
-- cargos duplicados
-- inconsistencias en saldos
-
-La conciliación actúa como una verificación independiente del flujo principal de operaciones.
+Para reintentar de forma segura, asigna una identidad estable a cada comparación y haz idempotentes las escrituras de resultados. Procesa lotes acotados, conserva el avance cuando sea necesario y asegúrate de que una reejecución no cree excepciones duplicadas ni altere los registros financieros de origen.
 
 ---
 
-### Jobs diarios como mecanismo de control
+## Clasificar diferencias antes de actuar
 
-En TR0V1, los procesos de conciliación se ejecutan mediante **jobs programados diariamente**.
+No todas las diferencias tienen la misma causa. Un resultado útil puede distinguir entre:
 
-Estos jobs recorren los registros financieros clave y comparan:
+- datos faltantes o retrasados;
+- diferencias temporales entre registros relacionados;
+- una regla o transición de estado que requiere investigación;
+- un valor fuera de una tolerancia definida explícitamente.
 
-- pagos vs cargos
-- movimientos registrados vs estado financiero esperado
-
-El propósito no es modificar datos automáticamente, sino detectar desviaciones lo antes posible.
-
-Un control que corre todos los días reduce significativamente el riesgo de que inconsistencias permanezcan ocultas durante largos periodos.
+La clasificación debe conservar referencias a los registros comparados y a la versión de la regla utilizada. Esto brinda contexto suficiente para que una persona pueda reproducir la comparación.
 
 ---
 
-### Qué ocurre cuando se detecta una inconsistencia
+## Separar la detección de la corrección
 
-Cuando el job detecta una inconsistencia:
+El proceso de conciliación identifica y registra una diferencia. La ruta de corrección debe seguir las reglas de autorización y auditoría del producto.
 
-1. Se genera una **alerta operativa**.
-2. El registro queda marcado para revisión.
-3. La corrección queda pendiente de **confirmación manual**.
-
-Esto es importante porque las plataformas financieras deben evitar correcciones automáticas que puedan alterar el estado financiero del cliente sin revisión.
-
-La conciliación detecta el problema.  
-La operación decide cómo corregirlo.
+Algunas excepciones pueden resolverse automáticamente cuando la regla es determinista y la operación permite reintentos seguros. Otras requieren revisión autorizada. En ambos casos, registra la decisión y conserva los movimientos originales para que después se entienda el cambio.
 
 ---
 
-### Conciliación como propiedad del sistema
+## Diseñar para la revisión operativa
 
-Un sistema financiero robusto no depende únicamente de la corrección del flujo principal.
+Una cola de excepciones es útil cuando cada elemento explica qué se comparó, qué difirió y cuál es la siguiente acción disponible. Mantén visibles los reintentos, las alertas y el estado de resolución sin tratar una alerta como prueba de que el estado financiero ya fue corregido.
 
-También necesita mecanismos que verifiquen continuamente que el sistema sigue siendo consistente.
-
-Los jobs de conciliación cumplen ese rol:
-
-- detectan desviaciones
-- exponen inconsistencias
-- generan señales tempranas para soporte y operación
-
-Esto convierte la conciliación en una **propiedad estructural del sistema**, no en una herramienta reactiva.
-
----
-
-### Por qué este patrón importa
-
-En sistemas financieros, la pregunta no es si ocurrirán inconsistencias.  
-La pregunta es **cuándo y cómo se detectarán**.
-
-Diseñar conciliación como parte del sistema — y no como una herramienta externa — permite que las plataformas evolucionen sin perder control sobre sus flujos financieros.
+Estas decisiones convierten la conciliación en un control revisable: comprueba consistencia, conserva evidencia y deja explícita la política de corrección propia del producto.

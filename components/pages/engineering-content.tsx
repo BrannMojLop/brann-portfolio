@@ -67,7 +67,7 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
         <section aria-labelledby="engineering-recent-title" className="engineering-recent space-y-6">
           <header className="engineering-list-heading flex flex-wrap items-end justify-between gap-4 border-b border-border/70 pb-4">
             <div className="space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80 md:text-[11px]">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary-text md:text-[11px]">
                 {labels.currentWork}
               </p>
               <h2 id="engineering-recent-title" className="text-[1.55rem] font-semibold tracking-[-0.03em] md:text-[1.9rem]">
@@ -89,7 +89,7 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
                     </div>
                     <div className="space-y-3">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary/85">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary-text">
                           {post.tags[0] ?? themeCopy[post.theme].title}
                         </p>
                         {post.articleType ? (
@@ -109,11 +109,13 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
                     </div>
                   </div>
 
-                  <div className="engineering-recent-note-meta">
-                    <div>
-                      <p className="engineering-note-meta-label">{t.engineering.metadata.publishedOn}</p>
-                      <time dateTime={post.date}>{post.date}</time>
-                    </div>
+                    <div className="engineering-recent-note-meta">
+                    {post.date ? (
+                      <div>
+                        <p className="engineering-note-meta-label">{t.engineering.metadata.publishedOn}</p>
+                        <time dateTime={post.date}>{post.date}</time>
+                      </div>
+                    ) : null}
                     {post.readingTime ? (
                       <div>
                         <p className="engineering-note-meta-label">{t.engineering.metadata.readingTime}</p>
@@ -165,7 +167,7 @@ export function EngineeringContent({ posts }: { posts: EngineeringPost[] }) {
                   </h3>
                 </div>
                 <div className="engineering-earlier-note-meta">
-                  <time dateTime={post.date}>{post.date}</time>
+                  {post.date ? <time dateTime={post.date}>{post.date}</time> : null}
                   <Link
                     href={localizePath(locale, `/engineering/${post.slug}`)}
                     aria-label={`${labels.read}: ${post.title}`}

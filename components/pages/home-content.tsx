@@ -1,31 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Database, Landmark, Network, ServerCog } from "lucide-react";
+import { ArrowDownRight, ArrowRight } from "lucide-react";
 
 import { useLanguage } from "@/components/language-provider";
 import { Section } from "@/components/section";
-import { SystemCard } from "@/components/system-card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { localizePath } from "@/lib/routing";
 import { systems } from "@/lib/systems";
 
-const icons = [Network, ServerCog, Landmark, Database] as const;
+const technologies = ["Python", "FastAPI", "React", "AWS"];
 
 export function HomeContent() {
   const { locale, t } = useLanguage();
-  const [leadIntro, ...supportingIntro] = t.home.intro;
-  const stack =
-    locale === "en"
-      ? ["Python", "FastAPI", "React", "PostgreSQL", "Domain Modeling", "Evidence-based delivery"]
-      : ["Python", "FastAPI", "React", "PostgreSQL", "Modelado de Dominio", "Entrega basada en evidencia"];
-  const primarySignal = t.home.architectureSignals[0];
-  const PrimarySignalIcon = icons[0];
+  const copy = t.home.projectCopy;
+  const businext = systems.find((system) => system.slug === "businext-erp");
+  const tr0v1 = systems.find((system) => system.slug === "tr0v1-credit-platform");
+  const workforce = systems.find((system) => system.slug === "workforce");
+
+  if (!businext || !tr0v1 || !workforce) {
+    throw new Error("Home selected work is missing a system entry.");
+  }
 
   return (
     <>
-      <Section className="hero-stage pb-10 pt-8 sm:pt-10 md:pt-16 lg:pt-20">
+      <Section className="hero-stage relative isolate overflow-hidden border-b border-border/60 py-12 sm:py-14 md:py-16">
         <div aria-hidden className="hero-ambient">
           <div className="hero-grid" />
           <span className="hero-orbit hero-orbit-a" />
@@ -33,216 +32,121 @@ export function HomeContent() {
           <span className="hero-scanline" />
         </div>
 
-        <div className="hero-shell grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
-          <div className="space-y-8 lg:space-y-12">
-            <div className="hero-copy space-y-7 md:space-y-9">
-              <div className="hero-eyebrow flex items-center gap-3.5">
-                <span className="h-px w-12 bg-primary/35" />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/80 md:text-[11px]">
-                  {t.home.eyebrow}
-                </p>
-              </div>
+        <div className="relative mx-auto max-w-5xl">
+          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.18em] text-primary-text md:text-xs">
+            {t.home.eyebrow}
+          </p>
+          <h1 className="hero-title max-w-[22ch] text-[2.55rem] font-semibold leading-[1.03] tracking-[-0.045em] text-balance sm:text-5xl md:text-[4.25rem] md:leading-[1.02]">
+            {t.home.title}
+          </h1>
+          <p className="mt-6 max-w-[62ch] text-base leading-7 text-foreground/85 sm:text-lg sm:leading-8">
+            {t.home.intro}
+          </p>
 
-              <div className="space-y-5 md:space-y-7">
-                <h1 className="hero-title max-w-4xl text-[2.5rem] font-semibold leading-[0.92] tracking-[-0.065em] text-balance sm:text-[3.3rem] md:max-w-5xl md:text-[4.6rem] md:leading-[0.9] lg:max-w-[14ch] lg:text-[5.15rem]">
-                  {t.home.title}
-                </h1>
-
-                <div className="hero-intro max-w-[43rem]">
-                  <p className="max-w-[40rem] text-[1.08rem] leading-8 text-foreground/90 md:text-[1.24rem] md:leading-9">
-                    {leadIntro}
-                  </p>
-                </div>
-
-                <div className="hero-proof-inline max-w-[40rem] border-l border-primary/30 pl-4 md:pl-6">
-                  <div className="flex items-center gap-2.5">
-                    <PrimarySignalIcon aria-hidden className="size-4 shrink-0 text-primary" />
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary/85 md:text-[11px]">
-                      {primarySignal.title}
-                    </p>
-                  </div>
-                  <p className="mt-2 text-base font-semibold tracking-[-0.02em] text-foreground">
-                    {primarySignal.value}
-                  </p>
-                </div>
-
-                <div className="hero-actions flex flex-wrap gap-3 pt-1">
-                  <Link href={localizePath(locale, "/systems")}>
-                    <Button size="lg" className="group hero-cta-primary">
-                      {t.home.exploreSystems}
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                    </Button>
-                  </Link>
-                  <Link href={localizePath(locale, "/engineering")}>
-                    <Button size="lg" variant="outline" className="group hero-cta-secondary">
-                      {t.home.readNotes}
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                    </Button>
-                  </Link>
-                </div>
-
-                <div className="hero-supporting-intro max-w-[39rem] border-l border-primary/18 pl-4 md:pl-6">
-                  <div className="space-y-3.5 text-[0.98rem] leading-7 text-muted-foreground/95 md:text-[1.03rem] md:leading-8">
-                    {supportingIntro.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="hero-stack space-y-4.5">
-              <div className="space-y-3.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-foreground/52 md:text-[11px]">
-                  {t.home.stackLabel}
-                </p>
-                <div className="flex max-w-3xl flex-wrap gap-2.5">
-                  {stack.map((item) => (
-                    <Badge
-                      key={item}
-                      variant="secondary"
-                      className="hero-chip rounded-md border border-primary/10 bg-card/95 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)] md:text-[11px]"
-                    >
-                      {item}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <aside className="hero-panel rounded-2xl border border-border/70 bg-card/95 p-5 shadow-sm lg:p-6">
-            <div aria-hidden className="hero-panel-rail" />
-            <div className="mb-6 flex items-start justify-between gap-4 border-b border-border/70 pb-4">
-              <div className="space-y-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
-                  {t.home.signalBoard}
-                </p>
-                <p className="max-w-xs text-[0.95rem] leading-6 text-muted-foreground">
-                  {t.home.matrixNote}
-                </p>
-              </div>
-              <span className="whitespace-nowrap rounded-full border border-primary/15 bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-primary">
-                {t.home.profileBadge}
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {t.home.architectureSignals.map((signal, idx) => {
-                const Icon = icons[idx];
-
-                return (
-                  <article
-                    key={signal.title}
-                    className="data-float hero-signal-card rounded-xl border border-border/65 bg-background/75 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
-                  >
-                    <span aria-hidden className="hero-signal-ping" />
-                    <div className="flex items-center gap-2.5">
-                      <Icon className="mt-0.5 size-4 shrink-0 text-primary" />
-                      <p className="font-mono text-[10px] uppercase tracking-[0.17em] text-foreground/58 md:text-[11px]">
-                        {signal.title}
-                      </p>
-                    </div>
-                    <p className="mt-3 text-[1.06rem] font-semibold leading-6 tracking-[-0.025em] text-foreground">
-                      {signal.value}
-                    </p>
-                    <p className="mt-2.5 max-w-sm text-[0.87rem] leading-5 text-muted-foreground">
-                      {signal.note}
-                    </p>
-                  </article>
-                );
-              })}
-            </div>
-          </aside>
-        </div>
-      </Section>
-
-      <Section className="py-8">
-        <div className="rounded-2xl border border-border/70 bg-card/85 p-6">
-          <div className="border-b border-border/70 pb-4">
-            <h2 className="text-xl font-semibold tracking-tight">{t.home.matrixTitle}</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{t.home.matrixNote}</p>
-            <p className="mt-4 max-w-4xl text-xs leading-6 text-foreground/75 md:text-sm">
-              {t.home.workflowSequence}
-            </p>
-          </div>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {t.home.focusTracks.map((track) => (
-              <article key={track.name} className="rounded-xl border border-border/70 bg-background/80 p-5">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/75">{track.name}</p>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">{track.description}</p>
-              </article>
+          <div role="group" aria-label={t.home.stackLabel} className="mt-6 flex flex-wrap gap-2">
+            {technologies.map((technology) => (
+              <Badge
+                key={technology}
+                variant="secondary"
+                className="rounded-md border border-primary/15 bg-card/90 px-3 py-1.5 font-mono text-xs tracking-wide text-foreground"
+              >
+                {technology}
+              </Badge>
             ))}
           </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="#selected-work"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              {t.home.exploreSystems}
+              <ArrowDownRight aria-hidden className="size-4" />
+            </Link>
+            <Link
+              href={localizePath(locale, "/contact")}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card/70 px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              {t.home.contactCta}
+              <ArrowRight aria-hidden className="size-4" />
+            </Link>
+          </div>
         </div>
       </Section>
 
-      <Section className="py-4">
-        <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
-          <article className="rounded-2xl border border-border/70 bg-card/85 p-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80 md:text-[11px]">
-              {locale === "en" ? "THREE DIMENSIONS" : "TRES DIMENSIONES"}
+      <Section
+        id="selected-work"
+        title={t.home.majorSystemsTitle}
+        description={t.home.majorSystemsDesc}
+        className="scroll-mt-24 py-14 md:py-16"
+      >
+        <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+          {[businext, tr0v1].map((system, index) => {
+            const project = index === 0 ? copy.businext : copy.tr0v1;
+            const content = system.content[locale];
+
+            return (
+              <article
+                key={system.slug}
+                className="group flex h-full flex-col border-t-2 border-primary/60 bg-card/70 px-5 py-5 transition-colors hover:bg-card sm:px-6 sm:py-6"
+              >
+                <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary-text">
+                  {project.focus}
+                </p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                  {content.name}
+                </h3>
+                <p className="mt-3 max-w-[58ch] text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+                  {project.summary}
+                </p>
+                <Link
+                  href={localizePath(locale, `/systems#${system.slug}`)}
+                  className="mt-6 inline-flex min-h-11 w-fit items-center gap-2 text-sm font-semibold text-primary-text underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  {project.linkLabel}
+                  <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+
+        <article className="mt-5 flex flex-col gap-3 border-t border-border/70 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h3 className="text-lg font-semibold">{workforce.content[locale].name}</h3>
+              <p className="text-sm font-medium text-primary-text">{copy.workforce.status}</p>
+            </div>
+            <p className="mt-1 max-w-[68ch] text-sm leading-6 text-muted-foreground">
+              {copy.workforce.summary}
             </p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight">
-              {locale === "en"
-                ? "Systems I build, how I design them, and how I engineer software."
-                : "Los sistemas que construyo, cómo los diseño y cómo hago ingeniería de software."}
+          </div>
+          <Link
+            href={localizePath(locale, `/systems#${workforce.slug}`)}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-semibold text-primary-text underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            {copy.workforce.linkLabel}
+            <ArrowRight aria-hidden className="size-4" />
+          </Link>
+        </article>
+      </Section>
+
+      <Section className="border-t border-border/60 py-12 md:py-14">
+        <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.7fr)] md:gap-14">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {t.home.approachTitle}
             </h2>
-            <div className="mt-4 max-w-3xl space-y-4 text-sm leading-7 text-muted-foreground md:text-[0.98rem]">
-              <p>
-                {locale === "en"
-                  ? "Selected systems show the domain, architecture, and operational constraints behind the work."
-                  : "Los sistemas seleccionados muestran el dominio, la arquitectura y las restricciones operativas detrás del trabajo."}
-              </p>
-              <p>
-                {locale === "en"
-                  ? "The engineering workflow makes scope, responsibilities, evidence, and review visible before a change moves toward release."
-                  : "El flujo de ingeniería hace visibles el alcance, las responsabilidades, la evidencia y la revisión antes de que un cambio avance hacia la liberación."}
-              </p>
-            </div>
-          </article>
-
-          <aside className="rounded-2xl border border-border/70 bg-card/85 p-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/58 md:text-[11px]">
-              {locale === "en" ? "CONTINUE THROUGH THE PORTFOLIO" : "CONTINÚA POR EL PORTAFOLIO"}
+            <p className="mt-4 max-w-[68ch] text-base leading-7 text-muted-foreground">
+              {t.home.approach}
             </p>
-            <div className="mt-4 space-y-3">
-              <Link
-                href={localizePath(locale, "/systems")}
-                className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {locale === "en"
-                  ? "Explore Businext ERP, TR0V1, and Workforce as architecture cases."
-                  : "Explorar Businext ERP, TR0V1 y Workforce como casos de arquitectura."}
-              </Link>
-              <Link
-                href={localizePath(locale, "/about")}
-                className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {locale === "en"
-                  ? "Review professional background, current role, and engineering practice."
-                  : "Ver trayectoria profesional, rol actual y práctica de ingeniería."}
-              </Link>
-              <Link
-                href={localizePath(locale, "/engineering")}
-                className="block rounded-xl border border-border/65 bg-background/75 px-4 py-3 text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {locale === "en"
-                  ? "Read engineering notes about system design, PostgreSQL, concurrency, and evidence."
-                  : "Leer notas de ingeniería sobre diseño de sistemas, PostgreSQL, concurrencia y evidencia."}
-              </Link>
-            </div>
+          </div>
+          <aside className="border-l border-primary/40 pl-5 sm:pl-6">
+            <h3 className="text-lg font-semibold">{t.home.aiTitle}</h3>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+              {t.home.aiDescription}
+            </p>
           </aside>
-        </div>
-      </Section>
-
-      <Section id="systems" title={t.home.majorSystemsTitle} description={t.home.majorSystemsDesc}>
-        <div className="grid gap-6 md:grid-cols-2">
-          {systems.map((system) => (
-            <SystemCard key={system.slug} system={system} />
-          ))}
         </div>
       </Section>
     </>

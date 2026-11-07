@@ -6,6 +6,7 @@ export const size = {
 };
 
 export const contentType = "image/png";
+export const alt = "Brandon Mojica, Software Engineer specializing in Backend and Full-Stack enterprise systems";
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -23,18 +24,18 @@ export default function OpenGraphImage() {
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "74%" }}>
           <div style={{ fontSize: 22, letterSpacing: "0.3em", textTransform: "uppercase", color: "#5eead4" }}>
-            Software Architecture Portfolio
+            Software Engineering Portfolio
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
             <div style={{ fontSize: 74, fontWeight: 700, lineHeight: 1 }}>
               Brandon Mojica Lopez
             </div>
             <div style={{ fontSize: 34, lineHeight: 1.3, color: "#cbd5e1" }}>
-              Software engineer focused on architecture, backend systems, and business-critical platforms.
+              Business-critical software, from backend systems to complete web applications.
             </div>
           </div>
           <div style={{ display: "flex", gap: "16px", fontSize: 24, color: "#94a3b8" }}>
-            <span>Businext ERP</span>
+            <span>BusiNext ERP</span>
             <span>TR0V1 Credit Platform</span>
           </div>
         </div>
@@ -52,7 +53,7 @@ export default function OpenGraphImage() {
             color: "#5eead4",
           }}
         >
-          Architecture
+          Software Engineering
         </div>
       </div>
     ),

@@ -1,120 +1,67 @@
 ---
-title: "Reconciliation jobs as systemic control in financial platforms"
-summary: "Why reconciliation jobs should be designed as a continuous control mechanism that detects inconsistencies between payments and charges, generates operational alerts, and preserves financial integrity in credit platforms such as TR0V1."
-date: "2026-03-09"
+title: "Reconciliation jobs for financial workflows"
+summary: "How to design repeatable reconciliation jobs that compare recorded financial movements with expected account state and route exceptions for review."
 theme: "financial-systems"
 articleType: "Control Pattern"
 readingTime: "8 min read"
 tags:
   - Reconciliation
   - Financial Systems
-  - Control Jobs
-  - Credit Platform
+  - Background Jobs
+  - Exception Handling
 ---
 
-### Reconciliation is more than a support tool
+## Reconciliation is part of the system design
 
-In many financial systems, reconciliation is introduced late in the design.
+Reconciliation compares related records or an independently derived state to find differences that the main transaction path cannot explain on its own.
 
-It is added as a support tool to investigate issues when users report something unusual.
-
-This approach often fails.
-
-In credit and payment platforms, reconciliation should not be an occasional tool. It should be designed as a **system-level control mechanism**.
-
-Its purpose is not only to review data but to continuously verify that financial flows remain consistent.
+It is useful to design the comparison alongside the workflow that produces the records. That makes the source of truth, relevant identifiers, and expected state transitions explicit before an exception needs investigation.
 
 ---
 
-### The real issue: operations that look valid
+## Define what the job compares
 
-In financial platforms, many errors do not immediately break the system.
+Start with a specific relationship rather than a broad scan. For example, a reconciliation rule may compare:
 
-A payment may be recorded correctly from a technical perspective but still be applied incorrectly relative to the credit state.
+- a payment with its allocation to an account;
+- a charge with its effective period;
+- ledger movements with a derived balance.
 
-A charge may exist in the database but not reflect the expected financial balance.
-
-These issues typically arise from:
-
-- retry operations
-- concurrent execution
-- charge generation errors
-- calculations dependent on credit state
-- operational mistakes
-
-Because of this, financial systems require a second verification layer.
+Document which system or record owns each value. If data can arrive asynchronously, distinguish a temporarily incomplete input from a true difference.
 
 ---
 
-### What TR0V1 reconciles
+## Make each run repeatable
 
-In TR0V1, reconciliation focuses primarily on the relationship between:
+A reconciliation job may be scheduled or triggered by an event. Its cadence depends on the freshness requirement, data volume, and operational capacity; frequency alone does not demonstrate effectiveness.
 
-- **recorded payments**
-- **charges applied to the credit account**
-
-The goal is to detect divergence between the financial state expected by the system and what is actually recorded.
-
-This helps identify cases such as:
-
-- incorrectly applied payments
-- missing charges
-- duplicated charges
-- balance inconsistencies
-
-Reconciliation acts as an independent verification layer for financial flows.
+For safe retries, give each comparison a stable identity and make output writes idempotent. Process bounded batches, persist progress where needed, and ensure a rerun does not create duplicate exceptions or alter the source financial records.
 
 ---
 
-### Daily jobs as a control mechanism
+## Classify differences before acting
 
-In TR0V1, reconciliation runs through **scheduled daily jobs**.
+Not every mismatch has the same cause. A useful result can distinguish:
 
-These jobs traverse financial records and compare:
+- missing or delayed input;
+- timing differences between related records;
+- a rule or state transition that needs investigation;
+- a value outside an explicitly defined tolerance.
 
-- payments vs charges
-- recorded movements vs expected financial state
-
-The goal is not to modify data automatically but to detect inconsistencies as early as possible.
-
-Running these checks daily significantly reduces the risk of hidden financial drift.
+The classification should retain references to the compared records and the rule version used. This gives reviewers enough context to reproduce the comparison.
 
 ---
 
-### What happens when inconsistencies are detected
+## Separate detection from correction
 
-When a reconciliation job detects an inconsistency:
+The reconciliation process identifies and records a difference. A correction path then follows the authorization and audit rules of the product.
 
-1. An **operational alert** is generated.
-2. The record is flagged for review.
-3. Correction requires **manual confirmation**.
-
-This prevents automatic fixes from altering the customer's financial state incorrectly.
-
-The system therefore **detects issues automatically**, but correction remains a controlled operational decision.
+Some exceptions may be resolved automatically when the rule is deterministic and the operation is safe to repeat. Others need an authorized review. In either case, record the decision and preserve the original movements so a later reviewer can understand the change.
 
 ---
 
-### Reconciliation as a system property
+## Design for operational review
 
-A robust financial system does not rely solely on the correctness of its main operational flow.
+An exception queue is useful only when each item explains what was compared, what differed, and which next action is available. Keep retries, alerting, and resolution status visible without treating an alert as proof that the financial state has been corrected.
 
-It also requires mechanisms that continuously verify system consistency.
-
-Reconciliation jobs fulfill this role:
-
-- detecting divergence
-- exposing inconsistencies
-- providing early signals for operations and support
-
-This makes reconciliation a **structural property of the platform**, not just a reactive tool.
-
----
-
-### Why this pattern matters
-
-In financial systems the question is not whether inconsistencies will occur.
-
-The real question is **when they will be detected and how quickly they can be addressed**.
-
-Designing reconciliation as part of the platform ensures financial systems can evolve without losing control over their financial flows.
+These design choices make reconciliation a reviewable control: it checks consistency, preserves evidence, and leaves product-specific correction policy explicit.

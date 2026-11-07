@@ -313,11 +313,11 @@ reviewed.
 ## Workforce as a bounded example
 
 Workforce is the concrete system behind this article. It is an independent
-workforce-management product under active local development, not production
-software. The local implementation has a FastAPI backend, a PostgreSQL
+workforce-management product with a documented local-development scope, not
+presented as production software. The local implementation has a FastAPI backend, a PostgreSQL
 transactional core, and a multi-organization foundation.
 
-Its current architecture separates AuthenticationContext from TenantContext,
+Its documented architecture separates AuthenticationContext from TenantContext,
 derives organization context on the backend after membership resolution, and
 uses PostgreSQL roles and RLS-related boundaries alongside application
 authorization. User, Membership, and Employee are separate concepts.

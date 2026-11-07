@@ -1,18 +1,17 @@
 ---
 title: "ERP platform architecture for real-world operations"
-summary: "A practical view of ERP architecture based on Businext: a modular monolith built with FastAPI where each business area runs as an independent mounted module within the same backend platform."
-date: "2026-03-09"
+summary: "A practical view of ERP architecture based on BusiNext: a modular monolith built with FastAPI where each business area runs as an independent mounted module within the same backend platform."
 theme: "architecture"
 articleType: "Architecture Guide"
 readingTime: "10 min read"
 tags:
   - ERP Architecture
   - Enterprise Software
-  - Businext
+  - BusiNext
   - Backend Systems
 ---
 
-### The real problem of ERP architecture
+## The real problem of ERP architecture
 
 ERP architecture discussions often start with technologies. Frameworks, databases or deployment models.
 
@@ -29,7 +28,7 @@ ERP architecture must support all of them while remaining understandable as the 
 
 That is why ERP architecture is mainly about **boundaries, contracts and domain ownership**.
 
-### Starting from the operational model
+## Starting from the operational model
 
 Before choosing services or infrastructure, the platform must answer a more fundamental question:
 
@@ -45,9 +44,9 @@ Typical ERP flows include:
 
 When architecture starts from tables instead of operational flows, the backend often becomes easy to scaffold but hard to evolve.
 
-### Decomposition by business domains
+## Decomposition by business domains
 
-In Businext the system was decomposed around business domains.
+In BusiNext the system was decomposed around business domains.
 
 Each business area operates as a module with clear responsibilities:
 
@@ -73,7 +72,7 @@ Each domain maintains its own engineering structure:
 
 This approach allows each domain to evolve without spreading changes across the entire platform.
 
-### Architecture designed for evolution
+## Architecture designed for evolution
 
 Many internal systems work well in the early stages even with weak boundaries. Problems appear when:
 
@@ -91,25 +90,23 @@ A practical ERP architecture emphasizes:
 - data consistency over implementation convenience  
 - visibility into operational state transitions
 
-### Why the modular monolith worked
+## The modular monolith decision
 
 For many ERP platforms adopting microservices too early increases operational complexity before the domain model stabilizes.
 
-Businext was built as a **modular monolith**.
+BusiNext was built as a **modular monolith**.
 
-This allowed:
+This design groups:
 
-- a simple deployment boundary  
-- direct integration between domains  
-- explicit internal contracts  
-- lower operational complexity for a single developer  
-- fast system evolution while the model matured
+- domain modules within one FastAPI backend;
+- routes and services organized around business areas;
+- cross-domain workflows that still require explicit coordination.
 
-A modular monolith only works when domain boundaries are real. Without clear boundaries it only centralizes coupling.
+A modular monolith still needs clear domain boundaries. Without them, it can centralize coupling without clarifying ownership.
 
-### Where good architecture pays off
+## Properties to evaluate
 
-Solid ERP architecture produces benefits in three areas.
+When evaluating ERP architecture, consider how the design handles three areas.
 
 **Change isolation**
 
@@ -123,7 +120,7 @@ The system must make it possible to understand what happened, why it happened, a
 
 Reports should reflect truth owned by each domain.
 
-### A practical rule
+## A practical rule
 
 A useful ERP design rule is simple:
 
@@ -131,4 +128,4 @@ A useful ERP design rule is simple:
 
 If ownership is unclear, the workflow is probably relying on accidental coupling.
 
-**Businext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**
+**BusiNext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**

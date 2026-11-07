@@ -9,34 +9,20 @@ function resolveSiteUrl() {
     throw new Error("NEXT_PUBLIC_SITE_URL must be configured for production deployments.");
   }
 
-  return "http://localhost:3000";
+  return "https://brandonmojica.dev";
 }
 
 export const siteConfig = {
   name: "Brandon Mojica Lopez | Software Engineer",
   shortName: "Brandon Mojica",
   description:
-    "Software engineer portfolio focused on software architecture, backend systems, ERP platforms, financial workflows, and business-critical operations.",
+    "Software Engineer portfolio focused on Backend and Full-Stack engineering for business-critical enterprise systems.",
   url: resolveSiteUrl(),
   ogImage: "/opengraph-image",
   engineeringOgImage: "/engineering/opengraph-image",
-  keywords: [
-    "Software Engineer Portfolio",
-    "Software Architecture",
-    "Backend Systems",
-    "ERP Platforms",
-    "Financial Workflows",
-    "Enterprise Software",
-    "PostgreSQL",
-    "System Design",
-    "Specification-driven Development",
-    "Engineering Workflow",
-  ],
   author: {
     name: "Brandon Mojica Lopez",
-    role: "Software Engineer focused on software architecture and backend systems",
-    jobTitle: "Head of Systems",
-    company: "Elements Of Steel",
+    role: "Software Engineer · Backend & Full-Stack",
   },
   links: {
     github: "https://github.com/BrannMojLop",
@@ -45,15 +31,42 @@ export const siteConfig = {
   },
 } as const;
 
+export const localizedSiteKeywords = {
+  en: [
+    "Software Engineer Portfolio",
+    "Backend and Full-Stack Engineering",
+    "Python FastAPI",
+    "React",
+    "AWS",
+    "Systems Architecture",
+    "ERP Platforms",
+    "Financial Workflows",
+    "Enterprise Software",
+    "AI-assisted Software Engineering",
+  ],
+  es: [
+    "Portafolio de ingeniero de software",
+    "Ingeniería Backend y Full-Stack",
+    "Python FastAPI",
+    "React",
+    "AWS",
+    "Arquitectura de sistemas",
+    "Plataformas ERP",
+    "Flujos financieros",
+    "Software empresarial",
+    "Ingeniería de software asistida por IA",
+  ],
+} as const;
+
 export const localizedSiteMetadata = {
   en: {
-    title: "Brandon Mojica | Software Engineer",
+    title: "Brandon Mojica | Software Engineer · Backend & Full-Stack",
     description:
-      "Software engineer focused on software architecture and backend systems. I design and lead the evolution of business-critical platforms around real operational constraints.",
+      "Software Engineer with backend strength and Full-Stack experience, building business-critical software across enterprise systems.",
   },
   es: {
-    title: "Brandon Mojica | Ingeniero de Software",
+    title: "Brandon Mojica | Ingeniero de Software · Backend y Full-Stack",
     description:
-      "Ingeniero de software enfocado en arquitectura de software y sistemas backend. Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
+      "Ingeniero de software con fortaleza en backend y experiencia Full-Stack, enfocado en software empresarial para operaciones críticas.",
   },
 } as const;

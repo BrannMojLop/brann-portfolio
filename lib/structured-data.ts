@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n";
 import { getLocalizedUrl } from "@/lib/routing";
-import { siteConfig } from "@/lib/site";
+import { localizedSiteKeywords, localizedSiteMetadata, siteConfig } from "@/lib/site";
 
 type BreadcrumbItem = {
   name: string;
@@ -12,7 +12,7 @@ type ArticleInput = {
   title: string;
   description: string;
   path: string;
-  datePublished: string;
+  datePublished?: string;
   dateModified?: string;
   keywords?: string[];
 };
@@ -25,21 +25,10 @@ export function buildPersonSchema(locale: Locale) {
     "@type": "Person",
     "@id": `${siteConfig.url}#person`,
     name: siteConfig.author.name,
-    jobTitle: siteConfig.author.jobTitle,
-    description: siteConfig.description,
+    description: localizedSiteMetadata[locale].description,
     url: getLocalizedUrl(locale, "/about"),
     email: siteConfig.links.email.replace("mailto:", ""),
-    knowsAbout: siteConfig.keywords,
-    alumniOf: [
-      {
-        "@type": "CollegeOrUniversity",
-        name: "UTEL",
-      },
-    ],
-    worksFor: {
-      "@type": "Organization",
-      name: siteConfig.author.company,
-    },
+    knowsAbout: localizedSiteKeywords[locale],
     sameAs,
   };
 }
@@ -124,8 +113,8 @@ export function buildArticleSchema({
     "@type": "Article",
     headline: title,
     description,
-    datePublished,
-    dateModified: dateModified || datePublished,
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
     inLanguage: locale === "en" ? "en-US" : "es-MX",
     mainEntityOfPage: articleUrl,
     url: articleUrl,

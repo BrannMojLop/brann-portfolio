@@ -85,7 +85,7 @@ export default async function EngineeringPostPage({ params }: Props) {
             title: frontmatter.title,
             description: frontmatter.seoDescription || frontmatter.summary,
             path: `/engineering/${slug}`,
-            datePublished: frontmatter.date,
+            datePublished: frontmatter.date ? String(frontmatter.date) : undefined,
             keywords: frontmatter.tags,
           }),
           buildBreadcrumbSchema("en", [
@@ -109,7 +109,7 @@ export default async function EngineeringPostPage({ params }: Props) {
           <p className="article-deck">{frontmatter.summary}</p>
           <div className="article-meta" aria-label="Article details">
             {frontmatter.articleType ? <span>{frontmatter.articleType}</span> : null}
-            <time dateTime={frontmatter.date}>{frontmatter.date}</time>
+            {frontmatter.date ? <time dateTime={frontmatter.date}>{frontmatter.date}</time> : null}
             {frontmatter.readingTime ? <span>{frontmatter.readingTime}</span> : null}
           </div>
         </header>

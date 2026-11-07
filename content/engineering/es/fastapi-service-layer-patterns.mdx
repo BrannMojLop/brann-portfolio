@@ -1,7 +1,6 @@
 ---
 title: "Patrones de capa de servicio en FastAPI para sistemas empresariales"
 summary: "Cómo estructurar routers, schemas y servicios para mantener aislada la lógica de negocio y evitar que las APIs se conviertan en simples wrappers de base de datos."
-date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Guía de Implementación"
 readingTime: "10 min de lectura"
@@ -25,7 +24,7 @@ En ese punto, la lógica del sistema ya no tiene un lugar claro.
 
 Los sistemas empresariales — como ERP o plataformas financieras — necesitan una estructura más fuerte porque el comportamiento del negocio cambia constantemente. Si la arquitectura no separa responsabilidades, la API pierde estabilidad.
 
-### Patrón 1: Routers deliberadamente delgados
+## Patrón 1: Routers deliberadamente delgados
 
 Los routers deberían encargarse principalmente de responsabilidades HTTP:
 
@@ -38,7 +37,7 @@ Cuando un router comienza a validar estados de dominio, escribir en múltiples r
 
 Routers delgados no son una preferencia estética. Son una forma de mantener separada la lógica de transporte del caso de uso.
 
-### Patrón 2: Servicios modelados alrededor de casos de uso
+## Patrón 2: Servicios modelados alrededor de casos de uso
 
 Una función de servicio útil representa una **acción de negocio** concreta.
 
@@ -61,7 +60,7 @@ Esto también mejora el lenguaje del código.
 Leer `cerrar_periodo_contable()` comunica intención de negocio.  
 Leer `update_period_status()` solo comunica un cambio técnico.
 
-### Patrón 3: Repositorios aislados de reglas de flujo
+## Patrón 3: Repositorios aislados de reglas de flujo
 
 Los repositorios existen para acceder a datos de forma consistente.
 
@@ -76,7 +75,7 @@ Cuando un repositorio empieza a decidir reglas de negocio, el límite entre pers
 La capa de servicio debe decidir **por qué** algo es válido.  
 El repositorio solo debería ayudar a persistir **qué cambió**.
 
-### Patrón 4: Respuestas orientadas al proceso
+## Patrón 4: Respuestas orientadas al proceso
 
 En APIs empresariales, devolver solo el modelo actualizado no siempre es suficiente.
 
@@ -89,7 +88,7 @@ Una respuesta orientada al proceso puede necesitar comunicar:
 
 Esto mantiene a los consumidores alineados con el flujo de negocio en lugar de obligarlos a inferir significado desde campos aislados.
 
-### Patrón 5: Centralizar efectos laterales
+## Patrón 5: Centralizar efectos laterales
 
 En sistemas empresariales, muchas acciones generan efectos adicionales:
 
@@ -103,7 +102,7 @@ Estos efectos deberían coordinarse desde el mismo servicio que ejecuta el caso 
 
 Dispersar estos efectos entre hooks, utilidades o handlers vuelve el sistema más difícil de depurar.
 
-### Patrón 6: Probar casos de uso como contratos
+## Patrón 6: Probar casos de uso como contratos
 
 Las pruebas backend más valiosas validan **contratos de negocio**.
 
@@ -116,7 +115,7 @@ Una buena prueba debería demostrar:
 
 Esto es mucho más natural cuando los servicios representan casos de uso claros.
 
-### Patrón 7: Hacer visibles los modos de falla
+## Patrón 7: Hacer visibles los modos de falla
 
 Los sistemas empresariales están llenos de escenarios como:
 
@@ -128,7 +127,7 @@ Estos no son errores accidentales. Son parte del dominio.
 
 Una buena capa de servicio hace visibles estas condiciones y documenta las decisiones de negocio en el código.
 
-### Por qué este patrón es especialmente importante en FastAPI
+## Por qué este patrón es especialmente importante en FastAPI
 
 FastAPI ofrece gran flexibilidad. No impone una arquitectura única.
 

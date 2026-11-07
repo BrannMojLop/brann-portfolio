@@ -1,131 +1,93 @@
 ---
-title: "Controles de consistencia para flujos de crédito, pagos e intereses"
-summary: "Patrones de implementación que reducen eventos duplicados, transiciones inválidas y deriva de conciliación en plataformas financieras como TR0V1."
-date: "2026-03-09"
+title: "Controles de consistencia para flujos de crédito y pagos"
+summary: "Patrones de diseño para idempotencia, transiciones de estado válidas, reglas de intereses y conciliación en APIs financieras."
 theme: "financial-systems"
 articleType: "Nota de Sistemas Financieros"
 readingTime: "9 min de lectura"
 tags:
-  - TR0V1
   - Flujos de Crédito
+  - Idempotencia
   - Conciliación
   - Sistemas Financieros
 ---
 
-### Por qué los controles de consistencia aparecen en sistemas financieros
+## Dónde puede originarse una inconsistencia financiera
 
-En plataformas financieras, los errores raramente aparecen como fallas técnicas evidentes. Con más frecuencia se manifiestan como **inconsistencias operativas**.
+Las operaciones financieras suelen cruzar varios límites: una solicitud a la API, una transacción de base de datos, un cálculo programado y una conciliación posterior. Cada límite puede introducir reintentos, estados desactualizados o fallas parciales que afecten el resultado.
 
-En TR0V1, algunos de los problemas reales que obligaron a introducir controles fueron:
+Algunas preguntas útiles de diseño son:
 
-- pagos duplicados
-- cargos duplicados
-- cálculo incorrecto de intereses
-- cortes generados con fechas inconsistentes
-- errores al diferir deudas a parcialidades
-- reglas financieras aplicadas de forma incorrecta en eventos operativos
+- ¿Puede recibirse la misma solicitud más de una vez?
+- ¿Qué estado de la cuenta permite esta operación?
+- ¿Qué reglas de producto y periodo aplican al cálculo?
+- ¿Cómo se comparan los movimientos registrados con el estado esperado de la cuenta?
 
-Un ejemplo típico fue el cálculo de intereses. No todos los cargos deben generar interés, y en particular **no se debe cobrar interés sobre interés**. Cuando esa regla no está explícita en el sistema, los cálculos pueden derivar silenciosamente.
-
-Otro caso ocurre al diferir deudas a parcialidades. El cálculo de intereses depende del contexto del crédito, del periodo activo y de la forma en que se generó el corte financiero.
-
-En este tipo de plataformas, la dificultad no está en guardar datos. Está en preservar la **consistencia del flujo financiero**.
+Son inquietudes generales del software de crédito y pagos. Las respuestas dependen de las reglas del producto y del modelo de datos.
 
 ---
 
-### Problemas comunes en flujos financieros
+## Hacer idempotentes las operaciones que pueden reintentarse
 
-Los sistemas de crédito y pagos suelen presentar ciertos riesgos estructurales:
+Un timeout de red no indica al cliente si el servidor confirmó la operación. Por eso, un reintento puede repetirla si la API no define cómo reconocer solicitudes duplicadas.
 
-- operaciones repetidas por reintentos
-- procesos batch que ejecutan lógica sobre datos parcialmente actualizados
-- cálculos dependientes del estado del crédito
-- inconsistencias entre fechas de corte y fechas de pago
+Una operación idempotente conserva el mismo efecto de negocio cuando se envía nuevamente la misma solicitud. El diseño puede combinar:
 
-Si estas condiciones no se controlan explícitamente, el sistema puede seguir operando mientras acumula inconsistencias difíciles de detectar.
+- una clave de idempotencia asociada a la operación de negocio;
+- una restricción de unicidad en la base de datos para la identidad correspondiente;
+- un resultado persistido para que un reintento reciba la respuesta original;
+- límites transaccionales que confirmen juntos el cambio de negocio y su registro de idempotencia.
 
----
-
-### Control 1: prevenir duplicados desde la base de datos
-
-El primer nivel de defensa contra inconsistencias es evitar que ciertas operaciones puedan registrarse más de una vez.
-
-En TR0V1 esto se maneja principalmente mediante:
-
-- **unique constraints** en combinaciones críticas
-- validaciones previas al aplicar operaciones
-- verificación de estado antes de ejecutar una acción financiera
-
-Este enfoque evita que el backend registre cargos o pagos duplicados incluso cuando existen reintentos o ejecuciones simultáneas.
+La clave debe representar la operación deseada, no solo la conexión HTTP. También hay que definir expiración, reutilización y solicitudes repetidas con datos distintos.
 
 ---
 
-### Control 2: validación del estado antes de ejecutar operaciones
+## Validar las transiciones de estado antes de aplicarlas
 
-Muchas operaciones financieras solo son válidas bajo ciertas condiciones.
+Las acciones financieras son válidas bajo condiciones definidas. Un pago, cargo, reverso o cambio de parcialidades debe comprobar el estado actual de la cuenta y las reglas de negocio de la transición.
 
-Por ejemplo:
+Una transición puede modelarse así:
 
-- un pago solo debe aplicarse si el estado de la cuenta lo permite
-- un cargo no debe repetirse si ya fue generado para el periodo
-- una deuda diferida debe calcular intereses bajo reglas distintas
+1. Cargar el estado relevante dentro del límite transaccional.
+2. Validar la acción solicitada contra la transición permitida y sus invariantes.
+3. Aplicar el cambio y sus registros contables de forma atómica cuando el modelo de datos lo permita.
+4. Guardar contexto suficiente para explicar la decisión después.
 
-En TR0V1 estas validaciones se realizan antes de ejecutar cualquier transición de estado.
-
-Además, varias acciones requieren **confirmaciones explícitas del usuario** o **aprobaciones con niveles de permisos**, lo que añade una capa adicional de control operativo.
-
----
-
-### Control 3: cálculo de intereses controlado por eventos y jobs
-
-El cálculo de intereses es uno de los puntos más sensibles en una plataforma crediticia.
-
-En TR0V1 se combina:
-
-- cálculo en eventos operativos
-- cálculo periódico mediante **jobs**
-- cortes financieros por periodo
-
-Este enfoque permite mantener el cálculo consistente incluso cuando el sistema recibe múltiples operaciones sobre el mismo crédito.
+Esto hace explícitas las transiciones inválidas y permite detectar estados obsoletos en solicitudes concurrentes.
 
 ---
 
-### Control 4: conciliación posterior
+## Tratar las reglas de intereses como reglas del producto
 
-Aun con controles preventivos, los sistemas financieros necesitan mecanismos de verificación posteriores.
+Los cálculos de intereses dependen del acuerdo, el principal, el historial del saldo, el periodo aplicable y las reglas específicas del producto. Estos insumos deben ser explícitos, en lugar de inferirse de los registros disponibles al momento del cálculo.
 
-En TR0V1 existe un proceso de **conciliación** que revisa flujos clave como:
-
-- pagos vs cargos
-- movimientos registrados vs estado financiero esperado
-
-Este proceso permite detectar inconsistencias que no se capturan inmediatamente en el flujo principal.
+Para que el cálculo sea repetible, define la fecha efectiva y los límites del periodo, conserva visible la versión de la regla y permite ejecutar el cálculo de nuevo de forma segura. La regla exacta pertenece al contrato del producto; un patrón técnico no debe definirla de manera implícita.
 
 ---
 
-### Qué ocurre cuando se detecta una inconsistencia
+## Conciliar movimientos registrados con el estado esperado
 
-Cuando el sistema detecta una inconsistencia durante conciliación:
+Los controles preventivos no resuelven todas las dudas que aparecen después de procesar una operación. La conciliación compara registros relacionados o saldos calculados de forma independiente para encontrar diferencias que requieren explicación.
 
-- se genera una alerta
-- el caso queda marcado para revisión
-- la corrección requiere confirmación manual
+Algunas dimensiones de comparación son:
 
-Esto es importante porque una corrección automática podría afectar el estado financiero del cliente.
+- pagos y sus aplicaciones;
+- cargos y los periodos que cubren;
+- movimientos contables y el saldo resultante de la cuenta.
 
-Por esta razón, el sistema **detecta inconsistencias automáticamente**, pero la corrección queda sujeta a revisión operativa.
+Cada comparación necesita una fuente de verdad documentada, tolerancias cuando hay redondeo y una forma de distinguir una excepción real de un insumo incompleto o retrasado.
 
 ---
 
-### La consistencia como propiedad del sistema
+## Hacer revisables las excepciones
 
-En plataformas financieras, la consistencia no es solo un detalle técnico. Es una propiedad fundamental del sistema.
+Cuando una comparación encuentra una diferencia, conserva las referencias de entrada, la versión de las reglas y el contexto del cálculo. Clasifica la excepción para que se pueda distinguir entre datos faltantes, una diferencia temporal, una transición rechazada y una posible corrección.
 
-Los controles combinan:
+La detección y la corrección son decisiones distintas. La ruta de corrección debe estar autorizada, ser trazable y permitir reintentos seguros; el nivel de automatización depende de las reglas financieras y los controles operativos.
 
-- restricciones en base de datos
-- validaciones de estado
-- confirmaciones operativas
-- conciliación posterior
+---
 
-Este conjunto de mecanismos permite que el sistema evolucione sin comprometer la integridad de los flujos financieros.
+## Conservar el rastro de auditoría de las decisiones
+
+Un registro de auditoría debe explicar qué cambió, qué acción de negocio lo originó y qué regla o transición de estado se aplicó. Debe mantener la relación entre una solicitud y sus movimientos financieros resultantes sin duplicar innecesariamente datos sensibles de pago.
+
+La idempotencia, la validación de estado, la conciliación y la auditabilidad atienden modos de falla distintos. En conjunto ayudan a razonar sobre los flujos financieros y mantienen explícitas las reglas del producto.

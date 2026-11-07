@@ -8,12 +8,10 @@ const locales = ["en", "es"] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getEngineeringPostSlugs();
-  const now = new Date();
 
   const staticEntries = locales.flatMap((locale) =>
     basePaths.map((path) => ({
       url: getLocalizedUrl(locale, path),
-      lastModified: now,
       alternates: {
         languages: {
           "en-US": getLocalizedUrl("en", path),
@@ -29,7 +27,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       return {
         url: getLocalizedUrl(locale, path),
-        lastModified: now,
         alternates: {
           languages: {
             "en-US": getLocalizedUrl("en", path),

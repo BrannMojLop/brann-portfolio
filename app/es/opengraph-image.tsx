@@ -6,6 +6,7 @@ export const size = {
 };
 
 export const contentType = "image/png";
+export const alt = "Brandon Mojica, ingeniero de software con experiencia Backend y Full-Stack en sistemas empresariales";
 
 export default function SpanishOpenGraphImage() {
   return new ImageResponse(
@@ -23,18 +24,18 @@ export default function SpanishOpenGraphImage() {
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "74%" }}>
           <div style={{ fontSize: 22, letterSpacing: "0.3em", textTransform: "uppercase", color: "#5eead4" }}>
-            Portafolio de Ingenieria
+            PORTAFOLIO DE INGENIERÍA
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
             <div style={{ fontSize: 74, fontWeight: 700, lineHeight: 1 }}>
               Brandon Mojica Lopez
             </div>
             <div style={{ fontSize: 34, lineHeight: 1.3, color: "#cbd5e1" }}>
-              Arquitectura de sistemas, plataformas ERP y backend con Python FastAPI para operacion real.
+              Software empresarial crítico: desde sistemas backend hasta aplicaciones web completas.
             </div>
           </div>
           <div style={{ display: "flex", gap: "16px", fontSize: 24, color: "#94a3b8" }}>
-            <span>Businext ERP</span>
+            <span>BusiNext ERP</span>
             <span>TR0V1 Credit Platform</span>
           </div>
         </div>
@@ -52,7 +53,7 @@ export default function SpanishOpenGraphImage() {
             color: "#5eead4",
           }}
         >
-          Sistemas
+          Ingeniería de software
         </div>
       </div>
     ),

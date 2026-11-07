@@ -1,13 +1,13 @@
 import { SystemsContent } from "@/components/pages/systems-content";
 import { StructuredData } from "@/components/structured-data";
+import { messages } from "@/lib/i18n";
 import { createPageMetadata } from "@/lib/metadata";
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
   locale: "es",
-  title: "Sistemas definidos por restricciones operativas",
-  description:
-    "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
+  title: messages.es.systems.title,
+  description: messages.es.systems.description,
   path: "/systems",
 });
 
@@ -18,8 +18,8 @@ export default function SpanishSystemsPage() {
         data={[
           buildCollectionPageSchema(
             "es",
-            "Sistemas definidos por restricciones operativas",
-            "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
+            messages.es.systems.title,
+            messages.es.systems.description,
             "/systems",
           ),
           buildBreadcrumbSchema("es", [

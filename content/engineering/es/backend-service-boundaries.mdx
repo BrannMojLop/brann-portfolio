@@ -1,7 +1,6 @@
 ---
 title: "Diseñar servicios en FastAPI alrededor de transacciones de negocio y no de CRUD"
 summary: "Por qué las APIs empresariales deben modelar acciones del negocio — pagos, aprobaciones, conciliaciones o movimientos — en lugar de exponer directamente operaciones CRUD sobre tablas."
-date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Patrón Backend"
 readingTime: "9 min de lectura"
@@ -12,7 +11,7 @@ tags:
   - Arquitectura Backend
 ---
 
-### Cuando las APIs CRUD dejan de funcionar
+## Cuando las APIs CRUD dejan de funcionar
 
 Muchas APIs internas se sienten limpias el primer día porque reflejan perfectamente la base de datos.
 
@@ -35,7 +34,7 @@ Esas acciones representan **transacciones de negocio**, no operaciones CRUD.
 
 Cuando el backend sigue modelando la API como acceso directo a tablas, la lógica termina dispersándose entre routers, modelos, jobs y condiciones específicas de UI.
 
-### El problema con APIs orientadas a tablas
+## El problema con APIs orientadas a tablas
 
 Los endpoints CRUD parten de una suposición implícita: la fila de base de datos representa la unidad de intención del sistema.
 
@@ -56,7 +55,7 @@ Las transiciones de estado se vuelven implícitas y difíciles de explicar.
 
 La primera versión del sistema funciona. Las siguientes empiezan a romperse bajo complejidad.
 
-### Modelar transacciones de negocio en la capa de servicio
+## Modelar transacciones de negocio en la capa de servicio
 
 Una capa de servicio funciona mejor cuando representa una **transacción completa del dominio**.
 
@@ -84,7 +83,7 @@ El servicio:
 
 De esta forma la política del sistema vive en una capa visible y explícita.
 
-### Estructura práctica en FastAPI
+## Estructura práctica en FastAPI
 
 Una estructura común en backends empresariales es:
 
@@ -105,7 +104,7 @@ La pregunta real es:
 
 Cuando los servicios modelan casos de uso, esa respuesta es visible en código.
 
-### Las transiciones de estado deben ser explícitas
+## Las transiciones de estado deben ser explícitas
 
 Uno de los mayores riesgos en software empresarial es fingir que las transiciones son simples updates.
 
@@ -126,7 +125,7 @@ Una buena capa de servicio debe hacer explícito:
 
 Cuando esto es explícito, la API gana estabilidad incluso si la implementación interna cambia.
 
-### El tradeoff
+## El tradeoff
 
 Agregar una capa de servicio introduce más estructura.
 
@@ -139,7 +138,7 @@ menos complejidad accidental cuando el sistema crece
 
 Cuando el backend soporta jobs, tooling administrativo, soporte operativo y consumidores externos, es importante tener un lugar donde el caso de uso se explique claramente.
 
-### Cómo cambia el diseño de APIs
+## Cómo cambia el diseño de APIs
 
 Cuando las APIs representan **acciones de negocio** y no tablas, la superficie cambia.
 
@@ -150,7 +149,7 @@ Los consumidores dependen de intención y no de persistencia.
 
 Esto vuelve la API más estable frente a cambios internos.
 
-### Impacto en producción
+## Impacto en producción
 
 En sistemas reales el beneficio principal es operativo.
 

@@ -48,7 +48,7 @@ export function SystemCard({ system, showDetails = false }: { system: SystemEntr
         <CardFooter className="mt-auto">
           <Link
             href={localizePath(locale, "/systems")}
-            className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
+            className="text-sm font-medium text-primary-text transition-colors hover:text-primary-text"
           >
             {content.ctaLabel}
           </Link>

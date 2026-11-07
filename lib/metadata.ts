@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import type { Locale } from "@/lib/i18n";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/routing";
-import { siteConfig } from "@/lib/site";
+import { localizedSiteKeywords, siteConfig } from "@/lib/site";
 
 type CreatePageMetadataInput = {
   locale: Locale;
@@ -32,7 +32,7 @@ export function createPageMetadata({
   return {
     title: fullTitle,
     description,
-    keywords: [...siteConfig.keywords],
+    keywords: [...localizedSiteKeywords[locale]],
     alternates: {
       canonical,
       languages: getLanguageAlternates(path),
@@ -49,7 +49,10 @@ export function createPageMetadata({
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: `${siteConfig.shortName} OpenGraph image`,
+          alt:
+            locale === "en"
+              ? "Brandon Mojica, Software Engineer with Backend and Full-Stack experience"
+              : "Brandon Mojica, ingeniero de software con experiencia Backend y Full-Stack",
         },
       ],
     },

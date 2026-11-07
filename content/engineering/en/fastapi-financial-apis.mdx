@@ -1,133 +1,93 @@
 ---
-title: "Consistency controls for credit, payment, and interest workflows"
-summary: "Implementation patterns that reduce duplicate events, invalid state changes, and reconciliation drift in financial platforms such as TR0V1."
-date: "2026-03-09"
+title: "Consistency controls for credit and payment workflows"
+summary: "Design patterns for idempotency, valid state transitions, interest rules, and reconciliation in financial APIs."
 theme: "financial-systems"
 articleType: "Financial Systems Note"
 readingTime: "9 min read"
 tags:
-  - TR0V1
   - Credit Workflows
+  - Idempotency
   - Reconciliation
   - Financial Systems
 ---
 
-### Why consistency controls emerge in financial systems
+## Where inconsistency can enter a financial workflow
 
-In financial platforms, errors rarely appear as obvious technical failures. More often they appear as **operational inconsistencies**.
+Financial operations often cross several boundaries: an API request, a database transaction, a scheduled calculation, and a later reconciliation. Each boundary creates a place where retries, stale state, or partial failure can affect the result.
 
-In TR0V1 several real situations forced the introduction of stronger consistency controls:
+Useful design questions include:
 
-- duplicated payments
-- duplicated charges
-- incorrect interest calculations
-- incorrectly generated financial cutoffs
-- inconsistencies in cutoff and payment dates
-- errors when converting debt into installments
+- Can the same request be received more than once?
+- Which account state permits this operation?
+- Which period and product rules apply to a calculation?
+- How can recorded movements be compared with the expected account state?
 
-Interest calculation was one of the most sensitive cases. Not every charge should generate interest, and in particular **interest should not generate additional interest**.
-
-If that rule is not explicitly modeled, the system can silently produce incorrect financial outcomes.
-
-Another example occurs when debts are converted into installment plans. Interest must be calculated based on the correct financial context and cutoff period.
-
-In financial systems the difficulty is not storing data — it is preserving **financial flow consistency**.
+These are general design concerns for credit and payment software. Their answers depend on the product's rules and data model.
 
 ---
 
-### Common risks in financial flows
+## Make retryable operations idempotent
 
-Credit and payment platforms typically face structural risks such as:
+Network timeouts do not tell a client whether the server committed a request. A retry can therefore repeat an operation unless the API defines how duplicate requests are recognized.
 
-- repeated operations caused by retries
-- batch processes running over partially updated data
-- calculations dependent on credit state
-- inconsistencies between cutoff dates and payment dates
+An idempotent operation produces the same business effect when the same request is submitted again. A design may combine:
 
-Without explicit controls, a system can continue operating while accumulating hidden inconsistencies.
+- an idempotency key scoped to the business operation;
+- a database uniqueness constraint for the relevant business identity;
+- a stored result that lets a retry receive the original outcome;
+- transaction boundaries that commit the business change and its idempotency record together.
 
----
-
-### Control 1: preventing duplicates at the database level
-
-The first line of defense is preventing critical operations from being recorded more than once.
-
-In TR0V1 this is handled mainly through:
-
-- **unique constraints** on key combinations
-- validation checks before applying operations
-- state verification before executing financial actions
-
-This prevents duplicated charges or payments even under retries or concurrent execution.
+The key must represent the intended operation, not merely the HTTP connection. Expiration, reuse, and conflicting payloads also need explicit rules.
 
 ---
 
-### Control 2: state validation before operations
+## Validate state transitions before applying them
 
-Financial actions are only valid under specific conditions.
+Financial actions are valid only under defined conditions. A payment, charge, reversal, or installment change should check the current account state and the business rules for the transition.
 
-For example:
+A transition can be modeled as:
 
-- a payment should only apply if the account state allows it
-- a charge should not be generated twice for the same period
-- installment conversions must follow different interest rules
+1. Load the relevant state within the transaction boundary.
+2. Validate the requested action against the allowed transition and its invariants.
+3. Apply the state change and related ledger entries atomically where the data model permits.
+4. Record enough context to explain the decision later.
 
-In TR0V1 these validations occur before state transitions are executed.
-
-Some actions also require **user confirmation** or **permission-based approvals**, adding an operational control layer.
-
----
-
-### Control 3: interest calculation via events and scheduled jobs
-
-Interest calculation is one of the most sensitive parts of a credit platform.
-
-TR0V1 combines:
-
-- event-driven calculations
-- periodic scheduled jobs
-- period-based financial cutoffs
-
-This approach maintains consistent calculations even when multiple operations affect the same credit account.
+This makes invalid transitions explicit and gives concurrent requests a clear point at which to detect stale state.
 
 ---
 
-### Control 4: reconciliation after execution
+## Treat interest rules as product rules
 
-Even with preventive controls, financial systems require verification processes.
+Interest calculations depend on the agreement, principal, balance history, applicable period, and product-specific rules. These inputs should be explicit rather than inferred from whichever records happen to be available during a calculation.
 
-TR0V1 performs reconciliation processes that check flows such as:
-
-- payments vs charges
-- recorded movements vs expected financial state
-
-This allows the platform to detect inconsistencies that were not captured during the original operation.
+For repeatable calculations, define the effective date and period boundaries, keep the rule version visible, and make reruns safe. The exact rule belongs to the product contract; a technical pattern should not silently define it.
 
 ---
 
-### What happens when inconsistencies are detected
+## Reconcile recorded movements with expected state
 
-When reconciliation detects inconsistencies:
+Preventive controls cannot answer every question after an operation has been processed. Reconciliation compares related records or independently derived balances to find differences that need explanation.
 
-- an alert is generated
-- the case is flagged for review
-- corrections require manual confirmation
+Examples of comparison dimensions include:
 
-This prevents automatic fixes from altering the customer's financial state incorrectly.
+- payments and their applications;
+- charges and the periods they cover;
+- ledger movements and the resulting account balance.
 
-The system therefore **detects issues automatically**, but correction remains a controlled operational decision.
+Each comparison needs a documented source of truth, tolerance where rounding is involved, and a way to distinguish a real exception from an incomplete or delayed input.
 
 ---
 
-### Consistency as a system property
+## Make exceptions reviewable
 
-In financial platforms, consistency is not just a technical concern. It is a fundamental property of the system.
+When a comparison finds a difference, preserve the input references, rule version, and calculation context. Classify the exception so an operator can distinguish missing data, a timing difference, a rejected transition, and a potential correction.
 
-Achieving it requires combining:
+Detection and correction are separate decisions. The correction path should be authorized, traceable, and safe to retry; the appropriate degree of automation depends on the financial rules and operational controls.
 
-- database constraints
-- state validation
-- operational confirmations
-- reconciliation processes
+---
 
-Together these mechanisms allow the system to evolve without compromising the integrity of financial flows.
+## Keep an audit trail of decisions
+
+An audit record should explain what changed, which business action caused it, and which rule or state transition was applied. It should preserve the link between a request and its resulting financial movements without duplicating sensitive payment data unnecessarily.
+
+Idempotency, state validation, reconciliation, and auditability address different failure modes. Together they make financial workflows easier to reason about while keeping product rules explicit.

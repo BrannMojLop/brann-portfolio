@@ -1,7 +1,6 @@
 ---
 title: "Defining ERP domain boundaries before modules start to scale"
-summary: "How Businext ERP separates each business area — CRM, inventory, sales, finance, human resources and suppliers — into independent modules mounted as FastAPI applications. The goal is to let each domain evolve without breaking the overall operation of the system."
-date: "2026-03-09"
+summary: "How BusiNext organizes finance, inventory, sales, HR, and supplier domains in a modular FastAPI backend, with explicit routes, services, and cross-domain trade-offs."
 theme: "architecture"
 articleType: "Architecture Note"
 readingTime: "8 min read"
@@ -9,15 +8,15 @@ tags:
   - ERP
   - Domain Boundaries
   - Modular Architecture
-  - Businext
+  - BusiNext
 ---
 
-### When an ERP becomes hard to change
+## When an ERP becomes hard to change
 
 An ERP does not become difficult to maintain when it grows in lines of code.  
 It becomes difficult when modules start depending on rules that actually belong to another business area.
 
-That was the risk when designing Businext ERP.
+That was the risk when designing BusiNext ERP.
 
 In real enterprise systems, business areas are not isolated. Finance needs inventory context to validate certain events. Sales needs the financial state of the customer. Human resources manages permissions that affect the entire platform.
 
@@ -27,7 +26,7 @@ The problem appears when those dependencies are resolved implicitly: direct join
 
 At that point the system still works, but it starts losing something more important than performance: clarity.
 
-### The scaling problem in ERP systems is not only technical
+## The scaling problem in ERP systems is not only technical
 
 As an ERP grows, each business area expands its responsibility.
 
@@ -43,22 +42,22 @@ Conditional logic spreads across services.
 
 The system still runs, but every change introduces uncertainty.
 
-### The architectural decision in Businext
+## The architectural decision in BusiNext
 
-From the beginning, Businext ERP was designed around business domains.
+From the beginning, BusiNext ERP was designed around business domains.
 
 Each business area operates as an independent module:
 
-CRM  
-HRM  
-SRM  
-PMS  
-EMS  
-RMS  
-IMS  
-SMS  
-AMS  
-EIS
+- BusiNext CRM — customers, portfolios, and commercial analysis
+- BusiNext HRM — human resources
+- BusiNext SRM — suppliers
+- BusiNext PMS — procurement
+- BusiNext EMS — expense control
+- BusiNext RMS — revenue
+- BusiNext IMS — inventory and products
+- BusiNext SMS — sales, pricing, and discounts
+- BusiNext AMS — accounting
+- BusiNext EIS — electronic invoicing
 
 In practice this is implemented as FastAPI applications mounted inside the same backend.
 
@@ -71,9 +70,9 @@ Each domain maintains its own engineering structure:
 - API routers  
 - domain services  
 
-This allows each domain to evolve within clear boundaries while still sharing the same production database.
+This structure makes routes and services visible by domain within the backend. Workflows that cross domains still require explicit coordination.
 
-### Why domain boundaries are architecture
+## Why domain boundaries are architecture
 
 Separating domains is not just folder organization.
 
@@ -87,7 +86,7 @@ Without those decisions, rules start leaking into queries, endpoints, and script
 
 That is how ERP systems become fragile.
 
-### Why direct table access usually starts the problem
+## Why direct table access usually starts the problem
 
 In many internal systems, reading another module’s table seems harmless.
 
@@ -102,9 +101,9 @@ This is dangerous in ERP systems because many rules are not obvious from the dat
 
 Those rules belong to the domain, not to persistence.
 
-### A practical model for defining boundaries
+## A practical model for defining boundaries
 
-In Businext, a useful approach was asking four questions:
+In BusiNext, a useful approach was asking four questions:
 
 - Which business area owns the rule  
 - Which areas consume the result  
@@ -113,7 +112,7 @@ In Businext, a useful approach was asking four questions:
 
 This keeps architecture decisions grounded in business ownership.
 
-### The tradeoff: more explicit coordination
+## The tradeoff: more explicit coordination
 
 Clear boundaries do not reduce complexity.  
 They make it visible.
@@ -121,34 +120,10 @@ They make it visible.
 Some workflows require coordination across modules.  
 Designing explicit service contracts can feel slower than direct queries.
 
-But in enterprise systems this prevents hidden coupling and large regression surfaces.
+Explicit contracts make dependencies easier to identify, but they do not eliminate coupling. Domain ownership and cross-domain behavior still need to be reviewed together.
 
-### Operational effect
+## Operational trade-offs
 
-The biggest benefit was not aesthetic.
-
-It was the ability to make changes with confidence.
-
-Financial logic stayed isolated.  
-Inventory behavior remained predictable.  
-New features had to declare their dependencies explicitly.
-
-That is what keeps an ERP maintainable.
-
-Not the absence of complexity, but clear ownership of business rules.
-
-**Businext was not designed as microservices, but as a modular monolith where each business domain evolves inside a FastAPI application mounted within the same backend.**
-
-This is especially true when:
-
-- the ERP is still growing in modules;
-- multiple people touch the same platform over time;
-- accounting and operational workflows must stay consistent.
-
-## Operational effect
-
-The strongest benefit was not aesthetic code quality. It was decision safety. Finance changes became easier to isolate. Inventory behavior stayed coherent. New features had to declare their dependencies instead of quietly inventing them.
-
-That is what keeps an ERP maintainable. Not the absence of complexity, but the presence of explicit ownership.
+The documented BusiNext shape is a modular monolith: domain routes and services are organized in a FastAPI backend. This keeps the design within a shared backend boundary; cross-domain workflows still need explicit contracts and coordination. The trade-off is clear module ownership within one backend rather than independently deployed services.
 
 If you are designing or refactoring a similar platform, a useful next step is to pair this boundary work with [FastAPI service design around business transactions](/engineering/backend-service-boundaries) and with a broader view on [ERP platform architecture](/engineering/erp-platform-architecture).

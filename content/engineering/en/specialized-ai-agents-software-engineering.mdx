@@ -201,9 +201,8 @@ the remaining unverified conditions should stay visible.
 
 ## The portfolio runtime as a safe public example
 
-The portfolio itself provides a concrete example without requiring private
-business details. The current Article 01 refresh moved through a sequence like
-this:
+The September 2026 refresh of the portfolio's specification-driven development
+note provides an example of a bounded workflow:
 
 ```text
 Discovery
@@ -217,25 +216,22 @@ Discovery
     → human QA / release decision
 ```
 
-The roles had different purposes. `portfolio-orchestrator` routed the work.
-`portfolio-strategist` and `case-study-architect` shaped the approved direction.
-A human resolved the claims and editorial boundaries. `portfolio-maintainer`
-integrated the approved MDX. `portfolio-experience-reviewer` and
-`portfolio-seo-accessibility-reviewer` checked the experience and
-SEO/accessibility. Technical validation collected local evidence. The work was
-not treated as released merely because implementation and automated checks
-completed.
+The runtime documents separate responsibilities for routing, strategy, case
+design, implementation, experience review, and SEO/accessibility review. These
+role names describe workflow responsibilities and handoffs; they do not establish
+that each role runs as an independently executable agent. The September refresh
+records claim decisions, editorial review, implementation, technical checks, and
+a separate human release decision.
 
 This example demonstrates workflow structure, not a universal engineering
 outcome. It also demonstrates why public evidence should describe the shape of
 the process rather than exposing hidden prompts, model settings, or private
 project context.
 
-This is an engineering-control example, not a claim that specialized agents
-independently build or release production software. In the Article 01 refresh,
-local implementation evidence did not close the release: desktop and rendered
-checks passed, while mobile verification and the human release decision remained
-separate gates.
+In the September 2026 validation record, desktop rendered review was complete
+while mobile QA remained a separate open checkpoint. The record shows how
+implementation evidence and a release decision were handled as distinct stages
+in that refresh.
 
 ## Where human judgment remains
 

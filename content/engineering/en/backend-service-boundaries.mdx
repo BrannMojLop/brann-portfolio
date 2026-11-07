@@ -1,7 +1,6 @@
 ---
 title: "Designing FastAPI services around business transactions instead of CRUD"
 summary: "Why enterprise APIs should model business actions — payments, approvals, reconciliations, or movements — instead of directly exposing CRUD operations over tables."
-date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Backend Pattern"
 readingTime: "9 min read"
@@ -12,7 +11,7 @@ tags:
   - Backend Architecture
 ---
 
-### When CRUD APIs stop working
+## When CRUD APIs stop working
 
 Many internal APIs feel clean on day one because they map perfectly to database tables.
 
@@ -37,7 +36,7 @@ These actions represent **business transactions**, not CRUD operations.
 
 When the API remains table-oriented, business rules start spreading across routers, models, jobs and UI logic.
 
-### The issue with table-oriented APIs
+## The issue with table-oriented APIs
 
 CRUD endpoints assume the database row is the primary unit of intention.
 
@@ -56,7 +55,7 @@ Validation spreads across layers.
 Responses reflect persistence instead of process meaning.  
 State transitions become implicit and harder to debug.
 
-### Modeling transactions in the service layer
+## Modeling transactions in the service layer
 
 A service layer works best when it models a **complete business transaction**.
 
@@ -74,7 +73,7 @@ Services coordinate the business use case.
 
 This keeps the policy of the system visible and centralized.
 
-### A practical FastAPI structure
+## A practical FastAPI structure
 
 A common structure in enterprise backends:
 
@@ -91,7 +90,7 @@ When a payment fails the real question is:
 
 Service-oriented design makes that answer visible in code.
 
-### State transitions must be explicit
+## State transitions must be explicit
 
 One of the biggest risks in enterprise backends is pretending state transitions are simple updates.
 
@@ -110,7 +109,7 @@ allowed destination states
 side effects of the transition  
 audit records produced
 
-### The tradeoff
+## The tradeoff
 
 A service layer introduces more structure.
 
@@ -121,7 +120,7 @@ The tradeoff is:
 more deliberate design early  
 far less accidental complexity later
 
-### How API design changes
+## How API design changes
 
 When APIs model business actions instead of tables:
 
@@ -132,7 +131,7 @@ clients depend on intent rather than persistence
 
 This makes APIs more resilient to internal refactoring.
 
-### Production impact
+## Production impact
 
 In real systems the main benefit is operational clarity.
 

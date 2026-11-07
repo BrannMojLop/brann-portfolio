@@ -1,7 +1,6 @@
 ---
 title: "FastAPI service layer patterns for enterprise systems"
 summary: "How to structure routers, schemas, and services to keep business logic isolated and prevent APIs from becoming simple database wrappers."
-date: "2026-03-09"
 theme: "backend-engineering"
 articleType: "Implementation Guide"
 readingTime: "10 min read"
@@ -25,7 +24,7 @@ At that point the system no longer has a clear place where business logic lives.
 
 Enterprise systems require stronger structure because business behavior evolves continuously. If responsibilities are not separated, the API becomes unstable.
 
-### Pattern 1: Intentionally thin routers
+## Pattern 1: Intentionally thin routers
 
 Routers should mainly handle HTTP concerns:
 
@@ -38,7 +37,7 @@ When routers begin validating domain states, writing multiple repositories and c
 
 Thin routers preserve the separation between transport logic and business use cases.
 
-### Pattern 2: Services built around use cases
+## Pattern 2: Services built around use cases
 
 A service function should represent a **business action**.
 
@@ -58,7 +57,7 @@ A service should:
 
 This approach also improves code readability because the function names represent business intent.
 
-### Pattern 3: Keep repositories focused on data access
+## Pattern 3: Keep repositories focused on data access
 
 Repositories exist to provide consistent access to data.
 
@@ -73,7 +72,7 @@ When repositories start encoding business flow semantics, the boundary between p
 Services decide **why** something is valid.  
 Repositories persist **what changed**.
 
-### Pattern 4: Process-oriented responses
+## Pattern 4: Process-oriented responses
 
 In enterprise APIs returning only the updated model is often not enough.
 
@@ -86,7 +85,7 @@ A response may need to communicate:
 
 This keeps API consumers aligned with the business flow rather than forcing them to infer meaning from isolated fields.
 
-### Pattern 5: Centralize side effects
+## Pattern 5: Centralize side effects
 
 Enterprise actions often generate additional effects:
 
@@ -100,7 +99,7 @@ These effects should be coordinated from the same service that executes the use 
 
 Spreading them across hooks and utilities makes the system harder to debug.
 
-### Pattern 6: Test use cases as contracts
+## Pattern 6: Test use cases as contracts
 
 The most valuable backend tests validate **business contracts**.
 
@@ -113,7 +112,7 @@ A strong test demonstrates:
 
 Explicit services make these tests far easier to write.
 
-### Pattern 7: Make failure modes visible
+## Pattern 7: Make failure modes visible
 
 Enterprise platforms include many cases such as:
 
@@ -125,7 +124,7 @@ These scenarios are part of the domain.
 
 A strong service layer makes these conditions explicit and documents business decisions in the code.
 
-### Why this pattern matters in FastAPI
+## Why this pattern matters in FastAPI
 
 FastAPI is flexible and does not enforce a single architecture.
 

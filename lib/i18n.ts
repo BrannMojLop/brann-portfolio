@@ -35,71 +35,54 @@ export const messages = {
       architectureNotes: "View system architecture",
     },
     home: {
-      eyebrow: "SYSTEMS ENGINEERING PORTFOLIO",
-      title: "Software engineer focused on software architecture and backend systems.",
-      intro: [
-        "I design and lead the evolution of business-critical platforms around real operational constraints.",
-        "My work connects business rules, domain modeling, backend architecture, and maintainable APIs across enterprise and financial workflows.",
-      ],
-      stackLabel: "ENGINEERING FOCUS",
-      profileBadge: "ENGINEERING PROFILE",
-      exploreSystems: "Explore Systems",
-      readNotes: "Read Engineering Notes",
-      signalBoard: "Business-critical platforms",
-      matrixTitle: "How I engineer software",
-      matrixNote:
-        "A current, human-led workflow from problem framing to evidence and release gates.",
-      majorSystemsTitle: "Selected systems",
-      majorSystemsDesc:
-        "I describe each selected system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
-      architectureSignals: [
-        {
-          title: "BUSINESS DOMAINS",
-          value: "Finance | HR | Sales | Inventory",
-          note: "Business process modeling and explicit operational rules.",
+      eyebrow: "SOFTWARE ENGINEER · BACKEND & FULL-STACK",
+      title: "I build business-critical software, from backend systems to complete web applications.",
+      intro:
+        "I connect React interfaces, Python and FastAPI services, and relational data to build enterprise software.",
+      stackLabel: "CORE TECHNOLOGIES",
+      exploreSystems: "View selected work",
+      majorSystemsTitle: "Selected work",
+      majorSystemsDesc: "Two business systems, with their domain challenges and technical decisions.",
+      projectCopy: {
+        businext: {
+          focus: "Enterprise resource planning",
+          summary:
+            "An ERP spanning finance, sales, inventory, human resources, and accounting. My work centers on backend and systems evolution around business rules and service boundaries.",
+          linkLabel: "Read the BusiNext ERP case",
         },
-        {
-          title: "BACKEND ARCHITECTURE",
-          value: "FastAPI + Service Layers",
-          note: "APIs and service boundaries that keep business logic understandable.",
+        tr0v1: {
+          focus: "Credit operations",
+          summary:
+            "Credit workflows for installments, interest, payments, reconciliation, and statements. My work centers on architecture and backend evolution; its APIs serve administrative tools and client interfaces.",
+          linkLabel: "Read the TR0V1 case",
         },
-        {
-          title: "DATA & AUTHORIZATION",
-          value: "PostgreSQL + tenant boundaries",
-          note: "Relational integrity, transaction boundaries, and layered authorization.",
+        workforce: {
+          status: "Local-development scope · Not production software",
+          summary:
+            "A workforce-management system with documented organization, people, and scheduling workflows.",
+          linkLabel: "Read the Workforce case",
         },
-      ],
-      focusTracks: [
-        {
-            name: "SPECIFY BEFORE BUILDING",
-            description:
-            "Use SDD to make scope, constraints, decisions, and acceptance evidence explicit.",
-          },
-          {
-            name: "SEPARATE RESPONSIBILITIES",
-            description:
-            "Plan architecture first, then keep planning, implementation, and review distinct.",
-          },
-          {
-            name: "REVIEW WITH EVIDENCE",
-            description:
-            "Use bounded AI-assisted roles, explicit handoffs, independent review, and release gates.",
-          },
-        ],
-      workflowSequence:
-        "Problem framing → Discovery → SDD / Architecture → Implementation plan → Specialized AI-assisted roles → Implementation → Independent review → Evidence / QA → Release gate",
+      },
+      approachTitle: "How I approach the work",
+      approach:
+        "I use business rules and operating constraints to shape APIs and data, then check changes against agreed requirements.",
+      aiTitle: "AI-assisted engineering",
+      aiDescription:
+        "I use AI for defined analysis and implementation tasks. I check results against requirements and remain responsible for technical and release decisions.",
+      contactCta: "Discuss a role or project",
     },
     systems: {
       title: "Systems shaped by operational constraints",
       description:
-        "I describe each system through its context, my responsibility, architecture decisions, constraints, and current verified state.",
+        "Explore enterprise and financial systems through their purpose, technical decisions, constraints, and documented responsibilities.",
       businessContextLabel: "Context",
       responsibilityLabel: "My responsibility",
       solutionLabel: "What it solves",
+      purposeLabel: "System purpose",
+      decisionsLabel: "Technical decisions",
       stackLabel: "Technology context",
       architectureLabel: "Architecture decisions",
-      constraintsLabel: "Constraints",
-      impactLabel: "Current verified state",
+      constraintsLabel: "Engineering considerations",
     },
     engineering: {
       title: "Engineering Notes",
@@ -155,172 +138,67 @@ export const messages = {
       ],
     },
     about: {
-      title: "About",
+      title: "From business rules to working software.",
       description:
-        "Software engineer focused on software architecture and backend systems, designing and leading the evolution of business-critical platforms.",
+        "I’m Brandon Mojica Lopez, a Software Engineer with a backend focus and Full-Stack experience. I connect business rules, APIs, data, and interfaces to build software around how a business operates.",
       metadata: {
         title: "About",
         description:
-          "Professional profile of Brandon Mojica Lopez, focused on software architecture, backend systems, and business-critical platforms.",
+          "Software Engineer with backend strength and Full-Stack experience in enterprise systems, technical decisions, and AI-assisted engineering practice.",
       },
-      intro: {
-        eyebrow: "ENGINEERING PROFILE",
-        title: "Software engineer focused on software architecture and backend systems.",
-        lead:
-          "I design and lead the evolution of business-critical platforms around real operational constraints.",
-        paragraphs: [
-          "My work connects business rules, domain modeling, backend architecture, and maintainable APIs across enterprise and financial workflows.",
-          "I design and evolve ERP, credit, and financial systems by translating domain rules into explicit services, APIs, state transitions, and operational controls.",
-          "The focus is practical: make boundaries clear, keep rules close to the domain, and build systems that can evolve without losing operational clarity.",
-        ],
-        stats: [
-          { value: "Head of Systems", label: "Elements Of Steel · 2019–Present" },
-          { value: "Career progression", label: "QA · Junior development · Project leadership" },
-          { value: "Full-stack development", label: "Alongside systems leadership" },
-        ],
-        badges: ["ERP Platforms", "Backend Architecture", "PostgreSQL", "System Design", "Engineering Workflow"],
-      },
-      build: {
-        title: "Systems I design and build",
-        description:
-          "Systems shaped by real operational constraints rather than demonstration assumptions.",
-        items: [
-          {
-            title: "Enterprise platforms",
-            description:
-              "ERP platforms that integrate finance, sales, inventory, human resources, dashboards, and accounting workflows.",
-          },
-          {
-            title: "Backend service architecture",
-            description:
-              "API platforms with explicit business logic, traceable state transitions, and clear service boundaries.",
-          },
-          {
-            title: "Financial systems",
-            description:
-              "Credit, interest, payments, reconciliation, and account statements where consistency and traceability are part of the architecture.",
-          },
-        ],
-      },
-      background: {
-        title: "Professional path",
-        description:
-          "A progression inside real business operations, from QA and junior development through project leadership, systems leadership, and full-stack development.",
-        paragraphs: [
-          "I joined Elements Of Steel in 2019. Over time, my work progressed through QA, junior software development, project leadership, and ultimately Head of Systems together with full-stack software development.",
-          "The focus throughout this progression has been connecting software with the real needs of business operations. I design and evolve systems where domain rules, service boundaries, and maintainability are part of the engineering work.",
-          "My academic background includes a Computer Systems Engineering degree and a Master’s Degree in Data Science for Business from UTEL.",
-        ],
-        highlights: [
-          "Head of Systems at Elements Of Steel.",
-          "Progression through QA, junior development, and project leadership.",
-          "Full-stack software development across ERP, credit, and financial systems.",
-          "Spanish — Native · English — B1 · Intermediate.",
-        ],
-      },
-      workflow: {
-        title: "How I engineer software",
-        description:
-          "In current work, I use specifications and architecture-first planning to make scope, constraints, decisions, and acceptance evidence explicit before implementation.",
-        sequence:
-          "Problem framing → Discovery → SDD / Architecture → Implementation plan → Specialized AI-assisted roles → Implementation → Independent review → Evidence / QA → Release gate",
-        note:
-          "AI can accelerate bounded analysis and implementation support, but engineering responsibility remains human. Handoffs record decisions, evidence, open questions, and acceptance criteria.",
-      },
-      systemsThinking: {
-        title: "Architecture principles",
-        description:
-          "Architecture should reduce operational risk and make system complexity explicit, understandable and evolvable.",
-        principles: [
-          {
-            title: "Model the business before the code",
-            description:
-            "Start with business flows, responsibilities, and failure points before designing the technical model.",
-          },
-          {
-            title: "Keep logic close to the domain",
-            description:
-            "Use service layers and explicit domain logic instead of thin CRUD around the database.",
-          },
-          {
-            title: "Make boundaries explicit",
-            description:
-            "Clear domain boundaries and expressive APIs help systems evolve without becoming fragile.",
-          },
-          {
-            title: "Design for traceability",
-            description:
-            "Predictable state transitions, auditability, and operational controls belong in the system model from the beginning.",
-          },
-        ],
-      },
-      technologyFocus: {
-        title: "Technology focus",
-        description:
-          "A curated technical focus for designing, building, and evolving enterprise systems with a strong backend orientation.",
-        groups: [
-          {
-            title: "Backend & APIs",
-            items: ["Python", "FastAPI", "SQLAlchemy", "Pydantic", "REST APIs"],
-          },
-          {
-            title: "Data & Persistence",
-            items: ["PostgreSQL", "MySQL / MariaDB", "Relational integrity", "Transaction boundaries"],
-          },
-          {
-            title: "Architecture & System Design",
-            items: ["Domain modeling", "Concurrency", "Idempotency", "Authorization boundaries", "Multi-tenant isolation"],
-          },
-          {
-            title: "Product, Platform & Workflow",
-            items: ["React", "TypeScript", "AWS", "Nginx", "SDD", "Independent review", "Release gates"],
-          },
-        ],
-      },
-      lookingFor: {
-        title: "Current technical focus",
-        description:
-          "Software architecture, backend systems, and business-critical platforms.",
-        paragraphs: [
-          "My work focuses on architecture, maintainability, and domain clarity.",
-          "I design and evolve systems where clear boundaries and operational consistency matter.",
-        ],
-        opportunities: [
-          "ERP platforms",
-          "Financial workflows",
-          "Backend service architecture",
-          "Domain modeling and maintainability",
-        ],
-      },
+      systemsTitle: "Backend and Full-Stack in practice",
+      systemsDescription:
+        "My work spans enterprise operations and financial workflows, with responsibilities grounded in each system’s documented scope.",
+      businextTitle: "BusiNext ERP",
+      businextDescription:
+        "I work on backend and systems evolution around its business rules, service boundaries, and operational constraints.",
+      tr0v1Title: "TR0V1 Credit Platform",
+      tr0v1Description:
+        "I work on architecture and backend evolution for financial rules and state transitions. Its APIs serve administrative tools and client interfaces.",
+      workforceTitle: "Workforce",
+      workforceStatus: "Local-development scope · not production software",
+      workforceDescription:
+        "The documented local-development scope covers organization, people, scheduling, and an administrative interface.",
+      approachTitle: "How I work",
+      approachDescription:
+        "I translate business rules into clear APIs, data boundaries, and application workflows, then review changes against agreed requirements.",
+      approachPrinciples: [
+        { title: "Start with the domain", description: "Make important business rules and operating needs explicit before shaping the technical model." },
+        { title: "Keep boundaries clear", description: "Give services and interfaces responsibilities that are understandable and maintainable." },
+        { title: "Review against requirements", description: "Check implementation evidence against the agreed behavior before technical and release decisions." },
+      ],
+      aiTitle: "AI-assisted engineering",
+      aiDescription:
+        "I use AI-supported specialist roles for focused analysis, implementation support, and review. I check outputs against requirements and retain responsibility for technical and release decisions. My engineering notes document this practice; Applied AI in products remains a growth area.",
+      focusTitle: "Technical focus",
+      focusDescription:
+        "Python · FastAPI · React · relational data · AWS within the systems documented in this portfolio.",
+      systemsCta: "Explore the systems",
+      contactCta: "Discuss an opportunity",
     },
     contact: {
-      title: "Contact",
+      title: "Let’s discuss a role or a software project.",
       description:
-        "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
-      intro:
-        "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
-      cardIntro:
-        "If you want to discuss architecture for business software, domain modeling, APIs, PostgreSQL, or reliable operational workflows, you can reach me through these channels.",
-      topicsTitle: "Topics I usually discuss:",
-      topics: [
-        "Software architecture and API design",
-        "Enterprise systems and ERP platforms",
-        "Credit workflows and financial domain modeling",
-        "PostgreSQL, data integrity, and authorization",
-      ],
-      pills: [
-        "Software Architecture",
-        "ERP Systems",
-        "PostgreSQL",
-        "Engineering Workflow",
-      ],
+        "Choose the path that best matches why you’re reaching out. Email is a direct way to start the conversation.",
+      metadata: {
+        title: "Contact",
+        description:
+          "Contact Brandon Mojica about Backend or Full-Stack engineering roles, including remote opportunities, or professional software projects.",
+      },
+      hiringTitle: "For hiring teams",
+      hiringDescription:
+        "I’m interested in software engineering roles across backend and Full-Stack work, including remote and international opportunities. Share the product, technical challenges, and what the team needs from the role.",
+      projectsTitle: "For professional projects",
+      projectsDescription:
+        "For APIs and integrations, enterprise web applications, custom software, or process and system modernization, tell me what you want to improve and the systems involved. We can discuss fit and define a practical next step.",
+      emailCta: "Email me",
       emailLabel: "Email",
       emailValue: "brandonmojica95@gmail.com",
-      note: "I usually respond faster through LinkedIn or email.",
+      profilesLabel: "Other professional profiles",
       linkedin: "LinkedIn",
       github: "GitHub",
-      email: "Send email",
     },
+
   },
   es: {
     nav: {
@@ -345,71 +223,54 @@ export const messages = {
       architectureNotes: "Ver arquitectura del sistema",
     },
     home: {
-      eyebrow: "PORTAFOLIO DE INGENIERÍA DE SISTEMAS",
-      title: "Ingeniero de software enfocado en arquitectura de software y sistemas backend.",
-      intro: [
-        "Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
-        "Mi trabajo conecta reglas de negocio, modelado de dominio, arquitectura backend y APIs mantenibles en flujos empresariales y financieros.",
-      ],
-      stackLabel: "ENFOQUE DE INGENIERÍA",
-      profileBadge: "PERFIL DE INGENIERÍA",
-      exploreSystems: "Explorar Sistemas",
-      readNotes: "Leer Notas de Ingeniería",
-      signalBoard: "Plataformas críticas para el negocio",
-      matrixTitle: "Cómo hago ingeniería de software",
-      matrixNote:
-        "Un flujo actual y dirigido por personas, desde definir el problema hasta reunir evidencia y pasar las puertas de liberación.",
-      majorSystemsTitle: "Sistemas seleccionados",
-      majorSystemsDesc:
-        "Describo cada sistema seleccionado a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
-      architectureSignals: [
-        {
-          title: "DOMINIOS DE NEGOCIO",
-          value: "Finanzas | RH | Ventas | Inventario",
-          note: "Modelado de procesos de negocio y reglas operativas explícitas.",
+      eyebrow: "INGENIERO DE SOFTWARE · BACKEND Y FULL-STACK",
+      title: "Construyo software para operaciones empresariales críticas, desde sistemas backend hasta aplicaciones web completas.",
+      intro:
+        "Conecto interfaces React, servicios con Python y FastAPI, y datos relacionales para construir software empresarial.",
+      stackLabel: "TECNOLOGÍAS PRINCIPALES",
+      exploreSystems: "Ver proyectos seleccionados",
+      majorSystemsTitle: "Proyectos seleccionados",
+      majorSystemsDesc: "Dos sistemas empresariales, sus retos de dominio y sus decisiones técnicas.",
+      projectCopy: {
+        businext: {
+          focus: "Planeación de recursos empresariales",
+          summary:
+            "Un ERP que abarca finanzas, ventas, inventario, recursos humanos y contabilidad. Mi trabajo se centra en la evolución backend y de sistemas alrededor de las reglas de negocio y los límites de servicio.",
+          linkLabel: "Leer el caso de BusiNext ERP",
         },
-        {
-          title: "ARQUITECTURA BACKEND",
-          value: "FastAPI + Capas de servicio",
-          note: "APIs y límites de servicio que mantienen clara la lógica de negocio.",
+        tr0v1: {
+          focus: "Operación de crédito",
+          summary:
+            "Flujos de crédito para parcialidades, intereses, pagos, conciliación y estados de cuenta. Mi trabajo se centra en arquitectura y evolución backend; sus APIs sirven a herramientas administrativas e interfaces de clientes.",
+          linkLabel: "Leer el caso de TR0V1",
         },
-        {
-          title: "DATOS Y AUTORIZACIÓN",
-          value: "PostgreSQL + límites de tenant",
-          note: "Integridad relacional, límites transaccionales y autorización por capas.",
+        workforce: {
+          status: "Alcance de desarrollo local · No es software en producción",
+          summary:
+            "Un sistema de gestión laboral con flujos documentados de organización, personas y horarios.",
+          linkLabel: "Leer el caso de Workforce",
         },
-      ],
-      focusTracks: [
-        {
-            name: "ESPECIFICAR ANTES DE CONSTRUIR",
-            description:
-            "Usar SDD para hacer explícitos el alcance, las restricciones, las decisiones y la evidencia de aceptación.",
-          },
-          {
-            name: "SEPARAR RESPONSABILIDADES",
-            description:
-            "Planificar la arquitectura primero y mantener separados el diseño, la implementación y la revisión.",
-          },
-          {
-            name: "REVISAR CON EVIDENCIA",
-            description:
-            "Usar roles con apoyo de IA, transferencias explícitas entre etapas, revisión independiente y puertas de liberación.",
-          },
-        ],
-      workflowSequence:
-        "Definición del problema → Descubrimiento → SDD / Arquitectura → Plan de implementación → Roles especializados con apoyo de IA → Implementación → Revisión independiente → Evidencia / QA → Puerta de liberación",
+      },
+      approachTitle: "Cómo abordo el trabajo",
+      approach:
+        "Uso las reglas de negocio y las restricciones operativas para definir APIs y datos; después compruebo los cambios frente a requisitos acordados.",
+      aiTitle: "Ingeniería asistida por IA",
+      aiDescription:
+        "Uso IA en tareas definidas de análisis e implementación. Compruebo los resultados frente a requisitos y mantengo la responsabilidad sobre las decisiones técnicas y de liberación.",
+      contactCta: "Conversemos sobre un rol o proyecto",
     },
     systems: {
       title: "Sistemas definidos por restricciones operativas",
       description:
-        "Describo cada sistema a partir de su contexto, mi responsabilidad, las decisiones de arquitectura, las restricciones y su estado actual verificable.",
+        "Conoce sistemas empresariales y financieros a través de su propósito, decisiones técnicas, restricciones y responsabilidades documentadas.",
       businessContextLabel: "Contexto",
       responsibilityLabel: "Mi responsabilidad",
       solutionLabel: "Qué resuelve",
+      purposeLabel: "Propósito del sistema",
+      decisionsLabel: "Decisiones técnicas",
       stackLabel: "Contexto tecnológico",
       architectureLabel: "Decisiones de arquitectura",
-      constraintsLabel: "Restricciones",
-      impactLabel: "Estado actual verificable",
+      constraintsLabel: "Consideraciones de ingeniería",
     },
     engineering: {
       title: "Notas de ingeniería",
@@ -465,171 +326,65 @@ export const messages = {
       ],
     },
     about: {
-      title: "Sobre mí",
+      title: "De las reglas de negocio al software que las hace funcionar.",
       description:
-        "Ingeniero de software enfocado en arquitectura de software y sistemas backend, diseñando y liderando la evolución de plataformas críticas para el negocio.",
+        "Soy Brandon Mojica Lopez, ingeniero de software con fortaleza en backend y experiencia Full-Stack. Conecto reglas de negocio, APIs, datos e interfaces para construir software a partir de cómo opera una empresa.",
       metadata: {
         title: "Sobre mí",
         description:
-          "Perfil profesional de Brandon Mojica Lopez, enfocado en arquitectura de software, sistemas backend y plataformas críticas para el negocio.",
+          "Ingeniero de software con fortaleza en backend y experiencia Full-Stack en sistemas empresariales, decisiones técnicas e ingeniería asistida por IA.",
       },
-      intro: {
-        eyebrow: "PERFIL DE INGENIERÍA",
-        title: "Ingeniero de software enfocado en arquitectura de software y sistemas backend.",
-        lead:
-          "Diseño y lidero la evolución de plataformas críticas para el negocio alrededor de restricciones operativas reales.",
-        paragraphs: [
-          "Mi trabajo conecta reglas de negocio, modelado de dominio, arquitectura backend y APIs mantenibles en flujos empresariales y financieros.",
-          "Diseño y evoluciono sistemas ERP, de crédito y financieros al traducir reglas de dominio en servicios explícitos, APIs, transiciones de estado y controles operativos.",
-          "El enfoque es práctico: hacer claros los límites, mantener las reglas cerca del dominio y construir sistemas que evolucionen sin perder claridad operativa.",
-        ],
-        stats: [
-          { value: "Jefe de Sistemas", label: "Elements Of Steel · 2019–actualidad" },
-          { value: "Trayectoria progresiva", label: "QA · Desarrollo junior · Liderazgo de proyectos" },
-          { value: "Desarrollo full-stack", label: "Junto con liderazgo de sistemas" },
-        ],
-        badges: ["Plataformas ERP", "Arquitectura Backend", "PostgreSQL", "Diseño de Sistemas", "Flujo de Ingeniería"],
-      },
-      build: {
-        title: "Tipos de sistemas que diseño y construyo",
-        description:
-          "Sistemas diseñados a partir de restricciones operativas reales, no de supuestos de demostración.",
-        items: [
-          {
-            title: "Plataformas empresariales",
-            description:
-              "Plataformas ERP que integran finanzas, ventas, inventario, recursos humanos, dashboards y flujos contables.",
-          },
-          {
-            title: "Arquitectura de servicios backend",
-            description:
-              "Plataformas API con lógica de negocio explícita, transiciones de estado trazables y límites claros entre servicios.",
-          },
-          {
-            title: "Sistemas financieros",
-            description:
-              "Crédito, intereses, pagos, conciliación y estados de cuenta donde la consistencia y la trazabilidad forman parte de la arquitectura.",
-          },
-        ],
-      },
-      background: {
-        title: "Trayectoria profesional",
-        description:
-          "Una progresión dentro de operaciones reales de negocio, desde QA y desarrollo junior hasta liderazgo de proyectos, jefatura de sistemas y desarrollo full-stack.",
-        paragraphs: [
-          "Me incorporé a Elements Of Steel en 2019. Con el tiempo, mi trabajo evolucionó por QA, desarrollo de software junior, liderazgo de proyectos y finalmente Jefe de Sistemas, junto con desarrollo de software full-stack.",
-          "El foco de esta trayectoria ha sido conectar el software con las necesidades reales de la operación empresarial. Diseño y evoluciono sistemas donde las reglas de dominio, los límites de servicio y la mantenibilidad forman parte del trabajo de ingeniería.",
-          "Mi formación académica incluye una Ingeniería en Sistemas Computacionales y una Maestría en Ciencia de Datos para Negocios en UTEL.",
-        ],
-        highlights: [
-          "Jefe de Sistemas en Elements Of Steel.",
-          "Trayectoria por QA, desarrollo junior y liderazgo de proyectos.",
-          "Desarrollo full-stack en sistemas ERP, de crédito y financieros.",
-          "Español — Nativo · Inglés — B1 · Intermedio.",
-        ],
-      },
-      workflow: {
-        title: "Cómo hago ingeniería de software",
-        description:
-          "En el trabajo actual utilizo especificaciones y planificación con arquitectura primero para hacer explícitos el alcance, las restricciones, las decisiones y la evidencia de aceptación antes de implementar.",
-        sequence:
-          "Definición del problema → Descubrimiento → SDD / Arquitectura → Plan de implementación → Roles especializados con apoyo de IA → Implementación → Revisión independiente → Evidencia / QA → Puerta de liberación",
-        note:
-          "La IA puede acelerar análisis acotados y apoyo a la implementación, pero la responsabilidad de ingeniería sigue siendo humana. Las transferencias explícitas entre etapas registran decisiones, evidencia, preguntas abiertas y criterios de aceptación.",
-      },
-      systemsThinking: {
-        title: "Principios de arquitectura de sistemas",
-        description:
-          "La arquitectura debe reducir riesgo operativo y hacer que la complejidad del sistema sea explícita, entendible y evolutiva.",
-        principles: [
-          {
-            title: "Modelar el negocio antes que el código",
-            description:
-              "Empezar por flujos de negocio, responsabilidades y puntos de fallo antes de diseñar el modelo técnico.",
-          },
-          {
-            title: "Mantener la lógica cerca del dominio",
-            description:
-              "Usar capas de servicio y lógica de dominio explícita en lugar de CRUD delgado alrededor de la base de datos.",
-          },
-          {
-            title: "Hacer explícitos los límites",
-            description:
-              "Los límites claros de dominio y las APIs expresivas permiten evolucionar sin volver frágil la plataforma.",
-          },
-          {
-            title: "Diseñar para la trazabilidad",
-            description:
-              "Las transiciones de estado predecibles, la auditabilidad y los controles operativos pertenecen al modelo desde el inicio.",
-          },
-        ],
-      },
-      technologyFocus: {
-        title: "Enfoque tecnológico",
-        description:
-          "Un enfoque técnico curado para diseñar, construir y evolucionar sistemas empresariales con orientación backend.",
-        groups: [
-          {
-            title: "Backend y APIs",
-            items: ["Python", "FastAPI", "SQLAlchemy", "Pydantic", "APIs REST"],
-          },
-          {
-            title: "Datos y persistencia",
-            items: ["PostgreSQL", "MySQL / MariaDB", "Integridad relacional", "Límites transaccionales"],
-          },
-          {
-            title: "Arquitectura y diseño de sistemas",
-            items: ["Modelado de dominio", "Concurrencia", "Idempotencia", "Límites de autorización", "Aislamiento multi-tenant"],
-          },
-          {
-            title: "Producto, plataforma y flujo",
-            items: ["React", "TypeScript", "AWS", "Nginx", "SDD", "Revisión independiente", "Puertas de liberación"],
-          },
-        ],
-      },
-      lookingFor: {
-        title: "Enfoque técnico actual",
-        description:
-          "Arquitectura de software, sistemas backend y plataformas críticas para el negocio.",
-        paragraphs: [
-          "Mi trabajo se enfoca en arquitectura, mantenibilidad y claridad de dominio.",
-          "Diseño y evoluciono sistemas donde importan los límites claros y la consistencia operativa.",
-        ],
-        opportunities: [
-          "Plataformas ERP",
-          "Flujos financieros",
-          "Arquitectura de servicios backend",
-          "Modelado de dominio y mantenibilidad",
-        ],
-      },
+      systemsTitle: "Backend y Full-Stack en la práctica",
+      systemsDescription:
+        "Mi trabajo abarca operaciones empresariales y flujos financieros, con responsabilidades acotadas al alcance documentado de cada sistema.",
+      businextTitle: "BusiNext ERP",
+      businextDescription:
+        "Trabajo en la evolución backend y de sistemas alrededor de sus reglas de negocio, límites de servicio y restricciones operativas.",
+      tr0v1Title: "Plataforma de crédito TR0V1",
+      tr0v1Description:
+        "Trabajo en arquitectura y evolución backend para reglas financieras y transiciones de estado. Sus APIs sirven a herramientas administrativas e interfaces para clientes.",
+      workforceTitle: "Workforce",
+      workforceStatus: "Alcance de desarrollo local · no es software de producción",
+      workforceDescription:
+        "El alcance documentado de desarrollo local abarca organización, personas, horarios y una interfaz administrativa.",
+      approachTitle: "Cómo trabajo",
+      approachDescription:
+        "Traduzco reglas de negocio en APIs, límites de datos y flujos de aplicación claros; después reviso los cambios frente a requisitos acordados.",
+      approachPrinciples: [
+        { title: "Partir del dominio", description: "Hacer explícitas las reglas de negocio y necesidades operativas antes de definir el modelo técnico." },
+        { title: "Mantener límites claros", description: "Dar a servicios e interfaces responsabilidades comprensibles y mantenibles." },
+        { title: "Revisar frente a requisitos", description: "Contrastar la evidencia de implementación con el comportamiento acordado antes de decidir sobre aspectos técnicos y de liberación." },
+      ],
+      aiTitle: "Ingeniería asistida por IA",
+      aiDescription:
+        "Uso roles especializados con apoyo de IA para análisis enfocados, apoyo a la implementación y revisión. Compruebo los resultados frente a requisitos y mantengo la responsabilidad sobre las decisiones técnicas y de liberación. Mis notas de ingeniería documentan esta práctica; la IA aplicada a productos sigue siendo un área de crecimiento.",
+      focusTitle: "Enfoque técnico",
+      focusDescription:
+        "Python · FastAPI · React · datos relacionales · AWS en los sistemas documentados en este portafolio.",
+      systemsCta: "Explorar los sistemas",
+      contactCta: "Conversar sobre una oportunidad",
     },
     contact: {
-      title: "Contacto",
+      title: "Conversemos sobre una oportunidad o un proyecto de software.",
       description:
-        "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
-      intro:
-        "Me interesan conversaciones sobre arquitectura de software, sistemas backend, plataformas empresariales, flujos financieros, integridad de datos y mantenibilidad.",
-      cardIntro:
-        "Si quieres hablar sobre arquitectura para software de negocio, modelado de dominio, APIs, PostgreSQL o flujos operativos confiables, puedes escribirme por cualquiera de estos medios.",
-      topicsTitle: "Temas sobre los que normalmente converso:",
-      topics: [
-        "Arquitectura de software y diseño de APIs",
-        "Sistemas empresariales y plataformas ERP",
-        "Flujos de crédito y modelado financiero",
-        "PostgreSQL, integridad de datos y autorización",
-      ],
-      pills: [
-        "Arquitectura de Software",
-        "Plataformas ERP",
-        "PostgreSQL",
-        "Flujo de Ingeniería",
-      ],
-      emailLabel: "Correo",
+        "Elige el motivo que mejor describe tu mensaje. El correo es una forma directa de iniciar la conversación.",
+      metadata: {
+        title: "Contacto",
+        description:
+          "Contacta a Brandon Mojica por oportunidades de ingeniería Backend o Full-Stack, incluidas remotas, o proyectos profesionales de software.",
+      },
+      hiringTitle: "Para equipos que están contratando",
+      hiringDescription:
+        "Me interesan oportunidades de ingeniería de software en backend y Full-Stack, incluidas posiciones remotas e internacionales. Cuéntame sobre el producto, sus retos técnicos y lo que el equipo necesita del rol.",
+      projectsTitle: "Para proyectos profesionales",
+      projectsDescription:
+        "Para APIs e integraciones, aplicaciones web empresariales, software a la medida o modernización de procesos y sistemas, cuéntame qué quieres mejorar y qué sistemas intervienen. Podemos conversar sobre el encaje y definir un siguiente paso práctico.",
+      emailCta: "Escribirme por correo",
+      emailLabel: "Correo electrónico",
       emailValue: "brandonmojica95@gmail.com",
-      note: "Normalmente respondo más rápido por LinkedIn o correo electrónico.",
+      profilesLabel: "Otros perfiles profesionales",
       linkedin: "LinkedIn",
       github: "GitHub",
-      email: "Enviar correo",
     },
   },
 } as const;

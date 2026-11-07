@@ -6,6 +6,7 @@
   --card: #101b2d;
   --card-foreground: #e2e8f0;
   --primary: #5eead4;
+  --primary-text: var(--primary);
   --primary-foreground: #08111f;
   --secondary: #172554;
   --secondary-foreground: #dbeafe;
@@ -29,7 +30,8 @@ html.light {
   --secondary: #dbeafe;
   --secondary-foreground: #1e3a8a;
   --muted: #e2e8f0;
-  --muted-foreground: #334155;
+  --muted-foreground: #1e293b;
+  --primary-text: #052e2b;
   --border: #cbd5e1;
   --ring: #0f766e;
   --hero-grid: rgba(15, 118, 110, 0.08);
@@ -44,6 +46,7 @@ html.light {
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-primary: var(--primary);
+  --color-primary-text: var(--primary-text);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -443,7 +446,7 @@ html.light .theme-toggle:hover {
 }
 
 .engineering-note-title-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .engineering-recent-note-meta,
@@ -473,13 +476,13 @@ html.light .theme-toggle:hover {
 
 .engineering-note-read-link {
   margin-left: auto;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   white-space: nowrap;
 }
 
 .engineering-note-read-link:hover {
-  color: color-mix(in srgb, var(--primary) 76%, var(--foreground));
+  color: var(--primary-text);
 }
 
 .engineering-earlier-list {
@@ -790,7 +793,7 @@ html.light .theme-toggle:hover {
 }
 
 .system-case-study-section h3 {
-  color: color-mix(in srgb, var(--primary) 82%, var(--foreground));
+  color: var(--primary-text);
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
@@ -1270,7 +1273,7 @@ html.light .theme-toggle:hover {
 
 .article-breadcrumbs a {
   flex: 0 0 auto;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--primary) 52%, transparent);
   text-underline-offset: 0.2em;
@@ -1292,7 +1295,7 @@ html.light .theme-toggle:hover {
 }
 
 .article-eyebrow {
-  color: var(--primary);
+  color: var(--primary-text);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
@@ -1421,7 +1424,7 @@ html.light .theme-toggle:hover {
 .article-related-read {
   display: inline-flex;
   margin-top: 0.65rem;
-  color: var(--primary);
+  color: var(--primary-text);
   font-size: 0.82rem;
   font-weight: 600;
   text-decoration: underline;

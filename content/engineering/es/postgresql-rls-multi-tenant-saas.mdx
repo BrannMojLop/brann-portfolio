@@ -214,7 +214,7 @@ RLS se evalúa en el contexto de roles de base de datos. Por eso la separación 
 roles es parte del diseño y no un detalle de despliegue.
 
 Los roles normales de API y worker no deberían tener silenciosamente los
-privilegios que vuelven irrelevante RLS. En el diseño local actual de Workforce,
+privilegios que vuelven irrelevante RLS. En el diseño local documentado de Workforce,
 los contratos de aprovisionamiento y migración distinguen las responsabilidades
 de runtime de las responsabilidades de migración o administración, y los roles
 de runtime se configuran sin `BYPASSRLS`. Esta afirmación describe la
@@ -314,11 +314,11 @@ revisan los roles o las escrituras.
 ## Workforce como ejemplo acotado
 
 Workforce es el sistema concreto detrás de este artículo. Es un producto
-independiente de gestión de fuerza laboral, en desarrollo local activo y no es
-software de producción. La implementación local tiene un backend FastAPI, un
+independiente de gestión laboral con un alcance documentado de desarrollo local,
+no presentado como software de producción. La implementación local tiene un backend FastAPI, un
 núcleo transaccional en PostgreSQL y una base multi-organización.
 
-Su arquitectura actual separa AuthenticationContext de TenantContext, deriva el
+Su arquitectura documentada separa AuthenticationContext de TenantContext, deriva el
 contexto de organización en el backend después de resolver la membresía y usa
 roles de PostgreSQL y límites relacionados con RLS junto con la autorización de
 aplicación. User, Membership y Employee son conceptos separados.

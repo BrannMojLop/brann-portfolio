@@ -1,13 +1,15 @@
 import { ContactContent } from "@/components/pages/contact-content";
 import { StructuredData } from "@/components/structured-data";
+import { messages } from "@/lib/i18n";
 import { createPageMetadata } from "@/lib/metadata";
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from "@/lib/structured-data";
 
+const contact = messages.en.contact;
+
 export const metadata = createPageMetadata({
   locale: "en",
-  title: "Contact",
-  description:
-    "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
+  title: contact.metadata.title,
+  description: contact.metadata.description,
   path: "/contact",
 });
 
@@ -18,8 +20,8 @@ export default function ContactPage() {
         data={[
           buildCollectionPageSchema(
             "en",
-            "Contact Brandon Mojica Lopez",
-            "I welcome conversations about software architecture, backend systems, enterprise platforms, financial workflows, data integrity, and maintainability.",
+            `${contact.metadata.title} Brandon Mojica Lopez`,
+            contact.metadata.description,
             "/contact",
           ),
           buildBreadcrumbSchema("en", [

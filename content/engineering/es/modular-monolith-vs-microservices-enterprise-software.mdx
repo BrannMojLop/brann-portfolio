@@ -1,7 +1,6 @@
 ---
-title: "Por qué Businext utiliza un monolito modular"
-summary: "Un análisis práctico de por qué un monolito modular fue la mejor decisión para Businext ERP: menor complejidad operativa, despliegue sencillo, integración directa entre dominios y mayor velocidad de evolución para un equipo pequeño."
-date: "2026-03-09"
+title: "Por qué BusiNext utiliza un monolito modular"
+summary: "Una comparación de los trade-offs entre monolitos modulares y microservicios para ERP, con la arquitectura modular de FastAPI documentada para BusiNext como contexto."
 theme: "architecture"
 articleType: "Análisis de Tradeoff"
 readingTime: "10 min de lectura"
@@ -12,7 +11,7 @@ tags:
   - Decisiones de Arquitectura
 ---
 
-### La discusión real no es monolito vs microservicios
+## La discusión real no es monolito vs microservicios
 
 En arquitectura de software empresarial, la conversación entre monolitos y microservicios suele presentarse como una evolución natural del sistema. Primero se empieza con un monolito y después se “escala” hacia microservicios.
 
@@ -26,7 +25,7 @@ La decisión correcta depende de tres factores mucho más concretos:
 
 Para plataformas ERP estas preguntas son especialmente importantes porque múltiples dominios comparten una **verdad operativa común**.
 
-### La naturaleza de los sistemas ERP
+## La naturaleza de los sistemas ERP
 
 Un ERP combina varios dominios del negocio:
 
@@ -47,7 +46,7 @@ Esto significa que muchos flujos del sistema requieren **transacciones coordinad
 
 Separar estos flujos demasiado pronto puede convertir una arquitectura limpia en papel en una plataforma más difícil de operar.
 
-### Por qué muchos equipos se mueven demasiado pronto
+## Por qué muchos equipos se mueven demasiado pronto
 
 Los microservicios prometen varios beneficios reales:
 
@@ -67,9 +66,9 @@ Esto suele producir varios síntomas conocidos:
 
 Para sistemas empresariales en crecimiento, esto suele ser **demasiada complejidad demasiado pronto**.
 
-### El monolito modular como arquitectura deliberada
+## El monolito modular como arquitectura deliberada
 
-En Businext la decisión fue construir la plataforma como un **monolito modular**.
+En BusiNext la decisión fue construir la plataforma como un **monolito modular**.
 
 Esto significa que todos los dominios viven dentro del mismo backend, pero cada uno mantiene límites claros de ingeniería.
 
@@ -88,16 +87,15 @@ EIS
 
 Cada módulo se implementa como una aplicación FastAPI montada dentro del mismo proceso del backend.
 
-Este enfoque permite:
+Este diseño tiene propiedades que determinan sus trade-offs:
 
-- integración directa entre dominios
-- consistencia transaccional simple
-- despliegue en un único servicio
-- menor complejidad operativa
+- módulos de dominio dentro de un backend
+- coordinación directa entre módulos
+- un límite de backend compartido para la integración
 
-Para un equipo pequeño — incluso un solo desarrollador — estas propiedades son críticas.
+El diseño mantiene estos módulos dentro de un backend; no los convierte en servicios desplegados de manera independiente.
 
-### Qué problema evita este enfoque
+## Qué problema evita este enfoque
 
 El monolito modular evita uno de los problemas más comunes en sistemas distribuidos prematuros: mover el acoplamiento del código hacia la red.
 
@@ -110,7 +108,7 @@ Cuando un sistema aún depende de decisiones coordinadas entre dominios, separar
 
 Esto aumenta la complejidad operativa sin necesariamente mejorar el modelo del dominio.
 
-### Cuándo los microservicios empiezan a tener sentido
+## Cuándo los microservicios empiezan a tener sentido
 
 Los microservicios se vuelven una opción más atractiva cuando varias condiciones ya están presentes:
 
@@ -121,7 +119,7 @@ Los microservicios se vuelven una opción más atractiva cuando varias condicion
 
 En ese punto, separar servicios puede reducir riesgo en lugar de aumentarlo.
 
-### Tres preguntas útiles antes de distribuir un sistema
+## Tres preguntas útiles antes de distribuir un sistema
 
 Antes de separar un servicio, tres preguntas suelen ser más útiles que cualquier checklist genérico:
 
@@ -131,7 +129,7 @@ Antes de separar un servicio, tres preguntas suelen ser más útiles que cualqui
 
 Si el acoplamiento sigue existiendo y solo cambia de lugar, el servicio probablemente todavía no está listo para existir por separado.
 
-### Una restricción especial del software empresarial
+## Una restricción especial del software empresarial
 
 Los sistemas ERP y financieros tienen una restricción importante: **verdad compartida**.
 
@@ -144,7 +142,7 @@ Muchos flujos requieren consistencia coordinada:
 
 Estas propiedades hacen que la distribución prematura sea particularmente costosa.
 
-### Una postura pragmática
+## Una postura pragmática
 
 En lugar de preguntar “¿cuándo debemos usar microservicios?”, una pregunta más útil es:
 
@@ -159,4 +157,4 @@ Para muchas plataformas empresariales internas, el camino más práctico es:
 
 Este enfoque mantiene la arquitectura alineada con la realidad del negocio y no con tendencias arquitectónicas.
 
-**Businext no fue diseñado como microservicios, sino como un monolito modular donde cada dominio del negocio evoluciona dentro de una aplicación FastAPI montada en el mismo backend.**
+**BusiNext no fue diseñado como microservicios, sino como un monolito modular donde cada dominio del negocio evoluciona dentro de una aplicación FastAPI montada en el mismo backend.**
